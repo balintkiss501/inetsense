@@ -1,2 +1,2 @@
-# inetsense
+# iNETSense
 iNETSense
