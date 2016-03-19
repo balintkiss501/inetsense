@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: INS-7_001
+      author: zsoltistvanfi
+      changes:
+        - createTable:
+            tableName: probe
+            columns:
+              - column:
+                  name: probe_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_on
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: auth_id
+                  type: char(8)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createTable:
+            tableName: measurement
+            columns:
+              - column:
+                  name: measurement_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_on
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed_on
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: probe_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_measurement_probe
+                    references: probe(probe_id)
+              - column:
+                  name: download_speed
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: upload_speed
+                  type: bigint
+                  constraints:
+                    nullable: false
