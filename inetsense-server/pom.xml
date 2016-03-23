@@ -17,6 +17,7 @@
     <!-- Telling Maven to use fancy JDK. Just for sure -->
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <!-- Parent POM of Spring Boot, containing specific configurations -->
