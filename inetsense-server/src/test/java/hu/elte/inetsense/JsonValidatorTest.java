@@ -1,7 +1,6 @@
 package hu.elte.inetsense;
 
-import hu.elte.inetsense.configuration.DozerMappingConfiguration;
-import hu.elte.inetsense.domain.entities.JsonMessageObject;
+import hu.elte.inetsense.web.dtos.JsonMessageObject;
 import hu.elte.inetsense.service.JsonValidator;
 
 import org.junit.Test;
@@ -9,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,18 +25,19 @@ import static org.junit.Assert.assertTrue;
  *
  * Created by balintkiss on 3/22/16.
  */
+
+/**
+ * TODO: Context configuration should be either separate Bean configuration class, or App.class, which
+ * has annotated component scanning via @SpringBootApplication, but loading fails because of MeasurementServiceImpl.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DozerMappingConfiguration.class)
+@ContextConfiguration(classes = JsonValidatorTest.class)
 public class JsonValidatorTest {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    /**
-     * TODO: Please someone explain me why do we need Dozer and how to access my validator bean.
-     * ApplicationContext in AppTest class initializes fine with the @ContextConfiguration.
-     */
-    //@Autowired
-    private JsonValidator validator = new JsonValidator();
+    @Autowired
+    private JsonValidator validator;
 
     @Test
     public void testSimpleValidJson() {
@@ -74,5 +75,10 @@ public class JsonValidatorTest {
         JsonMessageObject invalidObject = validator.validate("{\"invalidfield\":\"invalid_value\"}");
 
         assertTrue(true);
+    }
+
+    @Bean
+    public JsonValidator getJsonValidatorBean() {
+        return new JsonValidator();
     }
 }

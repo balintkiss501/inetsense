@@ -1,4 +1,4 @@
-package hu.elte.inetsense.domain.entities;
+package hu.elte.inetsense.web.dtos;
 
 import java.util.List;
 
