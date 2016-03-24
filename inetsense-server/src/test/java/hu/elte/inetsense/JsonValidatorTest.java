@@ -1,14 +1,16 @@
 package hu.elte.inetsense;
 
-import hu.elte.inetsense.configuration.DozerMappingConfiguration;
-import hu.elte.inetsense.domain.entities.JsonMessageObject;
+import hu.elte.inetsense.domain.entities.Measurement;
+import hu.elte.inetsense.web.dtos.JsonMessageObject;
 import hu.elte.inetsense.service.JsonValidator;
 
+import hu.elte.inetsense.web.dtos.MeasurementDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -16,6 +18,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -25,25 +35,29 @@ import static org.junit.Assert.assertTrue;
  *
  * Created by balintkiss on 3/22/16.
  */
+
+/**
+ * TODO: Context configuration should be either separate Bean configuration class, or (better yet) App.class, which
+ * has annotated component scanning via @SpringBootApplication,
+ * but ApplicationContext loading fails because of failing dependency autowiring in MeasurementServiceImpl.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DozerMappingConfiguration.class)
+@ContextConfiguration(classes = JsonValidatorTest.class)
 public class JsonValidatorTest {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    /**
-     * TODO: Please someone explain me why do we need Dozer and how to access my validator bean.
-     * ApplicationContext in AppTest class initializes fine with the @ContextConfiguration.
-     */
-    //@Autowired
-    private JsonValidator validator = new JsonValidator();
+    @Autowired
+    private JsonValidator validator;
 
     @Test
     public void testSimpleValidJson() {
-        JsonMessageObject messageObject = new JsonMessageObject(1);
-        JsonMessageObject validatedObject = validator.validate("{\"probeId\":1}");
+        String plainIdString = "{\"id\": 1}";
+        JsonMessageObject messageObject = new JsonMessageObject();
+        messageObject.setId(1L);
+        JsonMessageObject validatedObject = validator.validate(plainIdString);
 
-        assertEquals(messageObject.getProbeId(), validatedObject.getProbeId());
+        assertEquals(messageObject.getId(), validatedObject.getId());
     }
 
     /**
@@ -60,10 +74,37 @@ public class JsonValidatorTest {
             e.printStackTrace();
         }
 
-        JsonMessageObject messageObject = new JsonMessageObject(1);
+        List<MeasurementDTO> measurements = new ArrayList<>();
+        MeasurementDTO measurement = new MeasurementDTO();
+        measurement.setId(1L);
+        Calendar c = Calendar.getInstance();
+        c.set(2016, Calendar.FEBRUARY, 14, 15, 0, 0);
+        //c.add(Calendar.MILLISECOND, 455);
+        measurement.setCompletedOn(c.getTime());
+        measurement.setUploadSpeed(20L);
+        measurement.setDownloadSpeed(20L);
+        measurements.add(measurement);
+
+        JsonMessageObject messageObject = new JsonMessageObject();
+        messageObject.setId(1L);
+        messageObject.setLat(0.0F);
+        messageObject.setIon(9999.0F);
+        messageObject.setMeasurements(measurements);
+
         JsonMessageObject validatedObject = validator.validate(validJsonString);
 
-        assertEquals(messageObject.getProbeId(), validatedObject.getProbeId());
+        boolean etwas = (messageObject.getMeasurements().get(0).getCompletedOn()
+                .equals(validatedObject.getMeasurements().get(0).getCompletedOn()));
+
+        assertEquals(messageObject.getId(), validatedObject.getId());
+        assertEquals(messageObject.getMeasurements().get(0).getId(),
+                validatedObject.getMeasurements().get(0).getId());
+        assertTrue(messageObject.getMeasurements().get(0).getCompletedOn()
+                .equals(validatedObject.getMeasurements().get(0).getCompletedOn()));
+        assertEquals(messageObject.getMeasurements().get(0).getDownloadSpeed(),
+                validatedObject.getMeasurements().get(0).getDownloadSpeed());
+        assertEquals(messageObject.getMeasurements().get(0).getUploadSpeed(),
+                validatedObject.getMeasurements().get(0).getUploadSpeed());
     }
 
     /**
@@ -74,5 +115,10 @@ public class JsonValidatorTest {
         JsonMessageObject invalidObject = validator.validate("{\"invalidfield\":\"invalid_value\"}");
 
         assertTrue(true);
+    }
+
+    @Bean
+    public JsonValidator getJsonValidatorBean() {
+        return new JsonValidator();
     }
 }

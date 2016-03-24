@@ -1,3 +1,16 @@
 {
-  "probeId": 1
+  "id": 1,
+  "lat": 0.0,
+  "ion": 9999.0,
+  "measurements": [{
+    "id": 1,
+    "completedOn": "2016-02-14T15:00:00",
+    "downloadSpeed": 20,
+    "uploadSpeed": 20
+  }, {
+    "id": 2,
+    "completedOn": "2016-03-11T12:00:00",
+    "downloadSpeed": 200,
+    "uploadSpeed": 200
+  }]
 }
