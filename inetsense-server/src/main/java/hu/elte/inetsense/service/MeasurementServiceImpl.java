@@ -28,7 +28,6 @@ public class MeasurementServiceImpl extends AbstractService implements Measureme
         List<MeasurementDTO> measurementDTOs = new ArrayList<>(measurements.size());
         for (Measurement measurement : measurements) {
             MeasurementDTO dto = new MeasurementDTO();
-            dto.setId(measurement.getId());
             dto.setCompletedOn(measurement.getCompletedOn());
             dto.setDownloadSpeed(measurement.getDownloadSpeed());
             dto.setUploadSpeed(measurement.getUploadSpeed());

@@ -10,18 +10,9 @@ public class MeasurementDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long              id;
     private Date              completedOn;
     private Long              downloadSpeed;
     private Long              uploadSpeed;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
 
     public Date getCompletedOn() {
         return completedOn;
