@@ -1,25 +1,23 @@
 package hu.elte.inetsense.web.dtos;
 
-import hu.elte.inetsense.domain.entities.Measurement;
-
 import java.util.List;
 
 /**
  * Created by balintkiss on 3/22/16.
  */
-public class JsonMessageObject {
+public class ProbeDTO {
 
-    private Long id;
+    private String probeAuthId;
     private Float lat;
-    private Float ion;
+    private Float lon;
     private List<MeasurementDTO> measurements;
 
-    public Long getId() {
-        return this.id;
+    public String getProbeAuthId() {
+        return this.probeAuthId;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    public void setProbeAuthId(final String probeAuthId) {
+        this.probeAuthId = probeAuthId;
     }
 
     public Float getLat() {
@@ -30,12 +28,12 @@ public class JsonMessageObject {
         this.lat = lat;
     }
 
-    public Float getIon() {
-        return ion;
+    public Float getLon() {
+        return lon;
     }
 
-    public void setIon(Float ion) {
-        this.ion = ion;
+    public void setLon(Float lon) {
+        this.lon = lon;
     }
 
     public List<MeasurementDTO> getMeasurements() {

@@ -2,7 +2,7 @@ package hu.elte.inetsense.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import hu.elte.inetsense.web.dtos.JsonMessageObject;
+import hu.elte.inetsense.web.dtos.ProbeDTO;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +15,7 @@ public class JsonValidator {
 
     private final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
-    public JsonMessageObject validate(String message) {
-        return gson.fromJson(message, JsonMessageObject.class);
+    public ProbeDTO validate(String message) {
+        return gson.fromJson(message, ProbeDTO.class);
     }
 }
