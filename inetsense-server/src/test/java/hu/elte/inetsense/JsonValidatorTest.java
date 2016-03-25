@@ -1,9 +1,7 @@
 package hu.elte.inetsense;
 
-import hu.elte.inetsense.domain.entities.Measurement;
-import hu.elte.inetsense.web.dtos.JsonMessageObject;
 import hu.elte.inetsense.service.JsonValidator;
-
+import hu.elte.inetsense.web.dtos.JsonMessageObject;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,21 +12,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Unit test for the JSON validator service
@@ -55,16 +49,17 @@ public class JsonValidatorTest {
         String plainIdString = "{\"id\": 1}";
         JsonMessageObject messageObject = new JsonMessageObject();
         messageObject.setId(1L);
+        messageObject.setLat(0.0F);
+        messageObject.setIon(9999.0F);
         JsonMessageObject validatedObject = validator.validate(plainIdString);
 
         assertEquals(messageObject.getId(), validatedObject.getId());
     }
 
-    /**
-     * TODO: Array of measurement data is not implemented yet.
-     */
     @Test
     public void testWholeValidJson() {
+
+        // Read JSON file
         String validJsonString = "";
         String validJsonPath = new File("src/test/resources/valid-testdata.json").getAbsolutePath();
         try {
@@ -74,37 +69,50 @@ public class JsonValidatorTest {
             e.printStackTrace();
         }
 
+        // Create test measurement data
         List<MeasurementDTO> measurements = new ArrayList<>();
-        MeasurementDTO measurement = new MeasurementDTO();
-        measurement.setId(1L);
         Calendar c = Calendar.getInstance();
-        //c.set(2016, Calendar.FEBRUARY, 14, 15, 0, 0);
-        c.setTimeInMillis(1455458400000L);
-        measurement.setCompletedOn(c.getTime());
-        measurement.setUploadSpeed(20L);
-        measurement.setDownloadSpeed(20L);
-        measurements.add(measurement);
 
+        MeasurementDTO measurement1 = new MeasurementDTO();
+        measurement1.setId(1L);
+        c.setTimeInMillis(1455458400000L);
+        measurement1.setCompletedOn(c.getTime());
+        measurement1.setUploadSpeed(20L);
+        measurement1.setDownloadSpeed(20L);
+
+        MeasurementDTO measurement2 = new MeasurementDTO();
+        measurement2.setId(2L);
+        c.setTimeInMillis(1455458400000L);
+        measurement2.setCompletedOn(c.getTime());
+        measurement2.setUploadSpeed(200L);
+        measurement2.setDownloadSpeed(200L);
+
+        measurements.add(measurement1);
+
+        // Create test
         JsonMessageObject messageObject = new JsonMessageObject();
         messageObject.setId(1L);
         messageObject.setLat(0.0F);
         messageObject.setIon(9999.0F);
         messageObject.setMeasurements(measurements);
 
+        // Validate JSON
         JsonMessageObject validatedObject = validator.validate(validJsonString);
 
-        boolean etwas = (messageObject.getMeasurements().get(0).getCompletedOn()
-                .equals(validatedObject.getMeasurements().get(0).getCompletedOn()));
-
+        // Assert cases
         assertEquals(messageObject.getId(), validatedObject.getId());
-        assertEquals(messageObject.getMeasurements().get(0).getId(),
-                validatedObject.getMeasurements().get(0).getId());
-        assertTrue(messageObject.getMeasurements().get(0).getCompletedOn()
-                .equals(validatedObject.getMeasurements().get(0).getCompletedOn()));
-        assertEquals(messageObject.getMeasurements().get(0).getDownloadSpeed(),
-                validatedObject.getMeasurements().get(0).getDownloadSpeed());
-        assertEquals(messageObject.getMeasurements().get(0).getUploadSpeed(),
-                validatedObject.getMeasurements().get(0).getUploadSpeed());
+        assertEquals(messageObject.getLat(), validatedObject.getLat());
+        assertEquals(messageObject.getIon(), validatedObject.getIon());
+
+        for ( MeasurementDTO m : measurements ) {
+            assertEquals(m.getId(), validatedObject.getMeasurements().get(measurements.indexOf(m)).getId());
+            assertEquals(m.getCompletedOn(),
+                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getCompletedOn());
+            assertEquals(m.getDownloadSpeed(),
+                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getDownloadSpeed());
+            assertEquals(m.getUploadSpeed(),
+                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getUploadSpeed());
+        }
     }
 
     /**
@@ -114,7 +122,7 @@ public class JsonValidatorTest {
     public void testInvalidJson() {
         JsonMessageObject invalidObject = validator.validate("{\"invalidfield\":\"invalid_value\"}");
 
-        assertTrue(true);
+        fail();
     }
 
     @Bean
