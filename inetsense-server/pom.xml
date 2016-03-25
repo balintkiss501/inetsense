@@ -17,6 +17,7 @@
     <!-- Telling Maven to use fancy JDK. Just for sure -->
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <!-- Parent POM of Spring Boot, containing specific configurations -->
@@ -49,19 +50,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-        </dependency>
-
-        <!-- Dozer for easy class mapping (e.g. entity to DTO) -->
-        <dependency>
-            <groupId>net.sf.dozer</groupId>
-            <artifactId>dozer</artifactId>
-            <version>5.5.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sf.dozer</groupId>
-            <artifactId>dozer-spring</artifactId>
-            <version>5.5.1</version>
         </dependency>
 
         <!-- Google GSON for JSON validation -->
