@@ -78,8 +78,8 @@ public class JsonValidatorTest {
         MeasurementDTO measurement = new MeasurementDTO();
         measurement.setId(1L);
         Calendar c = Calendar.getInstance();
-        c.set(2016, Calendar.FEBRUARY, 14, 15, 0, 0);
-        //c.add(Calendar.MILLISECOND, 455);
+        //c.set(2016, Calendar.FEBRUARY, 14, 15, 0, 0);
+        c.setTimeInMillis(1455458400000L);
         measurement.setCompletedOn(c.getTime());
         measurement.setUploadSpeed(20L);
         measurement.setDownloadSpeed(20L);
