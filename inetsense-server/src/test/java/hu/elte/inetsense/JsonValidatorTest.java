@@ -1,6 +1,5 @@
 package hu.elte.inetsense;
 
-import hu.elte.inetsense.configuration.DozerMappingConfiguration;
 import hu.elte.inetsense.domain.entities.JsonMessageObject;
 import hu.elte.inetsense.service.JsonValidator;
 
@@ -26,7 +25,6 @@ import static org.junit.Assert.assertTrue;
  * Created by balintkiss on 3/22/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DozerMappingConfiguration.class)
 public class JsonValidatorTest {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -59,7 +57,7 @@ public class JsonValidatorTest {
             log.info("Error when accessing file.");
             e.printStackTrace();
         }
-
+ 
         JsonMessageObject messageObject = new JsonMessageObject(1);
         JsonMessageObject validatedObject = validator.validate(validJsonString);
 
