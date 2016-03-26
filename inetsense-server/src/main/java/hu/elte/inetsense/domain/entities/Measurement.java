@@ -28,6 +28,8 @@ public class Measurement implements Serializable {
     private Probe             probe;
     private Long              downloadSpeed;
     private Long              uploadSpeed;
+    private Float             latitude;
+    private Float             longitude;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,6 +88,24 @@ public class Measurement implements Serializable {
 
     public void setUploadSpeed(final Long uploadSpeed) {
         this.uploadSpeed = uploadSpeed;
+    }
+
+    @Column(nullable = false)
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(final Float latitude) {
+        this.latitude = latitude;
+    }
+
+    @Column(nullable = false)
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(final Float longitude) {
+        this.longitude = longitude;
     }
 
 }
