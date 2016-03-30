@@ -3,11 +3,11 @@
   "measurements": [{
     "lat": 0.0,
     "lng": 9999.0,
-    "completedOn": "2016-02-14T15:00:00",
+    "completedOn": "2016-02-14T15:00:00Z",
     "downloadSpeed": 20,
     "uploadSpeed": 20
   }, {
-    "completedOn": "2016-03-11T12:00:00",
+    "completedOn": "2016-03-11T12:00:00Z",
     "downloadSpeed": 200,
     "uploadSpeed": 200
   }]
