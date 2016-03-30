@@ -31,11 +31,11 @@
             "format": "date-time"
           },
           "downloadSpeed": {
-            "description": "Measured download speed in  (please help me)",
+            "description": "Measured download speed in bit/s",
             "type": "number"
           },
           "uploadSpeed": {
-            "description": "Measured upload speed in xxxxx (please help me)",
+            "description": "Measured upload speed in bit/s",
             "type": "number"
           }
         },
