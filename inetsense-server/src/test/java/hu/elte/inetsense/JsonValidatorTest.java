@@ -52,13 +52,9 @@ public class JsonValidatorTest {
                 "\"lon\": 9999.0 }";
         ProbeDTO messageObject = new ProbeDTO();
         messageObject.setProbeAuthId("12345678");
-        messageObject.setLat(0.0F);
-        messageObject.setLon(9999.0F);
         ProbeDTO validatedObject = validator.validate(plainString);
 
         assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
-        assertEquals(messageObject.getLat(), validatedObject.getLat());
-        assertEquals(messageObject.getLon(), validatedObject.getLon());
     }
 
     @Test
@@ -80,6 +76,8 @@ public class JsonValidatorTest {
 
         MeasurementDTO measurement1 = new MeasurementDTO();
         c.setTimeInMillis(1455458400000L);
+        measurement1.setLat(0.0F);
+        measurement1.setLng(9999.0F);
         measurement1.setCompletedOn(c.getTime());
         measurement1.setUploadSpeed(20L);
         measurement1.setDownloadSpeed(20L);
@@ -95,8 +93,6 @@ public class JsonValidatorTest {
         // Create test
         ProbeDTO messageObject = new ProbeDTO();
         messageObject.setProbeAuthId("12345678");
-        messageObject.setLat(0.0F);
-        messageObject.setLon(9999.0F);
         messageObject.setMeasurements(measurements);
 
         // Validate JSON
@@ -104,10 +100,12 @@ public class JsonValidatorTest {
 
         // Assert cases
         assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
-        assertEquals(messageObject.getLat(), validatedObject.getLat());
-        assertEquals(messageObject.getLon(), validatedObject.getLon());
 
         for ( MeasurementDTO m : measurements ) {
+            assertEquals(m.getLat(),
+                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getLat());
+            assertEquals(m.getLng(),
+                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getLng());
             assertEquals(m.getCompletedOn(),
                     validatedObject.getMeasurements().get(measurements.indexOf(m)).getCompletedOn());
             assertEquals(m.getDownloadSpeed(),
