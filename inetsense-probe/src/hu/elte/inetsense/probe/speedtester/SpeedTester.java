@@ -61,10 +61,11 @@ public class SpeedTester extends Thread {
         
         while(this.running) {
             
+            // save upload/download speed
             du.addMeasurement(new Measurement(
                 this.date.getTime(),
-                this.rand.nextInt(15*1024*1025), // max 15MB
-                this.rand.nextInt( 5*1024*1024)  // max  5MB
+                this.rand.nextInt(15*1024*1025*8), // max 15Mb
+                this.rand.nextInt( 5*1024*1024*8)  // max  5Mb
             ));
 
             try {

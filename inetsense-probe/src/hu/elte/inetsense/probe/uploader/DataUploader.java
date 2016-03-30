@@ -38,13 +38,11 @@ public class DataUploader{
         
     }
     
-    //
-    
-    /* Check server availability: */
+    /* Todo: Check server availability */
     private void flush() {
         
         /* todo: replace with a JSON lib */
-        String data = "{\"probe_id\":\""+probe_id+"\", \"measurements\":[";
+        String data = "{\"probeAuthId\":\""+probe_id+"\", \"measurements\":[";
         
         data += measurements.get(0).toJSON();
         

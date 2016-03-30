@@ -3,3 +3,4 @@ inetsense-server/.idea/**
 /inetsense-server/target/
 /inetsense-probe/nbproject/private/
 /inetsense-probe/build/
+/inetsense-probe/lib/

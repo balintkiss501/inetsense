@@ -12,21 +12,21 @@ package hu.elte.inetsense.probe.uploader;
 public class Measurement {
     
     private long timestamp;
-    private int download_bytes;
-    private int upload_bytes;
+    private int download_bps;
+    private int upload_bps;
 
-    public Measurement(long timestamp, int download_bytes, int upload_bytes) {
+    public Measurement(long timestamp, int download_bps, int upload_bps) {
         this.timestamp = timestamp;
-        this.download_bytes = download_bytes;
-        this.upload_bytes = upload_bytes;
+        this.download_bps = download_bps;
+        this.upload_bps = upload_bps;
     }
 
     public int getDownload() {
-        return download_bytes;
+        return download_bps;
     }
 
-    public void setDownload(int download_bytes) {
-        this.download_bytes = download_bytes;
+    public void setDownload(int download_bps) {
+        this.download_bps = download_bps;
     }
 
     public long getTimestamp() {
@@ -38,15 +38,15 @@ public class Measurement {
     }
 
     public int getUpload() {
-        return upload_bytes;
+        return upload_bps;
     }
 
-    public void setUpload(int upload_bytes) {
-        this.upload_bytes = upload_bytes;
+    public void setUpload(int upload_bps) {
+        this.upload_bps = upload_bps;
     }
     
     public String toJSON() {
-        return "{\"created_on\":"+timestamp+", \"download_speed\":"+download_bytes+", \"upload_speed\":"+upload_bytes+"}";
+        return "{\"completedOn\":"+timestamp+", \"downloadSpeed\":"+download_bps+", \"uploadSpeed\":"+upload_bps+"}";
     }
     
 }
