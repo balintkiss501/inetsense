@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: INS-7_003
+      author: zsoltistvanfi
+      changes:
+        - dropNotNullConstraint:
+            tableName: measurement
+            columnDataType: float
+            columnName: latitude
+        - dropNotNullConstraint:
+            tableName: measurement
+            columnDataType: float
+            columnName: longitude
