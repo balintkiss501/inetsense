@@ -90,7 +90,6 @@ public class Measurement implements Serializable {
         this.uploadSpeed = uploadSpeed;
     }
 
-    @Column(nullable = false)
     public Float getLatitude() {
         return latitude;
     }
@@ -99,7 +98,6 @@ public class Measurement implements Serializable {
         this.latitude = latitude;
     }
 
-    @Column(nullable = false)
     public Float getLongitude() {
         return longitude;
     }
