@@ -80,10 +80,7 @@
         <profile>
             <id>memdb</id>
             <activation>
-                <property>
-                    <name>spring.profiles.active</name>
-                    <value>memdb</value>
-                </property>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <dependencies>
                 <!-- H2 JDBC -->
