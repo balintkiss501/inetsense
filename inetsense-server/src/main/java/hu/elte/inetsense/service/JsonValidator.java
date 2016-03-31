@@ -36,6 +36,7 @@ public class JsonValidator {
 
     /**
      * TODO: Ugly, undocumented, but works
+     * Also, I don't like returning null object, but I was in a hurry.
      */
     public JsonValidator() {
         String schemaFilePath = new File(schemaFileStr).getAbsolutePath();
@@ -71,6 +72,7 @@ public class JsonValidator {
         JsonNode messageNode;
 
         if (null == message || message.isEmpty()) {
+            log.info("Message is empty!");
             return null;
         }
 
@@ -90,6 +92,8 @@ public class JsonValidator {
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
+            } else {
+                log.info("Incoming message does not conform to schema");
             }
         } catch (ProcessingException e) {
             e.printStackTrace();

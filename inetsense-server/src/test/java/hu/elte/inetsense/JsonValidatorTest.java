@@ -1,14 +1,13 @@
 package hu.elte.inetsense;
 
-import hu.elte.inetsense.config.JsonValidatorConfig;
 import hu.elte.inetsense.service.JsonValidator;
+import hu.elte.inetsense.web.JsonValidatorController;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
 import hu.elte.inetsense.web.dtos.ProbeDTO;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,22 +28,21 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit test for the JSON validator service
- * <p>
+ * 
  * Created by balintkiss on 3/22/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JsonValidatorConfig.class)
+@ContextConfiguration(classes = App.class)
 public class JsonValidatorTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    private MockMvc mockMvc;
 
     @Autowired
     private JsonValidator validator;
@@ -51,8 +50,11 @@ public class JsonValidatorTest {
     private String validJsonString;
     private ProbeDTO fullProbeData;
 
+    private MockMvc mockMvc;
+
     @Before
     public void init() {
+
         // Read JSON file
         validJsonString = "";
         String validJsonPath = new File("src/test/resources/valid-testdata.json").getAbsolutePath();
@@ -87,6 +89,7 @@ public class JsonValidatorTest {
         fullProbeData = new ProbeDTO();
         fullProbeData.setProbeAuthId("12345678");
         fullProbeData.setMeasurements(measurements);
+
     }
 
     @Test
@@ -138,25 +141,35 @@ public class JsonValidatorTest {
     }
 
     /**
-     * TODO
+     * TODO: Was not able to mock yet, but it works live.
+     *
+     * curl -X POST -H "Content-Type: application/json"
+     * -d @valid-testdata.json http://localhost:8080/message-endpoint
      */
     @Ignore
     @Test
     public void testValidatorController() {
-//        when(validator.validate(Matchers.any(String.class))).thenReturn(null);
-        when(validator.validate(Matchers.eq(validJsonString))).thenReturn(fullProbeData);
+        //mockMvc = MockMvcBuilders.standaloneSetup(new JsonValidatorController()).build();
+
+        //when(validator.validate(anyString())).thenReturn(null);
+        //doThrow(new RuntimeException()).when(validator).validate(anyObject());
+
+        //when(validatorMock.validate(eq(validJsonString))).thenReturn(fullProbeData);
 
         try {
             mockMvc.perform(post("/message-endpoint")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(validJsonString))
+                    .param("message", validJsonString))
                     .andExpect(status().isOk());
+            //verify(validator).validate(eq(validJsonString));
 
-            mockMvc.perform(post("/message-endpoint")
-                    .content("Bogus String"))
-                    .andExpect(status().isInternalServerError());
+            //mockMvc.perform(post("/message-endpoint")
+            //        .content("Bogus String"))
+            //        .andExpect(status().isInternalServerError());
+            //verify(validator).validate(anyString());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }
