@@ -76,4 +76,24 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>memdb</id>
+            <activation>
+                <property>
+                    <name>spring.profiles.active</name>
+                    <value>memdb</value>
+                </property>
+            </activation>
+            <dependencies>
+                <!-- H2 JDBC -->
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
 </project>
