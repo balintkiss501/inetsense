@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by balintkiss on 3/22/16.
  */
-public class ProbeDTO {
+public class ProbeDataDTO {
 
     private String probeAuthId;
     private List<MeasurementDTO> measurements;

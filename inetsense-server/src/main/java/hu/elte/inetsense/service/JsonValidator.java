@@ -8,7 +8,7 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import hu.elte.inetsense.web.dtos.ProbeDTO;
+import hu.elte.inetsense.web.dtos.ProbeDataDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -43,16 +43,15 @@ public class JsonValidator {
         try {
             schemaStr = new String(Files.readAllBytes(Paths.get(schemaFilePath)), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            log.info("Error when accessing JSON schema file for Validator.");
-            e.printStackTrace();
+            log.error("Error when accessing JSON schema file for Validator.", e);
         }
 
         JsonNode schemaNode = null;
         try {
             schemaNode = JsonLoader.fromString(schemaStr);
         } catch (IOException e) {
-            log.info("Error when parsing JSON schema. Make sure, that it is in valid JSON format, use a linter: http://jsonschemalint.com/draft4/#");
-            e.printStackTrace();
+            log.error("Error when parsing JSON schema. Make sure, that it is in valid JSON format. " +
+                    "Use a linter: http://jsonschemalint.com/draft4/#", e);
         }
 
         JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
@@ -60,26 +59,26 @@ public class JsonValidator {
         try {
             jsonSchema = factory.getJsonSchema(schemaNode);
         } catch (ProcessingException e) {
-            log.info("Error when parsing JSON schema. Make sure, that it is in valid JSON format, use a linter: http://jsonschemalint.com/draft4/#");
-            e.printStackTrace();
+            log.error("Error when processing JSON schema. Make sure, that it is a valid schema format. " +
+                    "Use a linter: http://jsonschemalint.com/draft4/#", e);
         }
 
         mapper = new ObjectMapper();
     }
 
-    public ProbeDTO validate(String message) {
+    public ProbeDataDTO validate(String message) {
 
         JsonNode messageNode;
 
         if (null == message || message.isEmpty()) {
-            log.info("Message is empty!");
+            log.error("Message is empty!");
             return null;
         }
 
         try {
             messageNode = JsonLoader.fromString(message) ;
         } catch (IOException e) {
-            log.info("Incoming message is not even in valid JSON format!");
+            log.error("Incoming message is not even in valid JSON format!", e);
             return null;
         }
 
@@ -88,15 +87,15 @@ public class JsonValidator {
             report = jsonSchema.validate(messageNode);
             if (report.isSuccess()) {
                 try {
-                    return mapper.treeToValue(messageNode, ProbeDTO.class);
+                    return mapper.treeToValue(messageNode, ProbeDataDTO.class);
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    log.error("Error when mapping JSON to Java class", e);
                 }
             } else {
-                log.info("Incoming message does not conform to schema");
+                log.error("Incoming message does not conform to schema");
             }
         } catch (ProcessingException e) {
-            e.printStackTrace();
+            log.error("Error when processing validation schema.", e);
         }
 
         return null;

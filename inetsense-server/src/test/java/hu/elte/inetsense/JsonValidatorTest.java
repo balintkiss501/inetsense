@@ -3,7 +3,7 @@ package hu.elte.inetsense;
 import hu.elte.inetsense.service.JsonValidator;
 import hu.elte.inetsense.web.JsonValidatorController;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
-import hu.elte.inetsense.web.dtos.ProbeDTO;
+import hu.elte.inetsense.web.dtos.ProbeDataDTO;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,11 +11,11 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,11 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Unit test for the JSON validator service
- * 
+ *
  * Created by balintkiss on 3/22/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = App.class)
+@ContextConfiguration(classes = JsonValidatorTest.class)
 public class JsonValidatorTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -48,7 +48,7 @@ public class JsonValidatorTest {
     private JsonValidator validator;
 
     private String validJsonString;
-    private ProbeDTO fullProbeData;
+    private ProbeDataDTO fullProbeData;
 
     private MockMvc mockMvc;
 
@@ -61,8 +61,7 @@ public class JsonValidatorTest {
         try {
             validJsonString = new String(Files.readAllBytes(Paths.get(validJsonPath)), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            log.info("Error when accessing file.");
-            e.printStackTrace();
+            log.error("Error when accessing test data file.", e);
         }
 
         // Create test measurement data
@@ -86,18 +85,17 @@ public class JsonValidatorTest {
         measurements.add(measurement1);
 
         // Create test probe data
-        fullProbeData = new ProbeDTO();
+        fullProbeData = new ProbeDataDTO();
         fullProbeData.setProbeAuthId("12345678");
         fullProbeData.setMeasurements(measurements);
-
     }
 
     @Test
     public void testSimpleValidJson() {
         String plainString = "{\"probeAuthId\": \"12345678\" }";
-        ProbeDTO messageObject = new ProbeDTO();
+        ProbeDataDTO messageObject = new ProbeDataDTO();
         messageObject.setProbeAuthId("12345678");
-        ProbeDTO validatedObject = validator.validate(plainString);
+        ProbeDataDTO validatedObject = validator.validate(plainString);
 
         assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
     }
@@ -106,7 +104,7 @@ public class JsonValidatorTest {
     public void testWholeValidJson() {
 
         // Validate JSON
-        ProbeDTO validatedObject = validator.validate(validJsonString);
+        ProbeDataDTO validatedObject = validator.validate(validJsonString);
 
         // Assert cases
         assertEquals(fullProbeData.getProbeAuthId(), validatedObject.getProbeAuthId());
@@ -132,11 +130,11 @@ public class JsonValidatorTest {
     @Test
     public void testInvalidJson() {
         // Invalid JSON
-        ProbeDTO invalidObject = validator.validate("{\"invalid_field\":\"invalid_value\"}");
+        ProbeDataDTO invalidObject = validator.validate("{\"invalid_field\":\"invalid_value\"}");
         assertNull(invalidObject);
 
         // Not even a JSON text
-        ProbeDTO notEvenJson = validator.validate("Bogus String");
+        ProbeDataDTO notEvenJson = validator.validate("Bogus String");
         assertNull(notEvenJson);
     }
 
@@ -168,8 +166,22 @@ public class JsonValidatorTest {
             //        .andExpect(status().isInternalServerError());
             //verify(validator).validate(anyString());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error when verifying controller.", e);
         }
+    }
 
+    /*
+      This way, when executing the test individually, takes less time
+      because it skips the DB context.
+     */
+
+    @Bean
+    public JsonValidator getJsonValidator() {
+        return new JsonValidator();
+    }
+
+    @Bean
+    public JsonValidatorController getJsonValidatorController() {
+        return new JsonValidatorController();
     }
 }

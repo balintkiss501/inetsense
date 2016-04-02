@@ -1,7 +1,7 @@
 package hu.elte.inetsense.web;
 
 import hu.elte.inetsense.service.JsonValidator;
-import hu.elte.inetsense.web.dtos.ProbeDTO;
+import hu.elte.inetsense.web.dtos.ProbeDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class JsonValidatorController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> validateMessage(@RequestBody String message) {
-        ProbeDTO jsonMessageObject = validator.validate(message);
+        ProbeDataDTO jsonMessageObject = validator.validate(message);
 
         if (null == jsonMessageObject) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
