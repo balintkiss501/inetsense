@@ -1,8 +1,10 @@
 package hu.elte.inetsense;
 
 import hu.elte.inetsense.service.JsonValidator;
-import hu.elte.inetsense.web.dtos.ProbeDTO;
+import hu.elte.inetsense.web.JsonValidatorController;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
+import hu.elte.inetsense.web.dtos.ProbeDataDTO;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,55 +27,41 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit test for the JSON validator service
  *
  * Created by balintkiss on 3/22/16.
  */
-
-/**
- * TODO: Context configuration should be either separate Bean configuration class, or (better yet) App.class, which
- * has annotated component scanning via @SpringBootApplication,
- * but ApplicationContext loading fails because of failing dependency autowiring in MeasurementServiceImpl.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = JsonValidatorTest.class)
 public class JsonValidatorTest {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private JsonValidator validator;
 
-    @Test
-    public void testSimpleValidJson() {
-        String plainString = "{\"probeAuthId\": \"12345678\"," +
-                "\"lat\": 0.0," +
-                "\"lon\": 9999.0 }";
-        ProbeDTO messageObject = new ProbeDTO();
-        messageObject.setProbeAuthId("12345678");
-        messageObject.setLat(0.0F);
-        messageObject.setLon(9999.0F);
-        ProbeDTO validatedObject = validator.validate(plainString);
+    private String validJsonString;
+    private ProbeDataDTO fullProbeData;
 
-        assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
-        assertEquals(messageObject.getLat(), validatedObject.getLat());
-        assertEquals(messageObject.getLon(), validatedObject.getLon());
-    }
+    private MockMvc mockMvc;
 
-    @Test
-    public void testWholeValidJson() {
+    @Before
+    public void init() {
 
         // Read JSON file
-        String validJsonString = "";
+        validJsonString = "";
         String validJsonPath = new File("src/test/resources/valid-testdata.json").getAbsolutePath();
         try {
             validJsonString = new String(Files.readAllBytes(Paths.get(validJsonPath)), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            log.info("Error when accessing file.");
-            e.printStackTrace();
+            log.error("Error when accessing test data file.", e);
         }
 
         // Create test measurement data
@@ -80,6 +70,8 @@ public class JsonValidatorTest {
 
         MeasurementDTO measurement1 = new MeasurementDTO();
         c.setTimeInMillis(1455458400000L);
+        measurement1.setLat(0.0F);
+        measurement1.setLng(9999.0F);
         measurement1.setCompletedOn(c.getTime());
         measurement1.setUploadSpeed(20L);
         measurement1.setDownloadSpeed(20L);
@@ -92,52 +84,104 @@ public class JsonValidatorTest {
 
         measurements.add(measurement1);
 
-        // Create test
-        ProbeDTO messageObject = new ProbeDTO();
+        // Create test probe data
+        fullProbeData = new ProbeDataDTO();
+        fullProbeData.setProbeAuthId("12345678");
+        fullProbeData.setMeasurements(measurements);
+    }
+
+    @Test
+    public void testSimpleValidJson() {
+        String plainString = "{\"probeAuthId\": \"12345678\" }";
+        ProbeDataDTO messageObject = new ProbeDataDTO();
         messageObject.setProbeAuthId("12345678");
-        messageObject.setLat(0.0F);
-        messageObject.setLon(9999.0F);
-        messageObject.setMeasurements(measurements);
+        ProbeDataDTO validatedObject = validator.validate(plainString);
+
+        assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
+    }
+
+    @Test
+    public void testWholeValidJson() {
 
         // Validate JSON
-        ProbeDTO validatedObject = validator.validate(validJsonString);
+        ProbeDataDTO validatedObject = validator.validate(validJsonString);
 
         // Assert cases
-        assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
-        assertEquals(messageObject.getLat(), validatedObject.getLat());
-        assertEquals(messageObject.getLon(), validatedObject.getLon());
-
-        for ( MeasurementDTO m : measurements ) {
+        assertEquals(fullProbeData.getProbeAuthId(), validatedObject.getProbeAuthId());
+        for (MeasurementDTO m : fullProbeData.getMeasurements()) {
+            assertEquals(m.getLat(),
+                    validatedObject.getMeasurements()
+                            .get(fullProbeData.getMeasurements().indexOf(m)).getLat());
+            assertEquals(m.getLng(),
+                    validatedObject.getMeasurements()
+                            .get(fullProbeData.getMeasurements().indexOf(m)).getLng());
             assertEquals(m.getCompletedOn(),
-                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getCompletedOn());
+                    validatedObject.getMeasurements()
+                            .get(fullProbeData.getMeasurements().indexOf(m)).getCompletedOn());
             assertEquals(m.getDownloadSpeed(),
-                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getDownloadSpeed());
+                    validatedObject.getMeasurements()
+                            .get(fullProbeData.getMeasurements().indexOf(m)).getDownloadSpeed());
             assertEquals(m.getUploadSpeed(),
-                    validatedObject.getMeasurements().get(measurements.indexOf(m)).getUploadSpeed());
+                    validatedObject.getMeasurements()
+                            .get(fullProbeData.getMeasurements().indexOf(m)).getUploadSpeed());
         }
     }
 
-    /**
-     * TODO: Bogus test case, unfortunately validator creates the object fine, failure not implemented yet.
-     */
-    @Ignore
     @Test
     public void testInvalidJson() {
-        ProbeDTO invalidObject = validator.validate("{\"invalidfield\":\"invalid_value\"}");
+        // Invalid JSON
+        ProbeDataDTO invalidObject = validator.validate("{\"invalid_field\":\"invalid_value\"}");
+        assertNull(invalidObject);
 
+        // Not even a JSON text
+        ProbeDataDTO notEvenJson = validator.validate("Bogus String");
+        assertNull(notEvenJson);
     }
 
     /**
-     * TODO: Validator REST Controller is not ready yet.
+     * TODO: Was not able to mock yet, but it works live.
+     *
+     * curl -X POST -H "Content-Type: application/json"
+     * -d @valid-testdata.json http://localhost:8080/message-endpoint
      */
     @Ignore
     @Test
     public void testValidatorController() {
+        //mockMvc = MockMvcBuilders.standaloneSetup(new JsonValidatorController()).build();
 
+        //when(validator.validate(anyString())).thenReturn(null);
+        //doThrow(new RuntimeException()).when(validator).validate(anyObject());
+
+        //when(validatorMock.validate(eq(validJsonString))).thenReturn(fullProbeData);
+
+        try {
+            mockMvc.perform(post("/message-endpoint")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("message", validJsonString))
+                    .andExpect(status().isOk());
+            //verify(validator).validate(eq(validJsonString));
+
+            //mockMvc.perform(post("/message-endpoint")
+            //        .content("Bogus String"))
+            //        .andExpect(status().isInternalServerError());
+            //verify(validator).validate(anyString());
+        } catch (Exception e) {
+            log.error("Error when verifying controller.", e);
+        }
+    }
+
+    /*
+      This way, when executing the test individually, takes less time
+      because it skips the DB context.
+     */
+
+    @Bean
+    public JsonValidator getJsonValidator() {
+        return new JsonValidator();
     }
 
     @Bean
-    public JsonValidator getJsonValidatorBean() {
-        return new JsonValidator();
+    public JsonValidatorController getJsonValidatorController() {
+        return new JsonValidatorController();
     }
 }

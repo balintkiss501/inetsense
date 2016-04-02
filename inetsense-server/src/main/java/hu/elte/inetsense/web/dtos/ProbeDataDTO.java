@@ -5,11 +5,9 @@ import java.util.List;
 /**
  * Created by balintkiss on 3/22/16.
  */
-public class ProbeDTO {
+public class ProbeDataDTO {
 
     private String probeAuthId;
-    private Float lat;
-    private Float lon;
     private List<MeasurementDTO> measurements;
 
     public String getProbeAuthId() {
@@ -18,22 +16,6 @@ public class ProbeDTO {
 
     public void setProbeAuthId(final String probeAuthId) {
         this.probeAuthId = probeAuthId;
-    }
-
-    public Float getLat() {
-        return lat;
-    }
-
-    public void setLat(Float lat) {
-        this.lat = lat;
-    }
-
-    public Float getLon() {
-        return lon;
-    }
-
-    public void setLon(Float lon) {
-        this.lon = lon;
     }
 
     public List<MeasurementDTO> getMeasurements() {
