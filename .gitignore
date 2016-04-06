@@ -4,3 +4,8 @@ inetsense-server/.idea/**
 /inetsense-probe/nbproject/private/
 /inetsense-probe/build/
 /inetsense-probe/lib/
+/inetsense-probe/bin/
+*.DS_Store
+*.classpath
+*.project
+inetsense-probe/.settings/
