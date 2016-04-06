@@ -95,7 +95,7 @@ public class SpeedMeter extends Thread {
 		URL url = new URL(this.url.toString());
 	    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 	    this.fileSize = urlConnection.getContentLength();
-	    System.out.println(urlConnection.getContentLength());
+	   // System.out.println(urlConnection.getContentLength());
 	    if(urlConnection.getContentLength() < this.minFileSize){
 	    	//Barmi mas
 	    	System.out.println("Warning A fajl merete tul kicsi!");
@@ -109,7 +109,7 @@ public class SpeedMeter extends Thread {
 	              {
 	            	  elapsedTime = getCurrentTime() - startTime;
 	            	  downloadedSize+=count;
-	           // 	  System.out.println(downloadedSize);
+	            	 // System.out.println(downloadedSize);
 	              }
 	      }finally {
 	    	  	 System.out.println("Downloaded");

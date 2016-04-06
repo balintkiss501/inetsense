@@ -20,13 +20,14 @@ public class SpeedTester extends Thread {
     private long interval;
     private Random rand;
     private Date date;
+    private SpeedMeter speedMeter;
     
     private boolean running = true;
 
     public SpeedTester( DataUploader du, long millis ) {
         
         super();
-        
+        this.speedMeter = new SpeedMeter("http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_50mb.mp4",10000,(long) 1000000);
         this.du = du;
         this.interval = millis;
         this.date = new Date();
@@ -58,13 +59,13 @@ public class SpeedTester extends Thread {
     
     @Override
     public void run() {
-        
-        while(this.running) {
-            
+    	this.speedMeter.start();
+        while(!this.speedMeter.isDownloaded()) {
+           // System.out.println(this.speedMeter.getAverageDownloadSpeed());
             // save upload/download speed
             du.addMeasurement(new Measurement(
                 this.date.getTime(),
-                this.rand.nextInt(15*1024*1025*8), // max 15Mb
+                this.speedMeter.getAverageDownloadSpeed(), // max 15Mb
                 this.rand.nextInt( 5*1024*1024*8)  // max  5Mb
             ));
 
