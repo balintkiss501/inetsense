@@ -10,12 +10,22 @@ Ext.define('TutorialApp.view.main.Main', {
     xtype: 'app-main',
 
     requires: [
+        'Ext.chart.series.Bar',
+        'Ext.chart.axis.Category',
+        'Ext.chart.axis.Numeric',
+        'Ext.chart.interactions.ItemEdit',
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
         'TutorialApp.view.main.MainController',
         'TutorialApp.view.main.MainModel',
-        'TutorialApp.view.main.List'
+        'TutorialApp.view.main.List',
+
+
+        'KitchenSink.store.Climate',
+        'KitchenSink.view.charts.column.BasicController',
+        'KitchenSink.view.charts.column.Basic'
+
     ],
 
     controller: 'main',
@@ -77,28 +87,52 @@ Ext.define('TutorialApp.view.main.Main', {
 
     items: [{
         title: 'Home',
-        iconCls: 'fa-home',
+        iconCls: 'fa-home'
         // The following grid shares a store with the classic version's grid as well!
-        items: [{
-            xtype: 'mainlist'
-        }]
     }, {
         title: 'Users',
         iconCls: 'fa-user',
+        items: [{
+            xtype: 'mainlist'
+        }]
+        /* ,
         bind: {
             html: '{loremIpsum}'
-        }
-    }, {
+        } */
+    },  {
+        title: 'Probes',
+        iconCls: 'fa-cog',
+        items: [{
+            xtype: 'probelist'
+        }]
+        /* ,
+        bind: {
+            html: '{loremIpsum}'
+        } */
+    },  {
+        title: 'Graphs',
+        iconCls: 'fa-cog',
+        items: [{
+            xtype: 'column-basic'
+        }]
+        /* ,
+        bind: {
+            html: '{loremIpsum}'
+        } */
+    }
+
+     /*,  {
         title: 'Groups',
         iconCls: 'fa-users',
         bind: {
             html: '{loremIpsum}'
         }
-    }, {
+    } */ /*, {
         title: 'Settings',
         iconCls: 'fa-cog',
         bind: {
             html: '{loremIpsum}'
         }
-    }]
+    }*/ ]
+
 });

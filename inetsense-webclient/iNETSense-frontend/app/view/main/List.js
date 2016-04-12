@@ -9,7 +9,7 @@ Ext.define('TutorialApp.view.main.List', {
         'TutorialApp.store.Personnel'
     ],
 
-    title: 'Personnel',
+    title: 'Users',
 
     store: {
         type: 'personnel'
@@ -17,6 +17,7 @@ Ext.define('TutorialApp.view.main.List', {
 
     columns: [
         { text: 'Name',  dataIndex: 'name' },
+        { text: 'Phone', dataIndex: 'username', flex: 1 },
         { text: 'Email', dataIndex: 'email', flex: 1 },
         { text: 'Phone', dataIndex: 'phone', flex: 1 }
     ],

@@ -6,7 +6,7 @@
 Ext.define('TutorialApp.Application', {
     extend: 'Ext.app.Application',
     
-    name: 'TutorialApp',
+    name: 'iNETSense',
 
     stores: [
         // TODO: add global / shared stores here
