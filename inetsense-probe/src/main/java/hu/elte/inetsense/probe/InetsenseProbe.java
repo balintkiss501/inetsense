@@ -15,8 +15,8 @@ public class InetsenseProbe {
     
     public static void main(String[] args) {
         
-        DataUploader du = new DataUploader("localhost:8000" ,"Test id");
-        SpeedTester se = new SpeedTester(du, 2500);
+        DataUploader du = new DataUploader("localhost:8080/message-endpoint" ,"Test id");
+        SpeedTester se = new SpeedTester(du, 10000);
         
         se.start();
         
