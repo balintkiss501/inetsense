@@ -34,7 +34,7 @@ public class ProbeDataServiceImpl extends AbstractService implements ProbeDataSe
     public void saveProbeData(final ProbeDataDTO probeData) {
         Probe probe = this.probeRepository.findOneByAuthId(probeData.getProbeAuthId());
         if (probe == null) {
-            log.warn("Probe does not exist with auth ID: " + probeData.getProbeAuthId());
+            log.warn("ProbeData save skipped because Probe does not exist with auth ID: " + probeData.getProbeAuthId());
             return;
         }
 
