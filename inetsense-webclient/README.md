@@ -19,6 +19,7 @@
 
 ## TODO
 - wire the server controller and the frontend stores (if it possible use fallback)
+- upload extjs SDK to the repositoy or store it somewhere (dropbox?)
 - write howto about starting a released version of the frontend-client (no need to download sdk or sencha cmd)
 - add a pom.xml / maven build option
 - optonal: add frontend gui test
