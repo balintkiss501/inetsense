@@ -11,4 +11,5 @@ import hu.elte.inetsense.domain.entities.Probe;
 @Repository
 public interface ProbeRepository extends JpaRepository<Probe, Long> {
 
+    public Probe findOneByAuthId(String id);
 }
