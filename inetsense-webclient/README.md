@@ -1,5 +1,9 @@
 # inetsense-webclient
 
+
+Pls check the INS-15-task comment section!
+
+
 ## Develop
 
 1. Download and install the [Sencha cmd](https://www.sencha.com/products/sencha-cmd/)
