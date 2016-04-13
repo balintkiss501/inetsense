@@ -20,11 +20,11 @@
 ## Screenshots
 
 
-![Home](/docs/pictures/home.png?raw=true "Landing screen")
+![Home](/inetsense-webclient/docs/pictures/home.png?raw=true "Landing screen")
 
-![Probes](/docs/pictures/probes.png?raw=true "Probes table")
+![Probes](/inetsense-webclient/docs/pictures/probes.png?raw=true "Probes table")
 
-![Users](inetsense-webclient/docs/pictures/users.png?raw=true "User table")
+![Users](/inetsense-webclient/docs/pictures/users.png?raw=true "User table")
 
 ![Charts](/inetsense-webclient/docs/pictures/chart-poc.png?raw=true "Charts")
 
