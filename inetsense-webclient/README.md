@@ -17,6 +17,18 @@
 7. Profit
 
 
+## Screenshots
+
+
+![Home](/docs/pictures/home.png?raw=true "Landing screen")
+
+![Probes](/docs/pictures/probes.png?raw=true "Probes table")
+
+![Users](inetsense-webclient/docs/pictures/users.png?raw=true "User table")
+
+![Charts](/inetsense-webclient/docs/pictures/chart-poc.png?raw=true "Charts")
+
+
 ## TODO
 - wire the server controller and the frontend stores (if it possible use fallback)
 - upload extjs SDK to the repositoy or store it somewhere (dropbox?)

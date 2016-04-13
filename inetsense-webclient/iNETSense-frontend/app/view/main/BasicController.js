@@ -82,7 +82,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
             value: mean,
             line: {
                 title: {
-                    text: 'Average high: ' + mean.toFixed(2) + '°F'
+                    text: 'Average: ' + mean.toFixed(2) + ''
                 },
                 lineDash: [2,2]
             }

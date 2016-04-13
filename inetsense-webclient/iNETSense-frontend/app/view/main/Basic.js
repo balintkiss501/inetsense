@@ -60,7 +60,7 @@ Ext.define('KitchenSink.view.charts.column.Basic', {
             minimum: 30,
             titleMargin: 20,
             title: {
-                text: 'Temperature in °F'
+                text: 'Bandwidth'
             },
             listeners: {
                 rangechange: 'onAxisRangeChange'
@@ -89,7 +89,7 @@ Ext.define('KitchenSink.view.charts.column.Basic', {
         },
         sprites: {
             type: 'text',
-            text: 'Redwood City Climate Data',
+            text: 'Bandwidth statistic',
             fontSize: 22,
             width: 100,
             height: 30,
