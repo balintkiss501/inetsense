@@ -73,13 +73,6 @@ public class Probe implements Serializable {
             return false;
         }
         final Probe other = (Probe) obj;
-        if (!Objects.equals(this.authId, other.authId)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return Objects.equals(this.createdOn, other.createdOn);
+        return Objects.equals(this.id, other.id);
     }
-
 }
