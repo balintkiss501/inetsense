@@ -31,6 +31,8 @@ public class MeasurementServiceImpl extends AbstractService implements Measureme
             dto.setCompletedOn(measurement.getCompletedOn());
             dto.setDownloadSpeed(measurement.getDownloadSpeed());
             dto.setUploadSpeed(measurement.getUploadSpeed());
+            dto.setLat(measurement.getLatitude());
+            dto.setLng(measurement.getLongitude());
             measurementDTOs.add(dto);
         }
 

@@ -1,6 +1,8 @@
 package hu.elte.inetsense;
 
 import hu.elte.inetsense.service.JsonValidator;
+import hu.elte.inetsense.service.ProbeDataService;
+import hu.elte.inetsense.service.ProbeDataServiceImpl;
 import hu.elte.inetsense.web.JsonValidatorController;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
 import hu.elte.inetsense.web.dtos.ProbeDataDTO;
@@ -184,4 +186,15 @@ public class JsonValidatorTest {
     public JsonValidatorController getJsonValidatorController() {
         return new JsonValidatorController();
     }
+    
+    @Bean
+    public ProbeDataService getProbeDataService() {
+        return new ProbeDataService() {
+
+            @Override
+            public void saveProbeData(ProbeDataDTO probeData) {
+            }
+        };
+    }
+    
 }
