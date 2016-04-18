@@ -3,7 +3,7 @@ package hu.elte.inetsense.probe.speedtester;
 
 import hu.elte.inetsense.probe.uploader.DataUploader;
 import hu.elte.inetsense.probe.uploader.Measurement;
-import java.util.Random;
+
 import java.util.Date;
 
 
@@ -18,21 +18,18 @@ public class SpeedTester extends Thread {
     
     private DataUploader du;
     private long interval;
-    private Random rand;
     private Date date;
     
     private boolean running = true;
+    private SpeedMeter sp;
 
     public SpeedTester( DataUploader du, long millis ) {
-        
         super();
         
         this.du = du;
         this.interval = millis;
         this.date = new Date();
-        
-        this.rand = new Random();
-        
+        this.sp = new SpeedMeter("http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_50mb.mp4",100000,(long) 1000000);
     }
     
     //
@@ -59,15 +56,17 @@ public class SpeedTester extends Thread {
     @Override
     public void run() {
         
+
         while(this.running) {
             
             // save upload/download speed
-            du.addMeasurement(new Measurement(
-                this.date.getTime(),
-                this.rand.nextInt(15*1024*1025*8), // max 15Mb
-                this.rand.nextInt( 5*1024*1024*8)  // max  5Mb
-            ));
-
+        	if(sp.isStarted()){
+                du.addMeasurement(new Measurement(
+                        this.date.getTime(),
+                        sp.getAverageDownloadSpeed(), // max 15Mb
+                        sp.getAverageUploadSpeed()  // max  5Mb
+                    ));
+        	}
             try {
                 sleep(this.interval);
             } catch (Exception ex) {}
