@@ -20,8 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Service for the Standardized Interface: validation of incoming JSON data against existing JSON schema
- *
+ * Service for the Standardized Interface: validation of incoming JSON data against existing JSON schema.
+ * <p>
  * Created by balintkiss on 3/22/16.
  */
 @Component
@@ -35,10 +35,11 @@ public class JsonValidator {
     private JsonSchema jsonSchema;
 
     /**
-     * TODO: Ugly, undocumented, but works
-     * Also, I don't like returning null object, but I was in a hurry.
+     * Initialize validator service.
      */
     public JsonValidator() {
+
+        // Load schema file
         String schemaFilePath = new File(schemaFileStr).getAbsolutePath();
         try {
             schemaStr = new String(Files.readAllBytes(Paths.get(schemaFilePath)), StandardCharsets.UTF_8);
@@ -46,6 +47,7 @@ public class JsonValidator {
             log.error("Error when accessing JSON schema file for Validator.", e);
         }
 
+        // Parse schema file as simple JSON data
         JsonNode schemaNode = null;
         try {
             schemaNode = JsonLoader.fromString(schemaStr);
@@ -54,8 +56,8 @@ public class JsonValidator {
                     "Use a linter: http://jsonschemalint.com/draft4/#", e);
         }
 
+        // Process JSON data as valid JSON schema
         JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
-
         try {
             jsonSchema = factory.getJsonSchema(schemaNode);
         } catch (ProcessingException e) {
@@ -63,25 +65,37 @@ public class JsonValidator {
                     "Use a linter: http://jsonschemalint.com/draft4/#", e);
         }
 
+        // Return JSON object mapper
         mapper = new ObjectMapper();
     }
 
+    /**
+     * Validate incoming JSON message object.
+     *
+     * @param message
+     * @return
+     */
     public ProbeDataDTO validate(String message) {
 
-        JsonNode messageNode;
-
+        // Nullcheck for incoming message string
         if (null == message || message.isEmpty()) {
             log.error("Message is empty!");
             return null;
         }
 
+        // Convert message to JSON object
+        JsonNode messageNode;
         try {
-            messageNode = JsonLoader.fromString(message) ;
+            messageNode = JsonLoader.fromString(message);
         } catch (IOException e) {
-            log.error("Incoming message is not even in valid JSON format!", e);
+            log.error("Incoming message is not even in valid JSON format!");
             return null;
         }
 
+        /**
+         * TODO: Better error handling, which might be difficult to implement.
+         */
+        // Validate JSON object to schema
         ProcessingReport report;
         try {
             report = jsonSchema.validate(messageNode);
@@ -89,12 +103,13 @@ public class JsonValidator {
                 try {
                     return mapper.treeToValue(messageNode, ProbeDataDTO.class);
                 } catch (JsonProcessingException e) {
-                    log.error("Error when mapping JSON to Java class", e);
+                    log.error("Error when mapping JSON to Java class.", e);
                 }
             } else {
-                log.error("Incoming message does not conform to schema");
+                log.error("Incoming message does not conform to schema.");
+                log.error("Your sent message is: \n\n" + mapper.writeValueAsString(messageNode) + "\n");
             }
-        } catch (ProcessingException e) {
+        } catch (ProcessingException | JsonProcessingException e) {
             log.error("Error when processing validation schema.", e);
         }
 

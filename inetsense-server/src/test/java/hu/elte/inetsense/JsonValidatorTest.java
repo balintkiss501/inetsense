@@ -2,14 +2,15 @@ package hu.elte.inetsense;
 
 import hu.elte.inetsense.service.JsonValidator;
 import hu.elte.inetsense.service.ProbeDataService;
-import hu.elte.inetsense.service.ProbeDataServiceImpl;
 import hu.elte.inetsense.web.JsonValidatorController;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
 import hu.elte.inetsense.web.dtos.ProbeDataDTO;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,14 +32,14 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Unit test for the JSON validator service
- *
+ * <p>
  * Created by balintkiss on 3/22/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,10 +51,20 @@ public class JsonValidatorTest {
     @Autowired
     private JsonValidator validator;
 
+    private MockMvc mockMvc;
+
+    @Mock
+    private JsonValidator validatorMock;
+
+    @Mock
+    private ProbeDataService probeDataServiceMock;
+
+    @InjectMocks
+    private JsonValidatorController controllerMock;
+
     private String validJsonString;
     private ProbeDataDTO fullProbeData;
 
-    private MockMvc mockMvc;
 
     @Before
     public void init() {
@@ -131,42 +143,37 @@ public class JsonValidatorTest {
 
     @Test
     public void testInvalidJson() {
+        // Not even a JSON text
+        ProbeDataDTO notEvenJson = validator.validate("Bogus String");
+        assertNull(notEvenJson);
+
         // Invalid JSON
         ProbeDataDTO invalidObject = validator.validate("{\"invalid_field\":\"invalid_value\"}");
         assertNull(invalidObject);
 
-        // Not even a JSON text
-        ProbeDataDTO notEvenJson = validator.validate("Bogus String");
-        assertNull(notEvenJson);
     }
 
-    /**
-     * TODO: Was not able to mock yet, but it works live.
-     *
-     * curl -X POST -H "Content-Type: application/json"
-     * -d @valid-testdata.json http://localhost:8080/message-endpoint
-     */
-    @Ignore
     @Test
     public void testValidatorController() {
-        //mockMvc = MockMvcBuilders.standaloneSetup(new JsonValidatorController()).build();
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(controllerMock).build();
 
-        //when(validator.validate(anyString())).thenReturn(null);
-        //doThrow(new RuntimeException()).when(validator).validate(anyObject());
-
-        //when(validatorMock.validate(eq(validJsonString))).thenReturn(fullProbeData);
+        when(validatorMock.validate(anyString())).thenReturn(null);
+        when(validatorMock.validate(validJsonString)).thenReturn(fullProbeData);
 
         try {
             mockMvc.perform(post("/message-endpoint")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .param("message", validJsonString))
+                    .content(validJsonString))
                     .andExpect(status().isOk());
-            //verify(validator).validate(eq(validJsonString));
 
-            //mockMvc.perform(post("/message-endpoint")
-            //        .content("Bogus String"))
-            //        .andExpect(status().isInternalServerError());
-            //verify(validator).validate(anyString());
+            mockMvc.perform(post("/message-endpoint")
+                    .content("{\"invalid_field\":\"invalid_value\"}"))
+                    .andExpect(status().isInternalServerError());
+
+            mockMvc.perform(post("/message-endpoint")
+                    .content("Bogus String"))
+                    .andExpect(status().isInternalServerError());
         } catch (Exception e) {
             log.error("Error when verifying controller.", e);
         }
@@ -186,15 +193,16 @@ public class JsonValidatorTest {
     public JsonValidatorController getJsonValidatorController() {
         return new JsonValidatorController();
     }
-    
+
     @Bean
     public ProbeDataService getProbeDataService() {
         return new ProbeDataService() {
 
             @Override
             public void saveProbeData(ProbeDataDTO probeData) {
+
             }
         };
     }
-    
+
 }

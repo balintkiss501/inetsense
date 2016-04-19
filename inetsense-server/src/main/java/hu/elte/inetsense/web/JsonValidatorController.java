@@ -5,15 +5,12 @@ import hu.elte.inetsense.service.ProbeDataService;
 import hu.elte.inetsense.web.dtos.ProbeDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Created by balintkiss on 3/25/16.
- */
-
-/**
- * TODO: storing object not implemented yet.
+ * JSON message endpoint for the Standardized Interface.
  */
 @RestController
 @RequestMapping("/message-endpoint")
@@ -26,10 +23,9 @@ public class JsonValidatorController {
     private ProbeDataService probeDataService;
 
     /**
-     * TODO: This doesn't do anything yet besides schema-based validation, but trust me,
-     * it validates if you send JSON.
-     *
-     * * curl -X POST -H "Content-Type: application/json" -d @valid-testdata.json http://localhost:8080/message-endpoint
+     * Validate incoming JSON message and save Probe data.
+     * <p>
+     * To test: curl -X POST -H "Content-Type: application/json" -d @valid-testdata.json http://localhost:8080/message-endpoint
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> validateMessage(@RequestBody String message) {
@@ -42,6 +38,6 @@ public class JsonValidatorController {
 
         probeDataService.saveProbeData(jsonMessageObject);
 
-        return ResponseEntity.ok("HTTP 200: Incoming JSON message validation was successful! Keep up the good work! To be continued..."); // TODO: adding Spring's default JSON-based response
+        return ResponseEntity.ok("HTTP 200: Incoming JSON message validation was successful! Keep up the good work!"); // TODO: adding Spring's default JSON-based response
     }
 }
