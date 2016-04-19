@@ -119,6 +119,18 @@ Ext.define('TutorialApp.view.main.Main', {
         bind: {
             html: '{loremIpsum}'
         } */
+    },
+
+    {
+        title: 'HighChart',
+        iconCls: 'fa-cog',
+        items: [{
+            xtype: 'highchart-panel'
+        }]
+        /* ,
+        bind: {
+            html: '{loremIpsum}'
+        } */
     }
 
      /*,  {
