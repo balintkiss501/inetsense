@@ -1,5 +1,12 @@
 package hu.elte.inetsense.server.collector.service;
 
+import java.io.IOException;
+import java.util.Scanner;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,16 +15,8 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import hu.elte.inetsense.common.dtos.ProbeDataDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import hu.elte.inetsense.common.dtos.ProbeDataDTO;
 
 /**
  * Service for the Standardized Interface: validation of incoming JSON data against existing JSON schema
@@ -27,22 +26,21 @@ import java.nio.file.Paths;
 @Component
 public class JsonValidator {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private final String schemaFileStr = "src/main/resources/probe-validation.schema.json";
+    private final Logger log           = LoggerFactory.getLogger(this.getClass());
+    private final String schemaFileStr = "/probe-validation.schema.json";
 
-    private String schemaStr = "";
+    private String       schemaStr     = "";
     private ObjectMapper mapper;
-    private JsonSchema jsonSchema;
+    private JsonSchema   jsonSchema;
 
     /**
      * TODO: Ugly, undocumented, but works
      * Also, I don't like returning null object, but I was in a hurry.
      */
     public JsonValidator() {
-        String schemaFilePath = new File(schemaFileStr).getAbsolutePath();
-        try {
-            schemaStr = new String(Files.readAllBytes(Paths.get(schemaFilePath)), StandardCharsets.UTF_8);
-        } catch (IOException e) {
+        try (Scanner sc = new Scanner(getClass().getResourceAsStream(schemaFileStr), "UTF-8").useDelimiter("\\A")) {
+            schemaStr = sc.next();
+        } catch (Exception e) {
             log.error("Error when accessing JSON schema file for Validator.", e);
         }
 
@@ -66,7 +64,7 @@ public class JsonValidator {
         mapper = new ObjectMapper();
     }
 
-    public ProbeDataDTO validate(String message) {
+    public ProbeDataDTO validate(final String message) {
 
         JsonNode messageNode;
 
@@ -76,7 +74,7 @@ public class JsonValidator {
         }
 
         try {
-            messageNode = JsonLoader.fromString(message) ;
+            messageNode = JsonLoader.fromString(message);
         } catch (IOException e) {
             log.error("Incoming message is not even in valid JSON format!", e);
             return null;

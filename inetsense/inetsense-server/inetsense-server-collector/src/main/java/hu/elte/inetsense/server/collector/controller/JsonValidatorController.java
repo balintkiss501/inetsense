@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Created by balintkiss on 3/25/16.
  */
-
-/**
- * TODO: storing object not implemented yet.
- */
 @RestController
 @RequestMapping("/message-endpoint")
 public class JsonValidatorController {
@@ -26,10 +22,8 @@ public class JsonValidatorController {
     private ProbeDataService probeDataService;
 
     /**
-     * TODO: This doesn't do anything yet besides schema-based validation, but trust me,
-     * it validates if you send JSON.
-     *
-     * * curl -X POST -H "Content-Type: application/json" -d @valid-testdata.json http://localhost:8080/message-endpoint
+     * Testing:<br>
+     * curl -X POST -H "Content-Type: application/json" -d @valid-testdata.json http://localhost:8080/message-endpoint
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> validateMessage(@RequestBody String message) {
