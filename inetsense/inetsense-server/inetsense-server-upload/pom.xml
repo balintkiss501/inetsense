@@ -11,9 +11,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <!-- Build plugin, that makes building of runnable JAR easier -->
     <build>
         <plugins>
+            <!-- Build plugin, that makes building of runnable JAR easier -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
