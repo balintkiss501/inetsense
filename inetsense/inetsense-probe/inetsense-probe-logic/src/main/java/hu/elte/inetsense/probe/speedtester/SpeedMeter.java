@@ -59,7 +59,7 @@ public class SpeedMeter {
 	/**
 	 * Ido ami utan szakitsa meg a letoltest
 	 */
-	private Integer timeout;
+	private Long timeout;
 
 	/**
 	 * A minimum file meret byte-ban megadva
@@ -72,7 +72,7 @@ public class SpeedMeter {
 	 * @param timeout Ido ami utan fejezze be a letoltest millisecundumban megadva
 	 * @param minFileSize A letoltendo file legkisebb merete byte-ban megadva;
 	 */
-	public SpeedMeter(String downloadUrl,String uploadUrl,Integer timeout,Long minFileSize,int uplodaedFileSize){
+	public SpeedMeter(String downloadUrl,String uploadUrl,Long timeout,Long minFileSize,int uplodaedFileSize){
 		this.downloadUrl = downloadUrl;
 		this.uploadUrl = uploadUrl;
 		this.timeout = timeout;
