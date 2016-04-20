@@ -1,5 +1,4 @@
 package hu.elte.inetsense.probe.speedtester;
-
 import java.io.*;
 import java.net.*;
 import java.text.ParseException;
@@ -11,11 +10,12 @@ import java.util.Scanner;
 
 public class SpeedMeter {
 
+	private String uploadUrl;
 
 	/**
 	 * Url amint keresztul merni szeretnenk a letoltesi sebesseget
 	 */
-	private String url;
+	private String downloadUrl;
 
 	/**
 	 * A feltoltendo file merete byte-ban
@@ -72,8 +72,9 @@ public class SpeedMeter {
 	 * @param timeout Ido ami utan fejezze be a letoltest millisecundumban megadva
 	 * @param minFileSize A letoltendo file legkisebb merete byte-ban megadva;
 	 */
-	public SpeedMeter(String url,Integer timeout,Long minFileSize,int uplodaedFileSize){
-		this.url = url;
+	public SpeedMeter(String downloadUrl,String uploadUrl,Integer timeout,Long minFileSize,int uplodaedFileSize){
+		this.downloadUrl = downloadUrl;
+		this.uploadUrl = uploadUrl;
 		this.timeout = timeout;
 		this.minFileSize = minFileSize;
 		this.uploadFileSize = uplodaedFileSize;
@@ -163,7 +164,7 @@ public class SpeedMeter {
 	 */
 	public void startDownload() throws IOException, ParseException{
 		long startTime = getCurrentTime();
-		URL url = new URL(this.url.toString());
+		URL url = new URL(this.downloadUrl.toString());
 	    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 	    this.fileSize = urlConnection.getContentLength();
 	    if(urlConnection.getContentLength() < this.minFileSize){
@@ -196,7 +197,7 @@ public class SpeedMeter {
 		HttpURLConnection conn = null;
 		try {
 
-		URL u = new URL("http://192.168.0.17:8888");
+		URL u = new URL(this.uploadUrl);
 		conn = (HttpURLConnection) u.openConnection();
 
 		conn.setDoOutput(true);

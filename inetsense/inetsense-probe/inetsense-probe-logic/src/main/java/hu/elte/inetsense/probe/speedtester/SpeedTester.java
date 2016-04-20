@@ -54,7 +54,7 @@ public class SpeedTester extends Thread {
     @Override
     public void run() {
       while(true){
-      			SpeedMeter sp = new SpeedMeter("http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_50mb.mp4",5000,(long) 20000,1000000);
+      			SpeedMeter sp = new SpeedMeter("http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_50mb.mp4","http://192.168.0.17:8888",5000,(long) 20000,1000000);
       			sp.run();
 
             du.addMeasurement(new Measurement(
