@@ -2,6 +2,7 @@
 package hu.elte.inetsense.probe;
 
 import hu.elte.inetsense.probe.speedtester.SpeedTester;
+import hu.elte.inetsense.probe.uploader.ConfigLoader;
 import hu.elte.inetsense.probe.uploader.DataUploader;
 
 /**
@@ -15,8 +16,10 @@ public class InetsenseProbe {
     
     public static void main(String[] args) {
         
-        DataUploader du = new DataUploader("localhost:8080/message-endpoint" ,"Test id");
-        SpeedTester se = new SpeedTester(du, 10000);
+        ConfigLoader cf = new ConfigLoader();
+        
+        DataUploader du = new DataUploader(cf.get("host")+":"+cf.get("port")+"/message-endpoint" ,cf.get("probe-id"));
+        SpeedTester se = new SpeedTester(du, Integer.parseInt(cf.get("test-interval")));
         
         se.start();
         
