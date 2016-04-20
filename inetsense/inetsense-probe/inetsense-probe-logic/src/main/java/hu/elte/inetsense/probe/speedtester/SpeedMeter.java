@@ -1,73 +1,93 @@
 package hu.elte.inetsense.probe.speedtester;
+
 import java.io.*;
 import java.net.*;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import java.util.Scanner;
 
 //Bit/sec ban merjuk a letoltesi sebesseg
 //Bit/sec ban merjuk a feltoltesi sebesseg
 
-public class SpeedMeter extends Thread {
+public class SpeedMeter {
+
+
 	/**
 	 * Url amint keresztul merni szeretnenk a letoltesi sebesseget
 	 */
-	String url;
-	
-    private Random rand;
-	
+	private String url;
 
+	/**
+	 * A feltoltendo file merete byte-ban
+	 */
+	private int uploadFileSize;
+
+	/**
+	 * Atlagos feltoltesi sebesseg
+	 */
+	private int averageUploadSpeed;
+
+	/**
+	 * A file fel lett-e mar toltve
+	 */
+	private volatile Boolean uploaded;
+
+	/**
+	 * Letoltodott e mar a file
+	 */
+	private volatile Boolean downloaded;
 	/**
 	 * Atlagos letoltesi sebesseg
 	 */
-	int averageDownloadSpeed;
-	
+	private int averageDownloadSpeed;
+
 	/**
 	 * Az aktualisan letoltott adat merete
 	 */
-	int downloadedSize;
-	
+	private int downloadedSize;
+
 	/**
 	 * A file telljes merete
 	 */
-	int fileSize;
-	
+	private int fileSize;
+
 	/**
 	 * A letoltes kezdete ota eltelt ido
 	 */
-	long elapsedTime;
-	
+	private long elapsedTime;
+
 	/**
 	 * Ido ami utan szakitsa meg a letoltest
 	 */
-	Integer timeout;
-	
+	private Integer timeout;
+
 	/**
 	 * A minimum file meret byte-ban megadva
 	 */
-	Long minFileSize;
-	  
+	private Long minFileSize;
+
 	/**
-	 * 
+	 *
 	 * @param url Url ahonnan toltson le
 	 * @param timeout Ido ami utan fejezze be a letoltest millisecundumban megadva
-	 * @param minFileSize A letoltendo file legkisebb merete byte-ban megadva; 
+	 * @param minFileSize A letoltendo file legkisebb merete byte-ban megadva;
 	 */
-	public SpeedMeter(String url,Integer timeout,Long minFileSize){
+	public SpeedMeter(String url,Integer timeout,Long minFileSize,int uplodaedFileSize){
 		this.url = url;
 		this.timeout = timeout;
 		this.minFileSize = minFileSize;
-        this.rand = new Random();
+		this.uploadFileSize = uplodaedFileSize;
+		this.uploaded = false;
+		this.downloaded = false;
 	}
-	
+
 	/**
 	 * Kulon szalon a letoltes megkezdese
 	 */
 	public void run(){
 		try {
 			startDownload();
-			//startUpload();
+			startUpload(this.uploadFileSize);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,7 +97,7 @@ public class SpeedMeter extends Thread {
 		}
 	};
 
-	
+
 	/**
 	 * A letoltendo file meretevel ter vissza
 	 * @return
@@ -85,7 +105,7 @@ public class SpeedMeter extends Thread {
 	public Integer getFileSize(){
 		return this.fileSize;
 	}
-	
+
 	/**
 	 * A mar eddig letoltott meretet adja vissza
 	 * @return
@@ -93,43 +113,52 @@ public class SpeedMeter extends Thread {
 	public Integer getDownloadedSize(){
 		return this.downloadedSize;
 	}
-	
+
 	/**
 	 * A letoltes elindult-e mar
 	 * @return
 	 */
-	public Boolean isStarted(){
+	public Boolean isDownloadStarted(){
 		return downloadedSize > 0;
 	}
-	
-	
+
+
 	/**
 	 * Az atlagos letoltesi sebesseget adja vissza
 	 * @return
 	 */
 	public Integer getAverageDownloadSpeed(){
-		if(isStarted() && (elapsedTime/1000)>0){
+		if(isDownloadStarted() && (elapsedTime/1000)>0){
 			return  (int) ((downloadedSize*8) / (elapsedTime/1000));
 		}else{
 			return 0;
 		}
 	}
-		
+
+	/**
+	 * Atlagos feltoltesi sebesseg
+	 * @return
+	 */
+	public Integer getAverageUploadSpeed(){
+		return this.averageUploadSpeed;
+	}
+
+	public Boolean isUploaded(){
+
+		return this.uploaded;
+	}
+
 	/**
 	 * Folyamatban van-e a toltes
 	 * @return
 	 */
 	public Boolean isDownloaded(){
-		if(isStarted()){
-			return (downloadedSize == fileSize) || (this.elapsedTime > this.timeout);
-		}else {
-			return false;
-		}
+		return this.downloaded;
 	}
-	
+
 	/**
 	 * A letoltes elinditasa
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws ParseException
 	 */
 	public void startDownload() throws IOException, ParseException{
@@ -137,7 +166,6 @@ public class SpeedMeter extends Thread {
 		URL url = new URL(this.url.toString());
 	    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 	    this.fileSize = urlConnection.getContentLength();
-	    System.out.println(urlConnection.getContentLength());
 	    if(urlConnection.getContentLength() < this.minFileSize){
 	    	//Barmi mas
 	    	System.out.println("Warning A fajl merete tul kicsi!");
@@ -151,42 +179,61 @@ public class SpeedMeter extends Thread {
 	              {
 	            	  elapsedTime = getCurrentTime() - startTime;
 	            	  downloadedSize+=count;
-	           // 	  System.out.println(downloadedSize);
 	              }
 	      }finally {
-	    	  	 System.out.println("Downloaded");
+	    	  	 this.downloaded = true;
 	    	     urlConnection.disconnect();
 	      }
-	
+
 	}
-	
-	
+
+
 	/**
 	 * A feltoltes elinditasa (Nem mukodik meg)
 	 * @throws IOException
 	 */
-	public void startUpload() throws IOException{
+	public void startUpload(int fileSize) {
+		HttpURLConnection conn = null;
+		try {
+
 		URL u = new URL("http://192.168.0.17:8888");
-		HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+		conn = (HttpURLConnection) u.openConnection();
+
 		conn.setDoOutput(true);
 		conn.setRequestMethod("POST");
+
 		OutputStream os = conn.getOutputStream();
-		byte[] b = new byte[5000000];
-			os.write(b);
-			os.flush();
-			System.out.println(conn.getResponseCode());
-			System.out.println("END");
+
+		byte[] b = new byte[fileSize];
+
+		b[b.length-1] = '\n';
+		os.write(b);
+		os.flush();
+		Scanner in = new Scanner(conn.getInputStream());
+		byte[] inread = new byte[4096];
+		int receiveCount = 0;
+
+		String line = in.nextLine();
+			this.averageUploadSpeed = ((fileSize * 8) / Integer.parseInt(line))*1000;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			this.uploaded = true;
+			conn.disconnect();
+		}
+
 	}
-	
-	public Integer getAverageUploadSpeed(){
-		return this.rand.nextInt( 5*1024*1024*8);
-	}
+
 	/**
 	 * Az aktualis ido timestampben
 	 * @return
 	 */
 	private long getCurrentTime(){
-		Calendar calendar = Calendar.getInstance();	  
+		Calendar calendar = Calendar.getInstance();
 		return calendar.getTime().getTime();
-	}	
+	}
 }
