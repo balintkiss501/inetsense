@@ -1,6 +1,15 @@
-inetsense-server/*.iml
-inetsense-server/.idea/**
-/inetsense-server/target/
-/inetsense-probe/nbproject/private/
-/inetsense-probe/build/
-/inetsense-probe/lib/
+# IntelliJ
+*.iml
+.idea/
+
+# Eclipse
+target/
+bin/
+.settings/
+.project
+.classpath
+
+# NetBeans
+nbproject/private/
+build/
+lib/

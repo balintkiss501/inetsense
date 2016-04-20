@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: patch/INS-7_001.yaml
-      relativeToChangelogFile: true
-  - include:
-      file: patch/INS-7_002.yaml
-      relativeToChangelogFile: true

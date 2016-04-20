@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "ProbeDTO",
+  "description": "Serialized Probe Specification",
+  "type": "object",
+  "properties": {
+    "probeAuthId": {
+      "description": "8 character long unique identifier for the Probe",
+      "type": "string"
+    },
+    "measurements": {
+      "description": "Array containing measurement entries",
+      "type": "array",
+      "items": {
+        "description": "Serialized Measurement Specification",
+        "type": "object",
+        "properties": {
+          "lat": {
+            "description": "Latitude",
+            "type": "number",
+            "optional": true
+          },
+          "lng": {
+            "description": "Longitude",
+            "type": "number",
+            "optional": true
+          },
+          "completedOn": {
+            "description": "Date at which the measurement was completed on",
+            "type": "string",
+            "format": "date-time"
+          },
+          "downloadSpeed": {
+            "description": "Measured download speed in bit/s",
+            "type": "number"
+          },
+          "uploadSpeed": {
+            "description": "Measured upload speed in bit/s",
+            "type": "number"
+          }
+        },
+        "required": [
+          "completedOn",
+          "downloadSpeed",
+          "uploadSpeed"
+        ]
+      }
+    }
+  },
+  "required": [
+    "probeAuthId"
+  ]
+}
