@@ -1,13 +1,9 @@
 # inetsense-webclient
 
 
-Pls check the INS-15-task comment section!
-
-
 ## Production
 
 1. Go to the project folder `inetsense/inetsense-webclient/` and execute the `mvn clean install` command for create the needed dependency for the webserver.
-
 
 
 ## Develop
@@ -29,16 +25,14 @@ export MAVEN_OPTS="-Xms256m -Xmx512m"
 
 4. Go to the project folder `inetsense/inetsense-webclient/` and execute the `mvn clean install -P rebuild` command for adding the needed sdk files to the project
 
-5. Start developing via  `sencha app watch` command
+5. Start developing via  `mvn clean install -P watch` command
 
 6. ???
 
 7. Profit
 
 
-
 ## Screenshots
-
 
 ![Home](/inetsense-webclient/docs/pictures/home.png?raw=true "Landing screen")
 
