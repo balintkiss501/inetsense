@@ -27,199 +27,243 @@ Ext.define('TutorialApp.view.HighChart', {
         resize: function() {
             console.log("painted");
 
-            $('#highchart-container').highcharts({
-                chart: {
-                  type: 'column'
-                },
-                title: {
-                  text: 'Bandwidth statistic'
-                },
-                subtitle: {
-                  text: '11 April, 2016  to 17 April, 2016'
-                },
-                xAxis: {
-                  type: 'category'
-                },
-                yAxis: {
-                  title: {
-                    text: 'Bandwidth (kB/s)'
-                  }
+                  $.getJSON('http://localhost:8080/measurements/1/from/1456790400000/to/1461494069283/', function (data) {
+                      var detailChart;
 
-                },
-                legend: {
-                  enabled: false
-                },
-                plotOptions: {
-                  series: {
-                    borderWidth: 0,
-                    dataLabels: {
-                      enabled: true,
-                      format: '{point.y:.1f}'
-                    }
-                  }
-                },
+                      $(document).ready(function () {
 
-                tooltip: {
-                  headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                  pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-                },
+                          // create the detail chart
+                          function createDetail(masterChart) {
 
-                series: [{
-                  name: 'Napok',
-                  // colorByPoint: true,
-                  data: [
-                    ['Hétfő', 56, 'Monday'],
-                    ['Kedd', 24, 'Tuesday'],
-                    ['Szerda', 10, 'Wednesday'],
-                    ['Csütörtök', 15, 'Thursday'],
-                    ['Péntek', 17, 'Friday'],
-                    ['Szombat', 45, 'Saturday'],
-                    ['Vasárnap', 35, 'Sunday']
-                  ],
-                  keys: ['name', 'y', 'drilldown']
-                }],
-                drilldown: {
-                  series: [{
-                    name: 'Hétfő',
-                    id: 'Monday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: 'Kedd',
-                    id: 'Tuesday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: 'Szerda',
-                    id: 'Wednesday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: 'Csütörtök',
-                    id: 'Thursday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: 'Péntek',
-                    id: 'Friday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: 'Szombat',
-                    id: 'Saturday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: 'Vasárnap',
-                    id: 'Sunday',
-                    data: [
-                      ['8-12h', 12, '8h'],
-                      ['12-16h', 16, '12h'],
-                      ['16-20h', 20, '16h'],
-                      ['20-24h', 24, '20h'],
-                      ['0-4h', 4, '0h'],
-                      ['4-8h', 8, '4h']
-                    ],
-                    keys: ['name', 'y', 'drilldown']
-                  }, {
-                    name: '8-12h',
-                    id: '8h',
-                    data: [
-                      ['8h', 8],
-                      ['9h', 9],
-                      ['10h', 10],
-                      ['11h', 11]
-                    ]
-                  }, {
-                    name: '12-16h',
-                    id: '12h',
-                    data: [
-                      ['12h', 12],
-                      ['13h', 13],
-                      ['14h', 14],
-                      ['15h', 15]
-                    ]
-                  }, {
-                    name: '16-20h',
-                    id: '16h',
-                    data: [
-                      ['16h', 16],
-                      ['17h', 17],
-                      ['18h', 18],
-                      ['19h', 19]
-                    ]
-                  }, {
-                    name: '20-24h',
-                    id: '20h',
-                    data: [
-                      ['20h', 20],
-                      ['21h', 21],
-                      ['22h', 22],
-                      ['23h', 23]
-                    ]
-                  }, {
-                    name: '0-4h',
-                    id: '0h',
-                    data: [
-                      ['0h', 0],
-                      ['1h', 1],
-                      ['2h', 2],
-                      ['3h', 3]
-                    ]
-                  }, {
-                    name: '4-8h',
-                    id: '4h',
-                    data: [
-                      ['4h', 4],
-                      ['5h', 5],
-                      ['6h', 6],
-                      ['7h', 7]
-                    ]
-                  }]
-                }
-              });
+                              // prepare the detail chart
+                              var detailData = [],
+                                  detailStart = data[0][0];
+
+                              $.each(masterChart.series[0].data, function () {
+                                  if (this.x >= detailStart) {
+                                      detailData.push(this.y);
+                                  }
+                              });
+
+                              // create a detail chart referenced by a global variable
+                              detailChart = $('#detail-container').highcharts({
+                                  chart: {
+                                      marginBottom: 120,
+                                      reflow: false,
+                                      marginLeft: 50,
+                                      marginRight: 20,
+                                      style: {
+                                          position: 'absolute'
+                                      }
+                                  },
+                                  credits: {
+                                      enabled: false
+                                  },
+                                  title: {
+                                      text: 'Bandwidth statistic'
+                                  },
+                                  subtitle: {
+                                      text: 'Select an area by dragging across the lower chart'
+                                  },
+                                  xAxis: {
+                                      type: 'datetime'
+                                  },
+                                  yAxis: {
+                                      title: {
+                                          text: null
+                                      },
+                                      maxZoom: 0.1
+                                  },
+                                  tooltip: {
+                                      formatter: function () {
+                                          var point = this.points[0];
+                                          return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
+                                              Highcharts.numberFormat(point.y, 2) + ' kB/s';
+                                      },
+                                      shared: true
+                                  },
+                                  legend: {
+                                      enabled: false
+                                  },
+                                  plotOptions: {
+                                      series: {
+                                          marker: {
+                                              enabled: false,
+                                              states: {
+                                                  hover: {
+                                                      enabled: true,
+                                                      radius: 3
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  },
+                                  series: [{
+                                      name: 'Avarage bandwidth',
+                                      pointStart: detailStart,
+                                      pointInterval: 24 * 3600 * 1000,
+                                      data: detailData
+                                  }],
+
+                                  exporting: {
+                                      enabled: false
+                                  }
+
+                              }).highcharts(); // return chart
+                          }
+
+                          // create the master chart
+                          function createMaster() {
+                              $('#master-container').highcharts({
+                                  chart: {
+                                      reflow: false,
+                                      borderWidth: 0,
+                                      backgroundColor: null,
+                                      marginLeft: 50,
+                                      marginRight: 20,
+                                      zoomType: 'x',
+                                      events: {
+
+                                          // listen to the selection event on the master chart to update the
+                                          // extremes of the detail chart
+                                          selection: function (event) {
+                                              var extremesObject = event.xAxis[0],
+                                                  min = extremesObject.min,
+                                                  max = extremesObject.max,
+                                                  detailData = [],
+                                                  xAxis = this.xAxis[0];
+
+                                              // reverse engineer the last part of the data
+                                              $.each(this.series[0].data, function () {
+                                                  if (this.x > min && this.x < max) {
+                                                      detailData.push([this.x, this.y]);
+                                                  }
+                                              });
+
+                                              // move the plot bands to reflect the new detail span
+                                              xAxis.removePlotBand('mask-before');
+                                              xAxis.addPlotBand({
+                                                  id: 'mask-before',
+                                                  from: data[0][0],
+                                                  to: min,
+                                                  color: 'rgba(0, 0, 0, 0.2)'
+                                              });
+
+                                              xAxis.removePlotBand('mask-after');
+                                              xAxis.addPlotBand({
+                                                  id: 'mask-after',
+                                                  from: max,
+                                                  to: data[data.length - 1][0],
+                                                  color: 'rgba(0, 0, 0, 0.2)'
+                                              });
+
+
+                                              detailChart.series[0].setData(detailData);
+
+                                              return false;
+                                          }
+                                      }
+                                  },
+                                  title: {
+                                      text: null
+                                  },
+                                  xAxis: {
+                                      type: 'datetime',
+                                      showLastTickLabel: true,
+                                      maxZoom: 64 * 24 * 3600000, // fourteen days
+                                      plotBands: [{
+                                          id: 'mask-before',
+                                          from: data[0][0],
+                                          to: data[data.length - 1][0],
+                                          color: 'rgba(0, 0, 0, 0.2)'
+                                      }],
+                                      title: {
+                                          text: null
+                                      }
+                                  },
+                                  yAxis: {
+                                      gridLineWidth: 0,
+                                      labels: {
+                                          enabled: false
+                                      },
+                                      title: {
+                                          text: null
+                                      },
+                                      min: 0.6,
+                                      showFirstLabel: false
+                                  },
+                                  tooltip: {
+                                      formatter: function () {
+                                          return false;
+                                      }
+                                  },
+                                  legend: {
+                                      enabled: false
+                                  },
+                                  credits: {
+                                      enabled: false
+                                  },
+                                  plotOptions: {
+                                      series: {
+                                          fillColor: {
+                                              linearGradient: [0, 0, 0, 70],
+                                              stops: [
+                                                  [0, Highcharts.getOptions().colors[0]],
+                                                  [1, 'rgba(255,255,255,0)']
+                                              ]
+                                          },
+                                          lineWidth: 1,
+                                          marker: {
+                                              enabled: false
+                                          },
+                                          shadow: false,
+                                          states: {
+                                              hover: {
+                                                  lineWidth: 1
+                                              }
+                                          },
+                                          enableMouseTracking: false
+                                      }
+                                  },
+
+                                  series: [{
+                                      type: 'area',
+                                      name: 'USD to EUR',
+                                      pointInterval: 24 * 3600 * 1000,
+                                      pointStart: data[0][0],
+                                      data: data
+                                  }],
+
+                                  exporting: {
+                                      enabled: false
+                                  }
+
+                              }, function (masterChart) {
+                                  createDetail(masterChart);
+                              })
+                                  .highcharts(); // return chart instance
+                          }
+
+                          // make the container smaller and add a second container for the master chart
+                          var $container = $('#highchart-container')
+                              .css('position', 'relative');
+
+                          $('<div id="detail-container">')
+                              .appendTo($container);
+
+                          $('<div id="master-container">')
+                              .css({
+                                  position: 'absolute',
+                                  top: 300,
+                                  height: 100,
+                                  width: '100%'
+                              })
+                                  .appendTo($container);
+
+                          // create master and in its callback, create the detail chart
+                          createMaster();
+                      });
+                  });
         }
 
     }
