@@ -5,6 +5,8 @@
 
 1. Go to the project folder `inetsense/inetsense-webclient/` and execute the `mvn clean install` command for create the needed dependency for the webserver.
 
+2. Build & start the server and type `http://localhost:8080/TutorialApp/index.html` in the browser.
+
 
 ## Develop
 
@@ -33,6 +35,7 @@ export MAVEN_OPTS="-Xms256m -Xmx512m"
 
 
 ## Screenshots
+
 
 ![Home](/inetsense-webclient/docs/pictures/home.png?raw=true "Landing screen")
 
