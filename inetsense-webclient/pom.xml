@@ -19,7 +19,7 @@
 		<resources>
 			<resource>
 				<targetPath>static</targetPath>
-				<directory>src/build/production</directory>
+				<directory>src/build/${sencha.env}</directory>
 				<includes>
 					<include>**</include>
 				</includes>

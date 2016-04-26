@@ -109,18 +109,7 @@ Ext.define('TutorialApp.view.main.Main', {
         bind: {
             html: '{loremIpsum}'
         } */
-    },  {
-        title: 'Graphs',
-        iconCls: 'fa-cog',
-        items: [{
-            xtype: 'column-basic'
-        }]
-        /* ,
-        bind: {
-            html: '{loremIpsum}'
-        } */
     },
-
     {
         title: 'Bandwidth statistic',
         iconCls: 'fa-cog',

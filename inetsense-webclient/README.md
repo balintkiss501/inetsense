@@ -27,7 +27,7 @@ export SENCHA_CMD="/home/hello/Applications/sencha-cmd/bin/Sencha/Cmd/sencha"
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 ````
 
-4. Go to the project folder `inetsense/inetsense-webclient/` and execute the `mvn clean install -P rebuildwebclient` command for adding the needed sdk files to the project
+4. Go to the project folder `inetsense/inetsense-webclient/` and execute the `mvn clean install -P rebuild` command for adding the needed sdk files to the project
 
 5. Start developing via  `sencha app watch` command
 
