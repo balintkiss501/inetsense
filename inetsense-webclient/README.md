@@ -12,6 +12,7 @@ Pls check the INS-15-task comment section!
 
 ## Develop
 
+
 1. Download and install the [Sencha cmd](https://www.sencha.com/products/sencha-cmd/)
 
 2. Download and extract the [ExtJS SDK 6.0](http://www.sencha.com/products/extjs/evaluate/)
@@ -22,6 +23,8 @@ ie. on unix:
 ```
 export SENCHA_SDK="/home/hello/Applications/ext-6.0.0/build"
 export SENCHA_CMD="/home/hello/Applications/sencha-cmd/bin/Sencha/Cmd/sencha"
+
+export MAVEN_OPTS="-Xms256m -Xmx512m"
 ````
 
 4. Go to the project folder `inetsense/inetsense-webclient/` and execute the `mvn clean install -P rebuildwebclient` command for adding the needed sdk files to the project

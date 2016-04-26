@@ -30,7 +30,7 @@
 	<profiles>
 	
 		<profile>
-			<id>rebuildwebclient</id>
+			<id>rebuild</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
