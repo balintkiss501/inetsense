@@ -52,13 +52,16 @@ public class DataUploader{
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
             conn.setRequestMethod("POST");
             
-            Writer out = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            out.append(data);
+            OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
+            wr.write(data);
+            wr.flush();
             
-            out.flush();
-            out.close();
+            System.out.println("DATA sent");
             
             this.measurements.clear();
         
