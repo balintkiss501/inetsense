@@ -48,22 +48,25 @@ public class DataUploader{
         System.out.println(data);
         
         try {
-            URL url = new URL(server_location.toString());
+            URL url = new URL(server_location);
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
-            conn.setDoInput(true);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestProperty("Accept", "application/json");
             conn.setRequestMethod("POST");
             
             OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
             wr.write(data);
+            wr.write('\n');
+            
             wr.flush();
+            wr.close();
             
             System.out.println("DATA sent");
             
             this.measurements.clear();
+            
+            conn.disconnect();
         
         } catch(Exception ex) {
             // print error, try again later
