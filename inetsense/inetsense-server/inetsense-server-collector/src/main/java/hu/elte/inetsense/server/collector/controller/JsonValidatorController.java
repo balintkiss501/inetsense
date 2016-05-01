@@ -1,16 +1,19 @@
-package hu.elte.inetsense.web;
+package hu.elte.inetsense.server.collector.controller;
 
-import hu.elte.inetsense.service.JsonValidator;
-import hu.elte.inetsense.service.ProbeDataService;
-import hu.elte.inetsense.util.JsonValidationException;
-import hu.elte.inetsense.web.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.server.collector.service.ProbeDataService;
+import hu.elte.inetsense.server.collector.service.JsonValidator;
+
+import hu.elte.inetsense.server.collector.util.JsonValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * JSON message endpoint for the Standardized Interface.
@@ -61,6 +64,5 @@ public class JsonValidatorController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("HTTP 500 error: Internal error happened when saving data after successful validation.");  // TODO: adding Spring's default JSON-based response
-
     }
 }

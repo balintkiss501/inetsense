@@ -1,4 +1,4 @@
-package hu.elte.inetsense.service;
+package hu.elte.inetsense.server.collector.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,8 +8,8 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import hu.elte.inetsense.util.JsonValidationException;
-import hu.elte.inetsense.web.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.server.collector.util.JsonValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

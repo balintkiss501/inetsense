@@ -1,11 +1,11 @@
-package hu.elte.inetsense;
+package hu.elte.inetsense.server.collector;
 
-import hu.elte.inetsense.service.JsonValidator;
-import hu.elte.inetsense.service.ProbeDataService;
-import hu.elte.inetsense.util.JsonValidationException;
-import hu.elte.inetsense.web.JsonValidatorController;
-import hu.elte.inetsense.web.dtos.MeasurementDTO;
-import hu.elte.inetsense.web.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.MeasurementDTO;
+import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.server.collector.controller.JsonValidatorController;
+import hu.elte.inetsense.server.collector.service.JsonValidator;
+import hu.elte.inetsense.server.collector.service.ProbeDataService;
+import hu.elte.inetsense.server.collector.util.JsonValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +32,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
