@@ -22,6 +22,13 @@
             <artifactId>inetsense-server-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>hu.elte.inetsense</groupId>
+            <artifactId>inetsense-webclient</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

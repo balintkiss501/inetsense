@@ -13,6 +13,7 @@
         <module>inetsense-server</module>
         <module>inetsense-probe</module>
         <module>inetsense-common</module>
+        <module>inetsense-webclient</module>
     </modules>
 
     <properties>
