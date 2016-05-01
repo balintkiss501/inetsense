@@ -2,6 +2,7 @@ package hu.elte.inetsense;
 
 import hu.elte.inetsense.service.JsonValidator;
 import hu.elte.inetsense.service.ProbeDataService;
+import hu.elte.inetsense.util.JsonValidationException;
 import hu.elte.inetsense.web.JsonValidatorController;
 import hu.elte.inetsense.web.dtos.MeasurementDTO;
 import hu.elte.inetsense.web.dtos.ProbeDataDTO;
@@ -30,9 +31,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.anyString;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,59 +108,101 @@ public class JsonValidatorTest {
 
     @Test
     public void testSimpleValidJson() {
-        String plainString = "{\"probeAuthId\": \"12345678\" }";
-        ProbeDataDTO messageObject = new ProbeDataDTO();
-        messageObject.setProbeAuthId("12345678");
-        ProbeDataDTO validatedObject = validator.validate(plainString);
 
-        assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
+        try {
+            String plainString = "{\"probeAuthId\": \"12345678\" }";
+            ProbeDataDTO messageObject = new ProbeDataDTO();
+            messageObject.setProbeAuthId("12345678");
+            ProbeDataDTO validatedObject = validator.validate(plainString);
+
+            assertEquals(messageObject.getProbeAuthId(), validatedObject.getProbeAuthId());
+        } catch (JsonValidationException e) {
+            log.error(e.getMessage(), e);
+            fail("Test case is not supposed to throw exception.");
+        }
     }
 
     @Test
     public void testWholeValidJson() {
 
-        // Validate JSON
-        ProbeDataDTO validatedObject = validator.validate(validJsonString);
+        try {
+            // Validate JSON
+            ProbeDataDTO validatedObject = validator.validate(validJsonString);
 
-        // Assert cases
-        assertEquals(fullProbeData.getProbeAuthId(), validatedObject.getProbeAuthId());
-        for (MeasurementDTO m : fullProbeData.getMeasurements()) {
-            assertEquals(m.getLat(),
-                    validatedObject.getMeasurements()
-                            .get(fullProbeData.getMeasurements().indexOf(m)).getLat());
-            assertEquals(m.getLng(),
-                    validatedObject.getMeasurements()
-                            .get(fullProbeData.getMeasurements().indexOf(m)).getLng());
-            assertEquals(m.getCompletedOn(),
-                    validatedObject.getMeasurements()
-                            .get(fullProbeData.getMeasurements().indexOf(m)).getCompletedOn());
-            assertEquals(m.getDownloadSpeed(),
-                    validatedObject.getMeasurements()
-                            .get(fullProbeData.getMeasurements().indexOf(m)).getDownloadSpeed());
-            assertEquals(m.getUploadSpeed(),
-                    validatedObject.getMeasurements()
-                            .get(fullProbeData.getMeasurements().indexOf(m)).getUploadSpeed());
+            // Assert cases
+            assertEquals(fullProbeData.getProbeAuthId(), validatedObject.getProbeAuthId());
+            for (MeasurementDTO m : fullProbeData.getMeasurements()) {
+                assertEquals(m.getLat(),
+                        validatedObject.getMeasurements()
+                                .get(fullProbeData.getMeasurements().indexOf(m)).getLat());
+                assertEquals(m.getLng(),
+                        validatedObject.getMeasurements()
+                                .get(fullProbeData.getMeasurements().indexOf(m)).getLng());
+                assertEquals(m.getCompletedOn(),
+                        validatedObject.getMeasurements()
+                                .get(fullProbeData.getMeasurements().indexOf(m)).getCompletedOn());
+                assertEquals(m.getDownloadSpeed(),
+                        validatedObject.getMeasurements()
+                                .get(fullProbeData.getMeasurements().indexOf(m)).getDownloadSpeed());
+                assertEquals(m.getUploadSpeed(),
+                        validatedObject.getMeasurements()
+                                .get(fullProbeData.getMeasurements().indexOf(m)).getUploadSpeed());
+            }
+        } catch (JsonValidationException e) {
+            log.error(e.getMessage(), e);
+            fail("Test case is not supposed to throw exception.");
         }
     }
 
     @Test
-    public void testInvalidJson() {
+    public void testErrorCases() {
+
+        // Null object
+        try {
+            validator.validate(null);
+            fail("The test did not throw exception.");
+        } catch (JsonValidationException e) {
+            assertThat(e, instanceOf(JsonValidationException.class));
+            assertEquals("Message is empty.", e.getMessage());
+        }
+
+        // Empty message
+        try {
+            validator.validate("");
+            fail("The test did not throw exception.");
+        } catch (JsonValidationException e) {
+            assertThat(e, instanceOf(JsonValidationException.class));
+            assertEquals("Message is empty.", e.getMessage());
+        }
+
         // Not even a JSON text
-        ProbeDataDTO notEvenJson = validator.validate("Bogus String");
-        assertNull(notEvenJson);
+        try {
+            ProbeDataDTO notEvenJson = validator.validate("Bogus String");
+        } catch (JsonValidationException e) {
+            assertThat(e, instanceOf(JsonValidationException.class));
+            assertEquals("Incoming message is not even in valid JSON format.", e.getMessage());
+        }
 
         // Invalid JSON
-        ProbeDataDTO invalidObject = validator.validate("{\"invalid_field\":\"invalid_value\"}");
-        assertNull(invalidObject);
-
+        try {
+            ProbeDataDTO invalidObject = validator.validate("{\"invalid_field\":\"invalid_value\"}");
+        } catch (JsonValidationException e) {
+            assertThat(e, instanceOf(JsonValidationException.class));
+            assertEquals("Incoming message does not conform to schema.", e.getMessage());
+        }
     }
 
     @Test
-    public void testValidatorController() {
+    public void testValidatorController() throws JsonValidationException {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controllerMock).build();
 
-        when(validatorMock.validate(anyString())).thenReturn(null);
+        doNothing().when(probeDataServiceMock).saveProbeData(any());
+
+        when(validatorMock.validate("Bogus String"))
+                .thenThrow(new JsonValidationException("Incoming message is not even in valid JSON format."));
+        when(validatorMock.validate("{\"invalid_field\":\"invalid_value\"}"))
+                .thenThrow(new JsonValidationException("Incoming message does not conform to schema."));
         when(validatorMock.validate(validJsonString)).thenReturn(fullProbeData);
 
         try {
@@ -168,14 +212,17 @@ public class JsonValidatorTest {
                     .andExpect(status().isOk());
 
             mockMvc.perform(post("/message-endpoint")
-                    .content("{\"invalid_field\":\"invalid_value\"}"))
+                    .content("Bogus String"))
                     .andExpect(status().isInternalServerError());
 
             mockMvc.perform(post("/message-endpoint")
-                    .content("Bogus String"))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"invalid_field\":\"invalid_value\"}"))
                     .andExpect(status().isInternalServerError());
+
         } catch (Exception e) {
             log.error("Error when verifying controller.", e);
+            fail("Error when verifying controller.");
         }
     }
 
@@ -186,7 +233,12 @@ public class JsonValidatorTest {
 
     @Bean
     public JsonValidator getJsonValidator() {
-        return new JsonValidator();
+        try {
+            return new JsonValidator();
+        } catch (JsonValidationException e) {
+            log.error("Error creating validator.", e);
+            return null;
+        }
     }
 
     @Bean
