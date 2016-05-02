@@ -36,12 +36,12 @@ public class DataUploader{
     private void flush() {
         
         /* todo: replace with a JSON lib */
-        String data = "{\"probeAuthId\":\""+probe_id+"\", \"measurements\":[";
+        String data = "{\"probeAuthId\":\""+probe_id+"\",\"measurements\":[";
         
         data += measurements.get(0).toJSON();
         
         for(int i=1; i<measurements.size(); i++) {
-            data += ", "+measurements.get(i).toJSON();
+            data += ","+measurements.get(i).toJSON();
         }
         
         data += "]}";
@@ -58,8 +58,8 @@ public class DataUploader{
             conn.setDoOutput( true );
             conn.setInstanceFollowRedirects( false );
             conn.setRequestMethod( "POST" );
-            conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded"); 
-            conn.setRequestProperty( "charset", "utf-8");
+            conn.setRequestProperty( "Content-Type", "text/json"); 
+            conn.setRequestProperty( "Charset", "utf-8");
             conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
             
             DataOutputStream wr= new DataOutputStream(conn.getOutputStream());
