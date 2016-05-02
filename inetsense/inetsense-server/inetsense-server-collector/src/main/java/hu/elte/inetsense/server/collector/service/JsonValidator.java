@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 /**
  * Service for the Standardized Interface: validation of incoming JSON data against existing JSON schema.
@@ -29,7 +30,7 @@ import java.nio.file.Paths;
 public class JsonValidator {
 
     private final Logger log = LoggerFactory.getLogger(JsonValidator.class);
-    private final String schemaFileStr = "src/main/resources/probe-validation.schema.json";
+    private final String schemaFileStr = "/probe-validation.schema.json";
 
     private String schemaStr = "";
     private ObjectMapper mapper;
@@ -41,10 +42,9 @@ public class JsonValidator {
     public JsonValidator() throws JsonValidationException {
 
         // Load schema file
-        String schemaFilePath = new File(schemaFileStr).getAbsolutePath();
-        try {
-            schemaStr = new String(Files.readAllBytes(Paths.get(schemaFilePath)), StandardCharsets.UTF_8);
-        } catch (IOException e) {
+        try (Scanner sc = new Scanner(getClass().getResourceAsStream(schemaFileStr), "UTF-8").useDelimiter("\\A")){
+            schemaStr = sc.next();
+        } catch (Exception e) {
             log.error("Error when accessing JSON schema file for Validator.", e);
             throw new JsonValidationException("Error when accessing JSON schema file for Validator.");
         }
