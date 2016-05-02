@@ -13,8 +13,24 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
     datechooser: null,
 
-    onDateChanged: function() {
+    onDateChanged: function(evt, data) {
+
+        if(data == null ||
+            data.startDate == "" || typeof data.startDate == "undefined" ||
+            data.endDate == "" || typeof data.endDate == "undefined" ) {
+            return;
+        }
+
+        var $scope = this;
+
         console.log("onDateChanged", arguments);
+
+        var dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
+        var dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
+
+        $.getJSON('http://localhost:8080/measurements/1/from/' + dFrom + '/to/' + dTo + '/', function (data) {
+            $scope.updateMasterChart(data);
+        });
     },
 
     initComponent: function(){
@@ -23,7 +39,10 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
         this.datechooser = new WebclientApp.view.main.chart.DateChooser({
             listeners: {
-                datechanged: this.onDateChanged
+                datechanged: {
+                    scope: this,
+                    fn: this.onDateChanged
+                }
             }
         });
 

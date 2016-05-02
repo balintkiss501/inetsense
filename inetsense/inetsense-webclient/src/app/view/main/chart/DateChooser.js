@@ -10,18 +10,20 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
 
     title: 'Pick the desired date',
 
+    myrec: null,
+
     onFieldChange: function() {
-        this.fireEvent('datechanged', this, this.getForm().getRecord().data);
+        this.fireEvent('datechanged', this, this.getForm().getValues());
     },
 
     listeners: {
         afterrender: function() {
 
-            this.getForm().loadRecord(Ext.create('WebclientApp.model.DateEntry', {
-                'startDate': '01/10/2003',
-                'startTime': null,
-                'endDate'  : '12/11/2009',
-                'endTime'  : null
+            this.myrec = this.getForm().loadRecord(Ext.create('WebclientApp.model.DateEntry', {
+                'startDate': '2016 03 01',
+                'endDate'  : '2016 04 01',
+                'startTime': '',
+                'endTime'  : ''
             }));
         }
     },
@@ -46,7 +48,8 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
                 items: [{
                     xtype: 'datefield',
                     name: 'startDate',
-                    margin: '0 5 0 0'
+                    margin: '0 5 0 0',
+                    format: 'Y m d'
                     // allowBlank: false
                 }, {
                     xtype: 'timefield',
@@ -70,7 +73,8 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
                 items: [{
                     xtype: 'datefield',
                     name: 'endDate',
-                    margin: '0 5 0 0'
+                    margin: '0 5 0 0',
+                    format: 'Y m d'
                     // allowBlank: false
                 }, {
                     xtype: 'timefield',
