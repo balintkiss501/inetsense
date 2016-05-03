@@ -5,6 +5,8 @@
  */
 package hu.elte.inetsense.probe.uploader;
 
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author Adam
@@ -46,7 +48,16 @@ public class Measurement {
     }
     
     public String toJSON() {
-        return "{\"completedOn\":"+timestamp+", \"downloadSpeed\":"+download_bps+", \"uploadSpeed\":"+upload_bps+"}";
+        return "{\"completedOn\":\""+getTimeString()+"\",\"downloadSpeed\":"+download_bps+",\"uploadSpeed\":"+upload_bps+"}";
+    }
+    
+    private String getTimeString() {
+        return (
+            new SimpleDateFormat("yyyy-MM-dd").format(timestamp)
+            + "T" +
+            new SimpleDateFormat("HH:mm:ss").format(timestamp)
+            + "Z"
+        );
     }
     
 }
