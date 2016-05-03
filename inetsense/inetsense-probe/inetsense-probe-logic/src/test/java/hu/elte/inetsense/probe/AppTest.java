@@ -1,5 +1,6 @@
-import static org.junit.Assert.*;
+package hu.elte.inetsense.probe;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class AppTest {
