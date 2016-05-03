@@ -313,9 +313,32 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             },
             tooltip: {
                 formatter: function () {
-                    var point = this.points[0];
-                    return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
-                        Highcharts.numberFormat(point.y, 2) + ' kB/s';
+                    // debugger
+
+                    var y1 = this.points[0].series.chart.series[0].yData[this.points[0].point.index];
+                    var y2 = this.points[0].series.chart.series[1].yData[this.points[0].point.index];
+
+                    var sOneVisible = this.points[0].series.chart.series[0].visible;
+                    var sSecondVisible = this.points[0].series.chart.series[1].visible;
+
+                    var name1 = this.points[0].series.chart.series[0].name;
+                    var name2 = this.points[0].series.chart.series[1].name;
+
+                    var v1 = ("     " + Highcharts.numberFormat(y1, 2)).slice(-5);
+                    var v2 = ("     " + Highcharts.numberFormat(y2, 2)).slice(-5);
+
+                    var names = [];
+                    if (sOneVisible) names.push(name1);
+                    if (sSecondVisible) names.push(name2);
+
+                    var values = [];
+                    if (sOneVisible) values.push('<b> '+ v1 + '</b>');
+                    if (sSecondVisible) values.push('<b> '+ v2 + '</b>');
+
+                    return '<b>'
+                                + names.join('/') + '</b>' + '<br/>'
+                                + Highcharts.dateFormat('%Y %m %d, %H:%M:%S', this.x) + '<br/>'
+                                + values.join('/') + ' kB/s';
                 },
                 shared: true,
                 crosshairs: true,
