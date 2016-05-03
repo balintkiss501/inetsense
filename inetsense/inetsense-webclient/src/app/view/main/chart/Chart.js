@@ -28,7 +28,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         var dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
         var dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
 
-        $.getJSON('http://localhost:8080/measurements/1/from/' + dFrom + '/to/' + dTo + '/', function (data) {
+        $.getJSON('http://localhost:8080/measurements/demo/1/from/' + dFrom + '/to/' + dTo + '/', function (data) {
             $scope.updateMasterChart(data);
         });
     },
