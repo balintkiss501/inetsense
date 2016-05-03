@@ -146,11 +146,13 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                             }
                         });
 
+                        var fromSeriesData = this.series[0].data;
+
                         // move the plot bands to reflect the new detail span
                         xAxis.removePlotBand('mask-before');
                         xAxis.addPlotBand({
                             id: 'mask-before',
-                            from: data[0][0][0],
+                            from: fromSeriesData[0].x,
                             to: min,
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
@@ -159,7 +161,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                         xAxis.addPlotBand({
                             id: 'mask-after',
                             from: max,
-                            to: data[0][data.length - 1][0],
+                            to: fromSeriesData[fromSeriesData.length - 1].x,
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
 
@@ -301,48 +303,64 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
               text: 'Select an area by dragging across the lower chart'
             },
             xAxis: {
-              type: 'datetime'
+                type: 'datetime'
             },
             yAxis: {
-              title: {
-                  text: null
-              },
-              maxZoom: 0.1
+                title: {
+                    text: null
+                },
+                maxZoom: 0.1
             },
             tooltip: {
-              formatter: function () {
-                  var point = this.points[0];
-                  return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
-                      Highcharts.numberFormat(point.y, 2) + ' kB/s';
-              },
-              shared: true
+                formatter: function () {
+                    var point = this.points[0];
+                    return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
+                        Highcharts.numberFormat(point.y, 2) + ' kB/s';
+                },
+                shared: true,
+                crosshairs: true,
+                followPointer: true
             },
             legend: {
-              enabled: false
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
             },
             plotOptions: {
-              series: {
-                  marker: {
+                series: {
+                    cursor: 'pointer',
+                    marker: {
                       enabled: false,
                       states: {
                           hover: {
-                              enabled: true,
-                              radius: 1
+                              enabled: false,
+                              radius: 1,
+                              lineWidth: 2
                           }
                       }
-                  }
-              }
+                    }
+                },
+                line: {
+                    states: {
+                        hover: {
+                            enabled: false
+                        }
+                    }
+                }
             },
             series: [{
-              name: 'Avarage bandwidth',
+              name: 'Upload',
               pointStart: detailStart[0],
               pointInterval: 24 * 3600 * 1000,
-              data: detailData[0]
+              data: detailData[0],
+              lineWidth: 2
             } , {
-              name: 'Avarage bandwidth',
+              name: 'Download',
               pointStart: detailStart[1],
               pointInterval: 24 * 3600 * 1000,
-              data: detailData[1]
+              data: detailData[1],
+              lineWidth: 2
             } ],
 
             exporting: {
