@@ -75,6 +75,8 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         }, true);
 
         this.updateDetailChart(data[0]);
+
+        this.doSelect(data[0][0][0], data[0][data[0].length -1][0], this.masterChart.xAxis[0]);
     },
 
 
@@ -108,6 +110,54 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     },
 
 
+    doSelect: function(__min, __max, __xAxis) {
+        var $scope = this;
+
+        var min = __min,
+            max = __max,
+            detailData = [[],[]],
+            xAxis = __xAxis;
+
+        // reverse engineer the last part of the data
+        $.each($scope.masterChart.series[0].data, function () {
+            if (this.x > min && this.x < max) {
+                detailData[0].push([this.x, this.y]);
+            }
+        });
+
+        $.each($scope.masterChart.series[1].data, function () {
+            if (this.x > min && this.x < max) {
+                detailData[1].push([this.x, this.y]);
+            }
+        });
+
+        var fromSeriesData = $scope.masterChart.series[0].data;
+
+        // move the plot bands to reflect the new detail span
+        xAxis.removePlotBand('mask-before');
+        xAxis.addPlotBand({
+            id: 'mask-before',
+            from: fromSeriesData[0].x,
+            to: min,
+            color: 'rgba(0, 0, 0, 0.2)'
+        });
+
+        xAxis.removePlotBand('mask-after');
+        xAxis.addPlotBand({
+            id: 'mask-after',
+            from: max,
+            to: fromSeriesData[fromSeriesData.length - 1].x,
+            color: 'rgba(0, 0, 0, 0.2)'
+        });
+
+
+        $scope.detailChart.series[0].setData(detailData[0]);
+        $scope.detailChart.series[1].setData(detailData[1]);
+
+        return false;
+    },
+
+
     createMaster: function(fn) {
 
         var $scope = this;
@@ -127,47 +177,12 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                     // listen to the selection event on the master chart to update the
                     // extremes of the detail chart
                     selection: function (event) {
+
                         var extremesObject = event.xAxis[0],
                             min = extremesObject.min,
-                            max = extremesObject.max,
-                            detailData = [[],[]],
-                            xAxis = this.xAxis[0];
+                            max = extremesObject.max;
 
-                        // reverse engineer the last part of the data
-                        $.each(this.series[0].data, function () {
-                            if (this.x > min && this.x < max) {
-                                detailData[0].push([this.x, this.y]);
-                            }
-                        });
-
-                        $.each(this.series[1].data, function () {
-                            if (this.x > min && this.x < max) {
-                                detailData[1].push([this.x, this.y]);
-                            }
-                        });
-
-                        var fromSeriesData = this.series[0].data;
-
-                        // move the plot bands to reflect the new detail span
-                        xAxis.removePlotBand('mask-before');
-                        xAxis.addPlotBand({
-                            id: 'mask-before',
-                            from: fromSeriesData[0].x,
-                            to: min,
-                            color: 'rgba(0, 0, 0, 0.2)'
-                        });
-
-                        xAxis.removePlotBand('mask-after');
-                        xAxis.addPlotBand({
-                            id: 'mask-after',
-                            from: max,
-                            to: fromSeriesData[fromSeriesData.length - 1].x,
-                            color: 'rgba(0, 0, 0, 0.2)'
-                        });
-
-
-                        $scope.detailChart.series[0].setData(detailData[0]);
-                        $scope.detailChart.series[1].setData(detailData[1]);
+                        $scope.doSelect(min, max, $scope.masterChart.xAxis[0]);
 
                         return false;
                     }
@@ -425,9 +440,11 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             $scope.createMaster(function(){
                 console.log("masterChart, detailChart created");
 
+                /*
                 $.getJSON('http://localhost:8080/measurements/1/from/1456790400000/to/1461494069283/', function (data) {
                     $scope.updateMasterChart(data);
                 });
+                */
                 
             });
         }
