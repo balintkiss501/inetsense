@@ -44,12 +44,12 @@ public class MeasurementController {
      */
     @CrossOrigin(origins = "http://localhost:1841")
 	@RequestMapping("/measurements/{probeId}/from/{dateFrom}/to/{dateTo}")
-	public List<List<BigDecimal>> getAllMeasurementsOfProbeIdByTimeWindow(
+	public List<List<List<BigDecimal>>> getAllMeasurementsOfProbeIdByTimeWindow(
 			@PathVariable("probeId") Integer probeId,
 			@PathVariable("dateFrom") String dateFrom,
 			@PathVariable("dateTo") String dateTo) {
 		
-		List<List<BigDecimal>> result = new ArrayList<List<BigDecimal>>();
+		List<List<List<BigDecimal>>> result = new ArrayList<List<List<BigDecimal>>>();
 		
 		// REVIEW check parameter validity
 		
@@ -63,19 +63,33 @@ public class MeasurementController {
 		
 		Random random = new Random(probeId);
 		
-		Integer resolution = 6;
+		Integer resolution = 600;
 		BigDecimal step = diff.divide(new BigDecimal(resolution));
 		
 		// REVIEW minimum resolution
 		// REVIEW measurement ranges, measurements base as parameter
 		
+		List<List<BigDecimal>> uploads = new ArrayList<List<BigDecimal>>();
 		for (int i = 0; i < resolution; i++) {
 
-			BigDecimal measured = new BigDecimal(random.nextInt(100) + random.nextDouble() + 100);
+			BigDecimal measured = new BigDecimal(random.nextInt(30) + random.nextDouble() + 0);
 			measured = measured.setScale(2, RoundingMode.CEILING);
 
-			result.add(Arrays.asList(dFrom.add(step.multiply(new BigDecimal(i)).setScale(0, RoundingMode.DOWN)), measured));
+			uploads.add(Arrays.asList(dFrom.add(step.multiply(new BigDecimal(i)).setScale(0, RoundingMode.DOWN)), measured));
 		}
+		
+		
+		List<List<BigDecimal>> downloads = new ArrayList<List<BigDecimal>>();
+		for (int i = 0; i < resolution; i++) {
+
+			BigDecimal measured = new BigDecimal(random.nextInt(30) + random.nextDouble() + 100);
+			measured = measured.setScale(2, RoundingMode.CEILING);
+
+			downloads.add(Arrays.asList(dFrom.add(step.multiply(new BigDecimal(i)).setScale(0, RoundingMode.DOWN)), measured));
+		}
+		
+		result.add(uploads);
+		result.add(downloads);
 
 		return result;
 	}

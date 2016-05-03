@@ -65,29 +65,45 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     updateMasterChart: function(data) {
 
         this.masterChart.series[0].update({
-            pointStart: data[0][0],
-            data: data
+            pointStart: data[0][0][0],
+            data: data[0]
         }, true);
 
-        this.updateDetailChart(data);
+        this.masterChart.series[1].update({
+            pointStart: data[1][0][0],
+            data: data[1]
+        }, true);
+
+        this.updateDetailChart(data[0]);
     },
 
 
     updateDetailChart: function(data) {
 
         // prepare the detail chart
-        var detailData = [],
-        detailStart = data[0][0];
+        var detailData = [ [], [] ],
+        detailStart = [ data[0][0], data[1][0] ];
 
         $.each(this.masterChart.series[0].data, function () {
-            if (this.x >= detailStart) {
-              detailData.push(this.y);
+            if (this.x >= detailStart[0]) {
+              detailData[0].push(this.y);
+            }
+        });
+
+        $.each(this.masterChart.series[1].data, function () {
+            if (this.x >= detailStart[1]) {
+              detailData[1].push(this.y);
             }
         });
 
         this.detailChart.series[0].update({
-            pointStart: detailStart,
-            data: detailData
+            pointStart: detailStart[0],
+            data: detailData[0]
+        }, true);
+
+        this.detailChart.series[1].update({
+            pointStart: detailStart[1],
+            data: detailData[1]
         }, true);
     },
 
@@ -96,7 +112,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
         var $scope = this;
 
-        var data = [[]];
+        var data = [[[]],[[]]];
 
         $scope.masterChart = $($scope.masterContainer).highcharts({
             chart: {
@@ -114,13 +130,19 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                         var extremesObject = event.xAxis[0],
                             min = extremesObject.min,
                             max = extremesObject.max,
-                            detailData = [],
+                            detailData = [[],[]],
                             xAxis = this.xAxis[0];
 
                         // reverse engineer the last part of the data
                         $.each(this.series[0].data, function () {
                             if (this.x > min && this.x < max) {
-                                detailData.push([this.x, this.y]);
+                                detailData[0].push([this.x, this.y]);
+                            }
+                        });
+
+                        $.each(this.series[1].data, function () {
+                            if (this.x > min && this.x < max) {
+                                detailData[1].push([this.x, this.y]);
                             }
                         });
 
@@ -128,7 +150,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                         xAxis.removePlotBand('mask-before');
                         xAxis.addPlotBand({
                             id: 'mask-before',
-                            from: data[0][0],
+                            from: data[0][0][0],
                             to: min,
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
@@ -137,12 +159,13 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                         xAxis.addPlotBand({
                             id: 'mask-after',
                             from: max,
-                            to: data[data.length - 1][0],
+                            to: data[0][data.length - 1][0],
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
 
 
-                        $scope.detailChart.series[0].setData(detailData);
+                        $scope.detailChart.series[0].setData(detailData[0]);
+                        $scope.detailChart.series[1].setData(detailData[1]);
 
                         return false;
                     }
@@ -214,9 +237,15 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                 type: 'area',
                 name: 'USD to EUR',
                 pointInterval: 24 * 3600 * 1000,
-                pointStart: data[0][0],
-                data: data
-            }],
+                pointStart: data[0][0][0],
+                data: data[0]
+            },{
+                type: 'area',
+                name: 'USD to EUR',
+                pointInterval: 24 * 3600 * 1000,
+                pointStart: data[1][0][0],
+                data: data[1]
+            } ],
 
             exporting: {
                 enabled: false
@@ -237,12 +266,17 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         var data = [[]];
 
         // prepare the detail chart
-        var detailData = [],
-        detailStart = data[0][0];
+        var detailData = [[],[]],
+        detailStart = [ data[0][0], data[0][0] ];
 
         $.each(masterChart.series[0].data, function () {
-            if (this.x >= detailStart) {
-              detailData.push(this.y);
+            if (this.x >= detailStart[0]) {
+              detailData[0].push(this.y);
+            }
+        });
+        $.each(masterChart.series[1].data, function () {
+            if (this.x >= detailStart[1]) {
+              detailData[1].push(this.y);
             }
         });
 
@@ -293,7 +327,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                       states: {
                           hover: {
                               enabled: true,
-                              radius: 3
+                              radius: 1
                           }
                       }
                   }
@@ -301,10 +335,15 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             },
             series: [{
               name: 'Avarage bandwidth',
-              pointStart: detailStart,
+              pointStart: detailStart[0],
               pointInterval: 24 * 3600 * 1000,
-              data: detailData
-            }],
+              data: detailData[0]
+            } , {
+              name: 'Avarage bandwidth',
+              pointStart: detailStart[1],
+              pointInterval: 24 * 3600 * 1000,
+              data: detailData[1]
+            } ],
 
             exporting: {
               enabled: false
