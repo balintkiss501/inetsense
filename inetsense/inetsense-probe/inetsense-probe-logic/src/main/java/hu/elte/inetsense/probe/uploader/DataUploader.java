@@ -5,6 +5,7 @@ import java.util.List;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -35,12 +36,12 @@ public class DataUploader{
     private void flush() {
         
         /* todo: replace with a JSON lib */
-        String data = "{\"probeAuthId\":\""+probe_id+"\", \"measurements\":[";
+        String data = "{\"probeAuthId\":\""+probe_id+"\",\"measurements\":[";
         
         data += measurements.get(0).toJSON();
         
         for(int i=1; i<measurements.size(); i++) {
-            data += ", "+measurements.get(i).toJSON();
+            data += ","+measurements.get(i).toJSON();
         }
         
         data += "]}";
@@ -50,19 +51,25 @@ public class DataUploader{
         try {
             URL url = new URL(server_location);
             
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestMethod("POST");
+            byte[] postData       = data.getBytes( StandardCharsets.UTF_8 );
+            int    postDataLength = postData.length;
             
-            OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();        
+            conn.setDoOutput( true );
+            conn.setInstanceFollowRedirects( false );
+            conn.setRequestMethod( "POST" );
+            conn.setRequestProperty( "Content-Type", "text/json"); 
+            conn.setRequestProperty( "Charset", "utf-8");
+            conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+            
+            DataOutputStream wr= new DataOutputStream(conn.getOutputStream());
+            wr.write(postData);
             wr.write('\n');
             
             wr.flush();
             wr.close();
             
-            System.out.println("DATA sent");
+            System.out.println("DATA sent! Response code: "+conn.getResponseCode());
             
             this.measurements.clear();
             

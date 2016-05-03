@@ -26,7 +26,7 @@ host = localhost
 port = 8080
 
 [probe]
-probe-id = Test id
+probe-id = testprid
 test-interval = 10000
 
 [speedtest]

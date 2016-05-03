@@ -1,5 +1,6 @@
 package hu.elte.inetsense.server.data;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +18,8 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Long> 
     List<Measurement> findAllByProbe(Probe probe);
 
     List<Measurement> findAllByProbeOrderByIdAsc(Probe probe);
+
+    List<Measurement> findAllByProbeAuthIdAndCompletedOnBetweenOrderByCompletedOnAsc(String probeAuthId, Date from,
+            Date to);
 
 }

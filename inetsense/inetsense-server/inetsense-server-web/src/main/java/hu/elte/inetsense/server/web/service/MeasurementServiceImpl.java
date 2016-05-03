@@ -1,6 +1,8 @@
 package hu.elte.inetsense.server.web.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +25,28 @@ public class MeasurementServiceImpl implements MeasurementService {
 
     @Override
     public List<MeasurementDTO> getAllMeasurements() {
-        List<Measurement> measurements = measurementRepository.findAll();
+        return entitiesToDTOs(measurementRepository.findAll());
+    }
 
-        List<MeasurementDTO> measurementDTOs = new ArrayList<>(measurements.size());
-        for (Measurement measurement : measurements) {
+    @Override
+    public List<MeasurementDTO> getMeasurementsByProbeAuthIdBetweenDates(final String probeAuthId, final Date from,
+            final Date to) {
+        return entitiesToDTOs(measurementRepository
+                .findAllByProbeAuthIdAndCompletedOnBetweenOrderByCompletedOnAsc(probeAuthId, from, to));
+    }
+
+    private List<MeasurementDTO> entitiesToDTOs(final Collection<Measurement> entities) {
+        List<MeasurementDTO> dtos = new ArrayList<>(entities.size());
+        for (Measurement entity : entities) {
             MeasurementDTO dto = new MeasurementDTO();
-            dto.setCompletedOn(measurement.getCompletedOn());
-            dto.setDownloadSpeed(measurement.getDownloadSpeed());
-            dto.setUploadSpeed(measurement.getUploadSpeed());
-            dto.setLat(measurement.getLatitude());
-            dto.setLng(measurement.getLongitude());
-            measurementDTOs.add(dto);
+            dto.setCompletedOn(entity.getCompletedOn());
+            dto.setDownloadSpeed(entity.getDownloadSpeed());
+            dto.setUploadSpeed(entity.getUploadSpeed());
+            dto.setLat(entity.getLatitude());
+            dto.setLng(entity.getLongitude());
+            dtos.add(dto);
         }
-
-        return measurementDTOs;
+        return dtos;
     }
 
 }

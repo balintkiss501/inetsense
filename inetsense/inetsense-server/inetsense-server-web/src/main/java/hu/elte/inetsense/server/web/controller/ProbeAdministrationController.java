@@ -5,12 +5,11 @@
  */
 package hu.elte.inetsense.server.web.controller;
 
-import java.util.List;
 
+import hu.elte.inetsense.common.dtos.ProbeDTO;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,32 +27,21 @@ import hu.elte.inetsense.server.web.service.ProbeService;
 public class ProbeAdministrationController {
 
     @Autowired
-    ProbeService    service;
+    ProbeService service;
 
     @Autowired
     ProbeRepository repo;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Probe> list() {
-        return repo.findAll();
+    public List<ProbeDTO> list() {
+        return repo.findAll().stream().map(p->{return new ProbeDTO(p.getAuthId(), p.getCreatedOn());} ).collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Probe addProbe() {
-
-        return service.addProbe();
+    public ProbeDTO addProbe() {
+        Probe p = service.addProbe();
+        return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity remove(@PathVariable("id") final Long id) {
-        Probe entity = repo.findOne(id);
-        if (entity != null) {
-            repo.delete(id);
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-
-    }
 
 }
