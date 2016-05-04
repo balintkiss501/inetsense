@@ -83,7 +83,7 @@ public class SpeedMeter {
 	}
 
 	/**
-	 * Kulon szalon a letoltes megkezdese
+	 * A letöltés megkezdése
 	 */
 	public void run(){
 		try {
@@ -144,6 +144,9 @@ public class SpeedMeter {
 		return this.averageUploadSpeed;
 	}
 
+	/**
+	 * Folyamatban van-e a feltöltés
+	 */
 	public Boolean isUploaded(){
 
 		return this.uploaded;
@@ -165,6 +168,7 @@ public class SpeedMeter {
 	public void startDownload() throws IOException, ParseException{
 		long startTime = getCurrentTime();
 		URL url = new URL(this.downloadUrl.toString());
+    	System.out.println("Kapcsolódás a letöltési szerverhez!");
 	    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 	    this.fileSize = urlConnection.getContentLength();
 	    if(urlConnection.getContentLength() < this.minFileSize){
@@ -176,11 +180,16 @@ public class SpeedMeter {
 
 	        	  byte[] b = new byte[4096];
 	              int count;
+	              System.out.println("Letöltés elindítása!");
 	              while (timeout >= elapsedTime && (count = in.read(b)) > 0)
 	              {
 	            	  elapsedTime = getCurrentTime() - startTime;
 	            	  downloadedSize+=count;
 	              }
+	              System.out.println("Letöltés befejezése!");
+	              System.out.println("A mért sebesség: "+getAverageDownloadSpeed());
+	              
+
 	      }finally {
 	    	  	 this.downloaded = true;
 	    	     urlConnection.disconnect();
@@ -198,6 +207,8 @@ public class SpeedMeter {
 		try {
 
 		URL u = new URL(this.uploadUrl);
+    	System.out.println("Kapcsolódás a feltöltési szerverhez!");
+
 		conn = (HttpURLConnection) u.openConnection();
 
 		conn.setDoOutput(true);
@@ -210,12 +221,16 @@ public class SpeedMeter {
 		b[b.length-1] = '\n';
 		os.write(b);
 		os.flush();
+    	System.out.println("Feltöltés megkezdése!");
 		Scanner in = new Scanner(conn.getInputStream());
 		byte[] inread = new byte[4096];
 		int receiveCount = 0;
 
 		String line = in.nextLine();
+    	System.out.println("Feltöltés megtörtént!");
+
 			this.averageUploadSpeed = ((fileSize * 8) / Integer.parseInt(line))*1000;
+	    	System.out.println("Feltöltés sebesség: "+this.averageUploadSpeed);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

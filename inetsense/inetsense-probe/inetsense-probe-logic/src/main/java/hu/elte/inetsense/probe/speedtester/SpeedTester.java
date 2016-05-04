@@ -16,14 +16,42 @@ import java.util.Date;
 
 public class SpeedTester extends Thread {
 
+	/**
+	 * A szerverrel valo kommunikációt valósítja meg
+	 */
     private DataUploader du;
+    
+    /**
+     * A letöltési sebesség ideje ms-ben
+     */
     private long interval;
+    
+    /**
+     * Az aktuális dátumot adja vissza
+     */
     private Date date;
+    
+    /**
+     * A feltöltési szerver címe
+     */
     private String uploadLocation;
+    
+    /**
+     * A letöltési szerver címe
+     */
     private String downloadLocation;
 
+    /**
+     * Fut e még a szál.
+     */
     private boolean running = true;
 
+    /**
+	 * @param du Az adatgyűjtő szerverre való kommunikációért felelős
+	 * @param millis Ido ami utan fejezze be a letoltest millisecundumban megadva
+	 * @param downloadLocation A letöltés szerver címe;
+	 * @param uploadLocation A feltöltési szerver címe;
+     */
     public SpeedTester( DataUploader du, long millis , String downloadLocation, String uploadLocation ) {
         super();
 
@@ -36,6 +64,9 @@ public class SpeedTester extends Thread {
 
     //
 
+    /**
+     * Fut-e még a szál
+     */
     public boolean isRunning() {
         return running;
     }
@@ -52,9 +83,9 @@ public class SpeedTester extends Thread {
 
     }
 
-
-    //
-
+    /**
+     * A letöltés és feltöltés mérése ciklukusan, amíg le nem állítják a szálat.
+     */
     @Override
     public void run() {
       while(true){
