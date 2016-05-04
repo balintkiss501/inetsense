@@ -43,11 +43,13 @@ public class MeasurementController {
      * @return
      */
     @CrossOrigin(origins = "http://localhost:1841")
-    @RequestMapping("/measurements/{probeId}/from/{dateFrom}/to/{dateTo}")
+    @RequestMapping("/measurements/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
     public List<List<List<BigDecimal>>> getAllMeasurementsOfProbeIdByTimeWindow(
             @PathVariable("probeId") final String probeId,
             @PathVariable("dateFrom") final String dateFrom,
-            @PathVariable("dateTo") final String dateTo) {
+            @PathVariable("dateTo") final String dateTo,
+            @PathVariable("resolution") Integer resolution
+            ) {
 
         List<List<List<BigDecimal>>> result = new ArrayList<List<List<BigDecimal>>>();
 
@@ -75,7 +77,7 @@ public class MeasurementController {
         long diff = end - start;
 
         // this should be sent by the client @zsoltistvanfi
-        final int resolution = 600;
+        // final int resolution = 600;
 
         long step = diff / resolution;
         if (step == 0) {
@@ -143,11 +145,13 @@ public class MeasurementController {
      * @return
      */
     @CrossOrigin(origins = "http://localhost:1841")
-	@RequestMapping("/measurements/demo/{probeId}/from/{dateFrom}/to/{dateTo}")
+	@RequestMapping("/measurements/demo/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
 	public List<List<List<BigDecimal>>> getDemoData(
 			@PathVariable("probeId") Integer probeId,
 			@PathVariable("dateFrom") String dateFrom,
-			@PathVariable("dateTo") String dateTo) {
+			@PathVariable("dateTo") String dateTo,
+			@PathVariable("resolution") Integer resolution
+			) {
 		
 		List<List<List<BigDecimal>>> result = new ArrayList<List<List<BigDecimal>>>();
 		
@@ -163,10 +167,11 @@ public class MeasurementController {
 		
 		Random random = new Random(probeId);
 		
-		Integer resolution = 600;
+//		resolution
+//		Integer resolution = 600;
 		BigDecimal step = diff.divide(new BigDecimal(resolution));
 		
-		// REVIEW minimum resolution
+		// REVIEW mini7mum resolution
 		// REVIEW measurement ranges, measurements base as parameter
 		
 		List<List<BigDecimal>> uploads = new ArrayList<List<BigDecimal>>();

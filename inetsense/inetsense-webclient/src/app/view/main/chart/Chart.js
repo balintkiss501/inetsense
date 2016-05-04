@@ -11,7 +11,19 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
     items:  [],
 
+    hcContainer: "highchartcontainer",
+
+    hcMasterContainer: "master-container",
+    hcDetailContainer: "detail-container",
+
+    hcMasterContainerSel: null,
+    hcDetailContainerSel: null,
+
+    demo: false,
+    probeId: '12345678',
+
     datechooser: null,
+
 
     onDateChanged: function(evt, data) {
 
@@ -28,14 +40,23 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         var dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
         var dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
 
-        $.getJSON('http://localhost:8080/measurements/demo/1/from/' + dFrom + '/to/' + dTo + '/', function (data) {
-            $scope.updateMasterChart(data);
+        $.getJSON('http://localhost:8080/measurements/' + (this.demo ? 'demo/' : '' ) + this.probeId +'/from/' + dFrom + '/to/' + dTo + '/600', function (data) {
+
+            if ( data != null && data.constructor === Array && data.length != 0 ) {
+                $scope.updateMasterChart(data);
+            }
+
         });
     },
 
     initComponent: function(){
 
         this.callParent();
+
+        this.hcContainerSel = "#" + this.hcContainer;
+
+        this.hcMasterContainerSel = "#" + this.hcContainer + " > ." + this.hcMasterContainer;
+        this.hcDetailContainerSel = "#" + this.hcContainer + " > ." + this.hcDetailContainer;
 
         this.datechooser = new WebclientApp.view.main.chart.DateChooser({
             listeners: {
@@ -54,11 +75,10 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             layout: 'fit',
             height: 600,
             monitorResize: true,
-            html: '<div id="highchart-container" style="min-width: 600px; height: 400px; margin: 0 auto"></div>'
+            html: '<div id="'+ this.hcContainer + '" style="min-width: 600px; height: 400px; margin: 0 auto"></div>'
         } ]);
     },
 
-    masterContainer: "#master-container",
     detailChart: null,
     masterChart: null,
 
@@ -164,7 +184,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
         var data = [[[]],[[]]];
 
-        $scope.masterChart = $($scope.masterContainer).highcharts({
+        $scope.masterChart = $($scope.hcMasterContainerSel).highcharts({
             chart: {
                 reflow: false,
                 borderWidth: 0,
@@ -298,7 +318,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         });
 
         // create a detail chart referenced by a global variable
-        this.detailChart = $('#detail-container').highcharts({
+        this.detailChart = $(this.hcDetailContainerSel).highcharts({
             chart: {
               marginBottom: 120,
               reflow: false,
@@ -421,13 +441,13 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             console.log("painted");
 
             // make the container smaller and add a second container for the master chart
-            var $container = $('#highchart-container')
+            var $container = $(this.hcContainerSel)
                 .css('position', 'relative');
 
-            $('<div id="detail-container">')
+            $('<div class="' + this.hcDetailContainer + '">')
                 .appendTo($container);
 
-            $('<div id="master-container">')
+            $('<div class="' + this.hcMasterContainer + '">')
                 .css({
                       position: 'absolute',
                       top: 300,
