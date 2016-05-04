@@ -83,7 +83,7 @@ public class SpeedMeter {
 	}
 
 	/**
-	 * Kulon szalon a letoltes megkezdese
+	 * A letöltés megkezdése
 	 */
 	public void run(){
 		try {
@@ -144,6 +144,9 @@ public class SpeedMeter {
 		return this.averageUploadSpeed;
 	}
 
+	/**
+	 * Folyamatban van-e a feltöltés
+	 */
 	public Boolean isUploaded(){
 
 		return this.uploaded;
