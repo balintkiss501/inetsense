@@ -6,10 +6,7 @@
 package hu.elte.inetsense.server.web.controller;
 
 
-import hu.elte.inetsense.domain.ProbeRepository;
-import hu.elte.inetsense.domain.entities.Probe;
-import hu.elte.inetsense.service.ProbeService;
-import hu.elte.inetsense.web.dtos.ProbeDTO;
+import hu.elte.inetsense.common.dtos.ProbeDTO;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +27,20 @@ import hu.elte.inetsense.server.web.service.ProbeService;
 public class ProbeAdministrationController {
 
     @Autowired
-    ProbeService    service;
+    ProbeService service;
 
     @Autowired
     ProbeRepository repo;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<ProbeDTO> list() {
-        return repo.findAll().stream().map(ProbeDTO::new ).collect(Collectors.toList());
+        return repo.findAll().stream().map(p->{return new ProbeDTO(p.getAuthId(), p.getCreatedOn());} ).collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Probe addProbe() {
-
-        return service.addProbe();
+    public ProbeDTO addProbe() {
+        Probe p = service.addProbe();
+        return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
     }
 
 
