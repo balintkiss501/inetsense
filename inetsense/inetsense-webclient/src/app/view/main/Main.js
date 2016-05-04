@@ -76,13 +76,13 @@ Ext.define('WebclientApp.view.main.Main', {
     items: [{
         title: 'Home',
         iconCls: 'fa-home'
-    }, {
+    }, /*{
         title: 'Users',
         iconCls: 'fa-user',
         items: [{
             xtype: 'userlist'
         }]
-    },  {
+    },*/ {
         title: 'Probes',
         iconCls: 'fa-cog',
         items: [{
@@ -93,8 +93,18 @@ Ext.define('WebclientApp.view.main.Main', {
         title: 'Bandwidth statistic',
         iconCls: 'fa-cog',
         items: [{
-            xtype: 'chart-panel'
+            xtype: 'chart-panel',
+            hcContainer: 'highchart-container'
         }]
-    }]
+    }, {
+        title: 'DEMO Bandwidth statistic',
+        iconCls: 'fa-cog',
+        items: [{
+            xtype: 'chart-panel',
+            demo: true,
+            hcContainer: 'highchart-container-demo'
+        }]
+    }
+    ]
 
 });
