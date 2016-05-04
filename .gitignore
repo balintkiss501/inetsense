@@ -1,0 +1,15 @@
+# IntelliJ
+*.iml
+.idea/
+
+# Eclipse
+target/
+bin/
+.settings/
+.project
+.classpath
+
+# NetBeans
+nbproject/private/
+build/
+lib/

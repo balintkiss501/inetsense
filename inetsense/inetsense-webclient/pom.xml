@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>hu.elte.inetsense</groupId>
+        <artifactId>inetsense</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+	<groupId>hu.elte.inetsense</groupId>
+	<artifactId>inetsense-webclient</artifactId>
+    <packaging>jar</packaging>
+
+	<properties>
+		<sencha.env>production</sencha.env>
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<targetPath>static</targetPath>
+				<directory>src/build/${sencha.env}</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+	<profiles>
+	
+		<profile>
+			<id>rebuild</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.3.2</version>
+						<executions>
+
+							<execution>
+								<id>sencha-upgrade</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${env.SENCHA_CMD}</executable>
+									<workingDirectory>${project.basedir}/src</workingDirectory>
+									<arguments>
+										<argument>app</argument>
+										<argument>upgrade</argument>
+										<argument>${env.SENCHA_SDK}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>sencha-compile</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${env.SENCHA_CMD}</executable>
+									<workingDirectory>${project.basedir}/src</workingDirectory>
+									<arguments>
+										<argument>app</argument>
+										<argument>build</argument>
+										<argument>--clean</argument>
+										<argument>--environment</argument>
+										<argument>${sencha.env}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+
+
+		<profile>
+			<id>watch</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.3.2</version>
+						<executions>
+							<execution>
+								<id>sencha-watch</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<!-- Set path to your Sencha Cmd executable -->
+									<executable>${env.SENCHA_CMD}</executable>
+									<workingDirectory>${project.basedir}/src</workingDirectory>
+									<arguments>
+										<argument>app</argument>
+										<argument>watch</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+
+	</profiles>
+
+	<dependencies>
+	</dependencies>
+
+</project>
