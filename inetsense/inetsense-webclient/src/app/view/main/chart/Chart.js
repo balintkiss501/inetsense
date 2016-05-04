@@ -4,7 +4,8 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     controller: 'chart',
 
     requires: [
-      'WebclientApp.view.main.chart.DateChooser'
+      'WebclientApp.view.main.chart.DateChooser',
+      'WebclientApp.view.main.chart.ProbeChooser'
     ],
 
     layout: 'fit',
@@ -13,6 +14,10 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
     hcContainer: "highchartcontainer",
 
+
+    masterRes: 300,
+    detailRes: 1000,
+
     hcMasterContainer: "master-container",
     hcDetailContainer: "detail-container",
 
@@ -20,9 +25,11 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     hcDetailContainerSel: null,
 
     demo: false,
-    probeId: '12345678',
+    probeId: 'PROBE002',
 
     datechooser: null,
+    probelist : null,
+    selectedProbe: null,
 
 
     getChartData: function(dFrom, dTo, resolution, cb){
@@ -51,7 +58,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         var dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
         var dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
 
-        this.getChartData(dFrom, dTo, 600, function (data) {
+        this.getChartData(dFrom, dTo, this.masterRes, function (data) {
             if ( data != null && data.constructor === Array && data.length != 0 ) {
                 $scope.updateMasterChart(data);
             }
@@ -68,6 +75,22 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         */
     },
 
+    onProbeSelected: function(evt,data){
+        if(data == null || data.probe == "" || data.probe == "undefined"){
+            return;
+        }
+        
+        var $scope = this;
+        
+        console.log("onProbeSelected", arguments);
+        
+        selectedProbe = data.probe;
+        
+        $getJSON('http://localhost:8080/measurements/'+selectedProbe+'/'+dFrom+'/to/'+dTo+'/',function (data){
+            $scope.updateMasterChart(data);
+        });
+    },
+    
     initComponent: function(){
 
         this.callParent();
@@ -76,6 +99,16 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
         this.hcMasterContainerSel = "#" + this.hcContainer + " > ." + this.hcMasterContainer;
         this.hcDetailContainerSel = "#" + this.hcContainer + " > ." + this.hcDetailContainer;
+
+        this.probelist = new WebclientApp.view.main.chart.ProbeChooser({
+            listenrs: {
+                select: {
+                    scope: this,
+                    fn: this.onProbeSelected
+                }
+            }
+        });
+        this.add(this.probelist);
 
         this.datechooser = new WebclientApp.view.main.chart.DateChooser({
             listeners: {
@@ -92,7 +125,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             xtype: 'panel',
             title: 'p0013 <i>(jeanluc)</i>',
             layout: 'fit',
-            height: 600,
+            height: 800,
             monitorResize: true,
             html: '<div id="'+ this.hcContainer + '" style="min-width: 600px; height: 400px; margin: 0 auto"></div>'
         } ]);
@@ -157,6 +190,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             detailData = [[],[]],
             xAxis = __xAxis;
 
+        /*
         // reverse engineer the last part of the data
         $.each($scope.masterChart.series[0].data, function () {
             if (this.x > min && this.x < max) {
@@ -168,6 +202,13 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             if (this.x > min && this.x < max) {
                 detailData[1].push([this.x, this.y]);
             }
+        });
+        */
+
+        $scope.getChartData(min, max, this.detailRes, function(data){
+
+            $scope.detailChart.series[0].setData(data[0]);
+            $scope.detailChart.series[1].setData(data[1]);
         });
 
         var fromSeriesData = $scope.masterChart.series[0].data;
@@ -188,10 +229,6 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             to: fromSeriesData[fromSeriesData.length - 1].x,
             color: 'rgba(0, 0, 0, 0.2)'
         });
-
-
-        $scope.detailChart.series[0].setData(detailData[0]);
-        $scope.detailChart.series[1].setData(detailData[1]);
 
         return false;
     },

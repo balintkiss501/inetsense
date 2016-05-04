@@ -116,9 +116,9 @@ public class MeasurementController {
                     .orElse(0);
 
             BigDecimal stepStartTime = BigDecimal.valueOf(start + step * i);
-
-            uploads.add(Arrays.asList(stepStartTime, BigDecimal.valueOf(averageUpload)));
-            downloads.add(Arrays.asList(stepStartTime, BigDecimal.valueOf(averageDownload)));
+            
+            uploads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), BigDecimal.valueOf(averageUpload)));
+            downloads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), BigDecimal.valueOf(averageDownload)));
 
             if (!iterator.hasNext()) {
                 break;
@@ -147,7 +147,7 @@ public class MeasurementController {
     @CrossOrigin(origins = "http://localhost:1841")
 	@RequestMapping("/measurements/demo/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
 	public List<List<List<BigDecimal>>> getDemoData(
-			@PathVariable("probeId") Integer probeId,
+			@PathVariable("probeId") String probeId,
 			@PathVariable("dateFrom") String dateFrom,
 			@PathVariable("dateTo") String dateTo,
 			@PathVariable("resolution") Integer resolution
@@ -164,8 +164,8 @@ public class MeasurementController {
 		BigDecimal dTo = new BigDecimal(dateTo);
 		
 		BigDecimal diff = dTo.subtract(dFrom);
-		
-		Random random = new Random(probeId);
+
+		Random random = new Random(probeId.hashCode());
 		
 //		resolution
 //		Integer resolution = 600;

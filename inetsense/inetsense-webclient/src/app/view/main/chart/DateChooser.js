@@ -20,8 +20,8 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
         afterrender: function() {
 
             this.myrec = this.getForm().loadRecord(Ext.create('WebclientApp.model.DateEntry', {
-                'startDate': '2016 03 01',
-                'endDate'  : '2016 04 01',
+                'startDate': '2016 04 15',
+                'endDate'  : '2016 05 10',
                 'startTime': '',
                 'endTime'  : ''
             }));
