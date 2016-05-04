@@ -17,7 +17,7 @@ Ext.define('WebclientApp.store.Probes', {
 
 
     //model: 'WebclientApp.model.Probe',
-    // storeId: 'probes',
+    storeId: 'probes',
     
     data: { items: [
         { identifier: "PROBE001" },

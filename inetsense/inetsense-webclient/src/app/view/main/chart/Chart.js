@@ -34,6 +34,9 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
     getChartData: function(dFrom, dTo, resolution, cb){
 
+        dFrom = (dFrom + "").split(".")[0];
+        dTo = (dTo + "").split(".")[0];
+
         $.getJSON('http://localhost:8080/measurements/' + (this.demo ? 'demo/' : '' ) + this.probeId +'/from/' + dFrom + '/to/' + dTo + '/' + resolution, function (data) {
             if(cb){
                 cb(data);
