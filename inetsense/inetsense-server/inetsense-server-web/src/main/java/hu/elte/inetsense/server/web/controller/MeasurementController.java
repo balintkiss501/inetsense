@@ -124,9 +124,9 @@ public class MeasurementController {
                 break;
             }
         }
-
-        result.add(uploads);
+        
         result.add(downloads);
+        result.add(uploads);
 
         return result;
     }
@@ -193,8 +193,8 @@ public class MeasurementController {
 			downloads.add(Arrays.asList(dFrom.add(step.multiply(new BigDecimal(i)).setScale(0, RoundingMode.DOWN)), measured));
 		}
 		
-		result.add(uploads);
 		result.add(downloads);
+		result.add(uploads);
 
 		return result;
 	}

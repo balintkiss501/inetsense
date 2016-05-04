@@ -25,6 +25,17 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     datechooser: null,
 
 
+    getChartData: function(dFrom, dTo, resolution, cb){
+
+        $.getJSON('http://localhost:8080/measurements/' + (this.demo ? 'demo/' : '' ) + this.probeId +'/from/' + dFrom + '/to/' + dTo + '/' + resolution, function (data) {
+            if(cb){
+                cb(data);
+            }
+        });
+
+    },
+
+
     onDateChanged: function(evt, data) {
 
         if(data == null ||
@@ -40,6 +51,13 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         var dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
         var dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
 
+        this.getChartData(dFrom, dTo, 600, function (data) {
+            if ( data != null && data.constructor === Array && data.length != 0 ) {
+                $scope.updateMasterChart(data);
+            }
+        });
+
+        /*
         $.getJSON('http://localhost:8080/measurements/' + (this.demo ? 'demo/' : '' ) + this.probeId +'/from/' + dFrom + '/to/' + dTo + '/600', function (data) {
 
             if ( data != null && data.constructor === Array && data.length != 0 ) {
@@ -47,6 +65,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
             }
 
         });
+        */
     },
 
     initComponent: function(){
