@@ -55,7 +55,7 @@ public class ProbeAdministrationTest {
     private ObjectMapper mapper;
 
     
-    final int probecount = 2;
+    final int probecount = 10;
     
     @Resource
     private WebApplicationContext context;
@@ -80,7 +80,6 @@ public class ProbeAdministrationTest {
                     andExpect(MockMvcResultMatchers.status().isOk()).
                     andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).
                     andDo(MockMvcResultHandlers.print()).
-                    andExpect(MockMvcResultMatchers.jsonPath("$.id").exists()).
                     andExpect(MockMvcResultMatchers.jsonPath("$.authId").exists()).
                     andExpect(MockMvcResultMatchers.jsonPath("$.createdOn").exists()).
                     andReturn().getResponse().getContentAsString();
@@ -109,21 +108,6 @@ public class ProbeAdministrationTest {
         }
         
         
-        //test delete
-        Probe p = probes.get(0);
-        
-        mockMvc.perform(MockMvcRequestBuilders.delete("/probe/"+p.getId())).
-                    andExpect(MockMvcResultMatchers.status().isOk());
-        
-        
-        List<Probe> plist2 = listProbes(probecount - 1);
-        
-        
-        assert !plist2.contains(p);
-        
-        plist2.forEach(probe -> {
-            assert probes.contains(probe);
-        });
         
         
     }
