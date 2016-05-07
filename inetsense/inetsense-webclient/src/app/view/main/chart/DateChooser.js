@@ -3,7 +3,7 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
     extend: 'Ext.form.Panel',
     xtype: 'datechooser',
 
-    width: 400,
+    // width: 400,
 
     bodyPadding: 10,
     layout: 'form',

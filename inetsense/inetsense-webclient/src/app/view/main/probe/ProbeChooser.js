@@ -1,6 +1,6 @@
 Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
     extend: 'Ext.form.Panel',
-    xtype: 'probelist',
+    xtype: 'probechooser',
     
     requires: [
         'WebclientApp.store.Probes'

@@ -90,6 +90,14 @@ Ext.define('WebclientApp.view.main.Main', {
         }]
     },
     {
+        title: 'StockChart',
+        items: [{
+            xtype: 'stock-chart-panel'
+        }]
+    }
+
+    /*
+    {
         title: 'Bandwidth statistic',
         iconCls: 'fa-cog',
         items: [{
@@ -104,7 +112,7 @@ Ext.define('WebclientApp.view.main.Main', {
             demo: true,
             hcContainer: 'highchart-container-demo'
         }]
-    }
+    }*/
     ]
 
 });
