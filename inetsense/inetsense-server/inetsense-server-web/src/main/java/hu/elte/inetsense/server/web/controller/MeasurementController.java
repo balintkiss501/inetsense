@@ -93,9 +93,9 @@ public class MeasurementController {
             final long stepEndTime = start + step * (i + 1);
             Date stepEndDate = new Date(stepEndTime);
 
-            if (!nextMeasurement.getCompletedOn().before(stepEndDate)) {
-                continue;
-            }
+//            if (!nextMeasurement.getCompletedOn().before(stepEndDate)) {
+//                continue;
+//            }
 
             List<MeasurementDTO> stepMeasurements = new ArrayList<>();
             stepMeasurements.add(nextMeasurement);

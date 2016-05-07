@@ -25,7 +25,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     hcDetailContainerSel: null,
 
     demo: false,
-    probeId: 'PROBE002',
+    probeId: 'PROBE001',
 
     datechooser: null,
     probelist : null,
@@ -111,7 +111,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                 }
             }
         });
-        this.add(this.probelist);
+        // this.add(this.probelist);
 
         this.datechooser = new WebclientApp.view.main.chart.DateChooser({
             listeners: {
@@ -432,7 +432,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                     return '<b>'
                                 + names.join('/') + '</b>' + '<br/>'
                                 + Highcharts.dateFormat('%Y %m %d, %H:%M:%S', this.x) + '<br/>'
-                                + values.join('/') + ' kB/s';
+                                + values.join('/') + ' Mb/s';
                 },
                 shared: true,
                 crosshairs: true,
