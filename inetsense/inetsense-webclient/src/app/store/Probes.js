@@ -3,27 +3,15 @@ Ext.define('WebclientApp.store.Probes', {
 
     alias: 'store.probes',
 
-    fields: [
-        'identifier'
-    ],
-    
-
-
-    //model: 'WebclientApp.model.Probe',
-    storeId: 'probes',
-    
-    data: { items: [
-        { identifier: "PROBE001" },
-        { identifier: "PROBE002" },
-        { identifier: "PROBE003" },
-        { identifier: "PROBE004" }
-    ]},
-    
-   proxy: {
-        type: 'memory',
+    autoLoad: true,
+    autoSync: true,
+    model: 'WebclientApp.model.ProbeModel',
+    proxy: {
+        type: 'rest',
+        url: 'http://localhost:8080/probe',
         reader: {
             type: 'json',
-            rootProperty: 'items'
+            rootProperty: 'data'
         }
     }
     

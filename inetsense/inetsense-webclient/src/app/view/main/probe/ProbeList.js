@@ -3,24 +3,29 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
     xtype: 'probelist',
 
     requires: [
-        'WebclientApp.store.Probes'
-    ],
+        'WebclientApp.store.Probes',
 
+    ],
     title: 'Probes',
 
     initComponent: function(){
-        console.log('helloworld>>>>>>>>');
-        
+        console.log('hello>>>>>>>');
         Ext.apply(this,{
-            width: 200,
+            width: 400,
+            height: 500,
             store: {
                 type: 'probes'
             },
             
         columns:[{
             header: 'Id',
-            dataIndex: 'identifier',
+            dataIndex: 'authId',
             flex: 1
+        },
+        {
+            header: 'Created',
+            dataIndex: 'createdOn',
+            flex: 2
         }],
         tbar: [{
             text: 'Add Probe',
@@ -29,35 +34,23 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
         }]
         });
         
-        
         this.callParent();
     },
     
     onAddClick: function(){
      
         Ext.Ajax.request({
-            url: '/probe',
+            url: 'http://localhost:8080/probe',
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            succes: function (response){
-                console.log('s' +response);
-            },
             failure: function (response){
                 console.log(response);
             }
         });
     
-       
-       $.getJSON('http://localhost:8080/probe', function (data) {
-            dLen = data.length;
-          for (i=0; i<dLen; i++){
-              console.log(data[i]);
-          }
-          var x = data[0];
-          console.log(x.authId);
-        });
-       
+        //this.store.reload();
+        this.store.load();
+              
     }
-    
-    
+
 });

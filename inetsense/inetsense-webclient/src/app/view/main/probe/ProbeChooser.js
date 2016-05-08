@@ -14,19 +14,7 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
 
     
     initComponent: function(){
-         var data = [{
-           id: 'PROBE001'
-        }, {
-            id: 'PROBE002'
-        },{
-            id: 'PROBE003'
-        }];
-
-        var store = Ext.create('Ext.data.Store', {
-            fields: ['id']
-        });
         
-        store.loadRawData(data, false);
         Ext.apply(this, {
             items: [{
                 xtype: 'fieldset',
@@ -37,18 +25,20 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
                     bind: '{probes.value}'
                 },{
                     xtype: 'combobox',
-                    // style: 'font: normal 12px courier',
-                    // reference: 'probes',
-                    // publishes: 'value',
                     queryMode: 'local',
                     fieldLabel: 'Select Probe',
-                    displayField: 'id',
-                    valueField: 'id',
-                    // anchor: '-15',
-                    store: store
-                    // minChars: 0,
-                    //queryMode: 'local',
-                    // typeAhead: true
+                    displayField: 'authId',
+                    valueField: 'authId',
+                    store: {
+                        type: 'probes'
+                    },
+                    listeners:{
+                        render: function(combobox){
+                           // Ext.getCmp('asd').getStore().load();
+                           this.getStore().load();
+                        }
+                    }
+
                 }]
             }]
         });
