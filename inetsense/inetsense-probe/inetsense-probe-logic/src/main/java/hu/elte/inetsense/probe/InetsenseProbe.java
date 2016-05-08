@@ -26,7 +26,7 @@ public class InetsenseProbe {
             cf = new ConfigLoader();
         }
         
-        log.info("Config loaded");
+        InetsenseProbe.log.info("Config loaded");
         
         DataUploader du = new DataUploader(cf.get("host")+":"+cf.get("port")+"/message-endpoint" ,cf.get("probe-id"));
         SpeedTester se = new SpeedTester(

@@ -1,16 +1,14 @@
 package hu.elte.inetsense.probe.uploader;
 
+import hu.elte.inetsense.probe.InetsenseProbe;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import org.apache.log4j.Logger;
 
 public class DataUploader{
-    
-    public static Logger log = Logger.getLogger(DataUploader.class.getName());
     
     private String probe_id;
     private String server_location;
@@ -65,7 +63,7 @@ public class DataUploader{
             wr.flush();
             wr.close();
             
-            log.info("DATA sent! Response code: "+conn.getResponseCode());
+            InetsenseProbe.log.info("DATA sent! Response code: "+conn.getResponseCode());
             
             this.measurements.clear();
             
@@ -73,7 +71,7 @@ public class DataUploader{
         
         } catch(Exception ex) {
             // print error, try again later
-            log.error(ex.getMessage());
+            InetsenseProbe.log.error(ex.getMessage());
         }
         
     }
