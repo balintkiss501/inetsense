@@ -1,6 +1,5 @@
 package hu.elte.inetsense.probe.uploader;
 
-import hu.elte.inetsense.probe.InetsenseProbe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,10 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ *
+ * @author Adam Kecskes
+ */
 public class DataUploader{
     
     private String probe_id;
@@ -23,6 +26,7 @@ public class DataUploader{
     public void addMeasurement(Measurement me) {
         
         this.measurements.add(me);
+        System.out.println(me.getDownload());
         
         this.flush();
         
@@ -41,6 +45,8 @@ public class DataUploader{
         }
         
         data += "]}";
+        
+        System.out.println(data);
         
         try {
             URL url = new URL(server_location);
@@ -63,7 +69,7 @@ public class DataUploader{
             wr.flush();
             wr.close();
             
-            InetsenseProbe.log.info("DATA sent! Response code: "+conn.getResponseCode());
+            System.out.println("DATA sent! Response code: "+conn.getResponseCode());
             
             this.measurements.clear();
             
@@ -71,7 +77,7 @@ public class DataUploader{
         
         } catch(Exception ex) {
             // print error, try again later
-            InetsenseProbe.log.error(ex.getMessage());
+            System.out.println(ex.getMessage());
         }
         
     }
