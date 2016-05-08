@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
+import hu.elte.inetsense.server.web.config.ExtJSCORS;
 import hu.elte.inetsense.server.web.service.MeasurementService;
 
 /**
@@ -42,7 +43,7 @@ public class MeasurementController {
      *
      * @return
      */
-    @CrossOrigin(origins = "http://localhost:1841")
+    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
     @RequestMapping("/measurements/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
     public List<List<List<BigDecimal>>> getAllMeasurementsOfProbeIdByTimeWindow(
             @PathVariable("probeId") final String probeId,
@@ -144,7 +145,7 @@ public class MeasurementController {
      * 
      * @return
      */
-    @CrossOrigin(origins = "http://localhost:1841")
+    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
 	@RequestMapping("/measurements/demo/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
 	public List<List<List<BigDecimal>>> getDemoData(
 			@PathVariable("probeId") String probeId,

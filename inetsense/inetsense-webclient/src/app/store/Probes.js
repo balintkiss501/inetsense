@@ -4,9 +4,14 @@ Ext.define('WebclientApp.store.Probes', {
     alias: 'store.probes',
 
     fields: [
-        'alias', 'probeId'
+        'authId', 'createdOn'
     ],
+
+    mode: 'probe',
     
+
+    // demo
+    /*
     data: {
         items: [{
             alias: 'Egyetem',
@@ -23,6 +28,15 @@ Ext.define('WebclientApp.store.Probes', {
             type: 'json',
             rootProperty: 'items'
         }
+    }*/
+
+    autoLoad: true,
+    // autoSync: true,
+
+    // server
+    proxy: {
+        type: 'rest',
+        url : 'http://localhost:8080/probes'
     }
     
 });

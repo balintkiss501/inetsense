@@ -32,8 +32,8 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
                     xtype: 'combobox',
                     queryMode: 'local',
                     fieldLabel: 'Select Probe',
-                    displayField: 'alias',
-                    valueField: 'probeId',
+                    displayField: 'authId',
+                    valueField: 'authId',
                     listeners: {
                         change: {
                             scope: this,
