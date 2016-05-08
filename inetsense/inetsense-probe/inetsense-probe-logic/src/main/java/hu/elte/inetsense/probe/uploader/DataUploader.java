@@ -6,12 +6,11 @@ import java.util.List;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import org.apache.log4j.Logger;
 
-/**
- *
- * @author Adam Kecskes
- */
 public class DataUploader{
+    
+    public static Logger log = Logger.getLogger(DataUploader.class.getName());
     
     private String probe_id;
     private String server_location;
@@ -26,7 +25,6 @@ public class DataUploader{
     public void addMeasurement(Measurement me) {
         
         this.measurements.add(me);
-        System.out.println(me.getDownload());
         
         this.flush();
         
@@ -45,8 +43,6 @@ public class DataUploader{
         }
         
         data += "]}";
-        
-        System.out.println(data);
         
         try {
             URL url = new URL(server_location);
@@ -69,7 +65,7 @@ public class DataUploader{
             wr.flush();
             wr.close();
             
-            System.out.println("DATA sent! Response code: "+conn.getResponseCode());
+            log.info("DATA sent! Response code: "+conn.getResponseCode());
             
             this.measurements.clear();
             
@@ -77,7 +73,7 @@ public class DataUploader{
         
         } catch(Exception ex) {
             // print error, try again later
-            System.out.println(ex.getMessage());
+            log.error(ex.getMessage());
         }
         
     }
