@@ -9,7 +9,7 @@ Ext.define('WebclientApp.view.main.Main', {
         'WebclientApp.view.main.chart.Chart',
         'WebclientApp.view.main.chart.ChartController',
 
-        'WebclientApp.view.main.probe.ProbeList',
+        'WebclientApp.view.main.probe.ProbeSelector',
         'WebclientApp.view.main.users.UserList',
 
         'WebclientApp.view.main.MainController',
@@ -83,15 +83,16 @@ Ext.define('WebclientApp.view.main.Main', {
             xtype: 'userlist'
         }]
     },*/ {
-        title: 'Probes',
+        title: 'Probe selector',
         iconCls: 'fa-cog',
         items: [{
-            xtype: 'probelist'
+            xtype: 'probeselector'
         }]
     },
     {
         title: 'StockChart',
         items: [{
+            
             xtype: 'stock-chart-panel'
         }]
     }

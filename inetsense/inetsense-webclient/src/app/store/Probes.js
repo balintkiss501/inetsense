@@ -4,16 +4,16 @@ Ext.define('WebclientApp.store.Probes', {
     alias: 'store.probes',
 
     fields: [
-        'name', 'age'
+        'alias', 'probeId'
     ],
     
     data: {
         items: [{
-            name: 'Tom',
-            age: 20
+            alias: 'Egyetem',
+            probeId: 'PROBE001'
         }, {
-            name: 'Peter',
-            age: 30
+            alias: 'Otthoni mobil',
+            probeId: 'PROBE002'
         }]
     },
     

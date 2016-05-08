@@ -1,6 +1,6 @@
-Ext.define('WebclientApp.view.main.probe.ProbeList', {    
+Ext.define('WebclientApp.view.main.probe.ProbeSelector', {    
     extend: 'Ext.form.Panel',
-    xtype: 'probelist',
+    xtype: 'probeselector',
     
     requires: [
         'WebclientApp.store.Probes'
@@ -32,8 +32,8 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
                     xtype: 'combobox',
                     queryMode: 'local',
                     fieldLabel: 'Select Probe',
-                    displayField: 'name',
-                    valueField: 'age',
+                    displayField: 'alias',
+                    valueField: 'probeId',
                     listeners: {
                         change: {
                             scope: this,
