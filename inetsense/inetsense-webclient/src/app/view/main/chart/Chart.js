@@ -103,14 +103,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         this.hcMasterContainerSel = "#" + this.hcContainer + " > ." + this.hcMasterContainer;
         this.hcDetailContainerSel = "#" + this.hcContainer + " > ." + this.hcDetailContainer;
 
-        this.probelist = new WebclientApp.view.main.chart.ProbeChooser({
-            listenrs: {
-                select: {
-                    scope: this,
-                    fn: this.onProbeSelected
-                }
-            }
-        });
+        this.probelist = new WebclientApp.view.main.chart.ProbeChooser();
         this.add(this.probelist);
 
         this.datechooser = new WebclientApp.view.main.chart.DateChooser({

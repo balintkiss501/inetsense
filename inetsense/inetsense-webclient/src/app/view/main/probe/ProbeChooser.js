@@ -1,6 +1,6 @@
 Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
     extend: 'Ext.form.Panel',
-    xtype: 'probelist',
+    xtype: 'probechooser',
     
     requires: [
         'WebclientApp.store.Probes'
@@ -9,13 +9,26 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
     title: 'Probes',
     width: 400,
     layout: 'form',
-    //viewModel: {},
+    viewModel: {},
     
 
     
     initComponent: function(){
-        Ext.apply(this,{
-                items: [{
+         var data = [{
+           id: 'PROBE001'
+        }, {
+            id: 'PROBE002'
+        },{
+            id: 'PROBE003'
+        }];
+
+        var store = Ext.create('Ext.data.Store', {
+            fields: ['id']
+        });
+        
+        store.loadRawData(data, false);
+        Ext.apply(this, {
+            items: [{
                 xtype: 'fieldset',
                 layout: 'anchor',
                 items: [{
@@ -24,22 +37,20 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
                     bind: '{probes.value}'
                 },{
                     xtype: 'combobox',
-                    style: 'font: normal 12px courier',
-                    reference: 'probes',
-                    publishes: 'value',
+                    // style: 'font: normal 12px courier',
+                    // reference: 'probes',
+                    // publishes: 'value',
+                    queryMode: 'local',
                     fieldLabel: 'Select Probe',
-                    displayField: 'probe',
-                    anchor: '-15',
-                    forselecton: true,
-                    store: {
-                        style: 'font: normal 12px courier',
-                        type: 'probes'
-                    },
-                    minChars: 0,
+                    displayField: 'id',
+                    valueField: 'id',
+                    // anchor: '-15',
+                    store: store
+                    // minChars: 0,
                     //queryMode: 'local',
-                    typeAhead: true
-                    }]
-            }] 
+                    // typeAhead: true
+                }]
+            }]
         });
         this.callParent();
     }
