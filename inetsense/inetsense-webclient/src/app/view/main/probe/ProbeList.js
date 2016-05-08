@@ -7,11 +7,11 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
 
     ],
     title: 'Probes',
-
+    
     initComponent: function(){
         Ext.apply(this,{
             width: 400,
-            height: 500,
+            height: 800,
             store: {
                 type: 'probes'
             },

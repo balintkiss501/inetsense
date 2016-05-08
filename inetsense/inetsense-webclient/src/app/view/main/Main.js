@@ -75,7 +75,12 @@ Ext.define('WebclientApp.view.main.Main', {
 
     items: [{
         title: 'Home',
-        iconCls: 'fa-home'
+        iconCls: 'fa-home',
+        html: [
+            '<p height="300px"><center><font size="80"><b>iNETSense</b></font></center></p>',
+            '<p vertical-align="middle" padding="40px"><center><font size="40">iNETSense az internet sávszélességének mérésére.</font></center></p>',
+            '<a href="https://github.com/zdtorok/inetsense/wiki/Webclient-Felhaszn%C3%A1l%C3%B3i-dokument%C3%A1ci%C3%B3"><center>User Guide</center></a>'
+        ]
     }, /*{
         title: 'Users',
         iconCls: 'fa-user',
@@ -96,7 +101,7 @@ Ext.define('WebclientApp.view.main.Main', {
             xtype: 'chart-panel',
             hcContainer: 'highchart-container'
         }]
-    }, {
+    } /*{
         title: 'DEMO Bandwidth statistic',
         iconCls: 'fa-cog',
         items: [{
@@ -104,7 +109,7 @@ Ext.define('WebclientApp.view.main.Main', {
             demo: true,
             hcContainer: 'highchart-container-demo'
         }]
-    }
+    }*/
     ]
 
 });
