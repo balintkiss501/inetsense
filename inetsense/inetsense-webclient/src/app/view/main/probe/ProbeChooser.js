@@ -11,19 +11,20 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
     layout: 'form',
     viewModel: {},
     
-
+    onSelected: function(combo, record, index){
+        this.fireEvent('selected',this,record.get(combo.valueField));
+    },
     
+ 
     initComponent: function(){
+    
+        var $scope = this;
         
         Ext.apply(this, {
             items: [{
                 xtype: 'fieldset',
                 layout: 'anchor',
                 items: [{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Selected probe',
-                    bind: '{probes.value}'
-                },{
                     xtype: 'combobox',
                     queryMode: 'local',
                     fieldLabel: 'Select Probe',
@@ -34,8 +35,10 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
                     },
                     listeners:{
                         render: function(combobox){
-                           // Ext.getCmp('asd').getStore().load();
                            this.getStore().load();
+                        },
+                        select: function(combobox,record,index){
+                          $scope.onSelected(combobox, record, index);
                         }
                     }
 
@@ -44,6 +47,8 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
         });
         this.callParent();
     }
+    
+    
     
     
     

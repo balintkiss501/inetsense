@@ -9,7 +9,6 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
     title: 'Probes',
 
     initComponent: function(){
-        console.log('hello>>>>>>>');
         Ext.apply(this,{
             width: 400,
             height: 500,
@@ -47,8 +46,6 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
                 console.log(response);
             }
         });
-    
-        //this.store.reload();
         this.store.load();
               
     }

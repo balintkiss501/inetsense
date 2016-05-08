@@ -30,6 +30,8 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     datechooser: null,
     probelist : null,
     selectedProbe: null,
+    dTo: null,
+    dFrom: null,
 
 
     getChartData: function(dFrom, dTo, resolution, cb){
@@ -57,11 +59,11 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         var $scope = this;
 
         console.log("onDateChanged", arguments);
-
-        var dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
-        var dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
-
+         dFrom = (new Date(data.startDate + ' ' + (data.starTime || ''))).getTime();
+         dTo = (new Date(data.endDate + ' ' + (data.endTime || '' ))).getTime();
+        console.log(data);
         this.getChartData(dFrom, dTo, this.masterRes, function (data) {
+            console.log(data);
             if ( data != null && data.constructor === Array && data.length != 0 ) {
                 $scope.updateMasterChart(data);
             }
@@ -79,23 +81,26 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
     },
 
     onProbeSelected: function(evt,data){
-        if(data == null || data.probe == "" || data.probe == "undefined"){
+        if(data == null || data == "" || data == "undefined"){
             return;
         }
+        var  $scope = this;
+        this.probeId = data;
         
-        var $scope = this;
-        
-        console.log("onProbeSelected", arguments);
-        
-        selectedProbe = data.probe;
-        
-        $getJSON('http://localhost:8080/measurements/'+selectedProbe+'/'+dFrom+'/to/'+dTo+'/',function (data){
-            $scope.updateMasterChart(data);
-        });
+        var df = Ext.Date.format(new Date(dFrom),"Y m d");
+        var dt = Ext.Date.format(new Date(dTo), "Y m d");    
+        data = {startDate: df, endDate: dt};
+        this.getChartData(dFrom,dTo,this.masterRes,function(data){
+          if ( data != null && data.constructor === Array && data.length != 0 ) {
+                $scope.updateMasterChart(data);
+            }else{
+                Ext.MessageBox.alert('Status','A kiválasztott opciókhoz, nincs megjeleníthető adat',this.showResult,this);
+            }
+        })
     },
     
     initComponent: function(){
-
+        console.log(this.probeId);
         this.callParent();
 
         this.hcContainerSel = "#" + this.hcContainer;
@@ -103,7 +108,14 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
         this.hcMasterContainerSel = "#" + this.hcContainer + " > ." + this.hcMasterContainer;
         this.hcDetailContainerSel = "#" + this.hcContainer + " > ." + this.hcDetailContainer;
 
-        this.probelist = new WebclientApp.view.main.chart.ProbeChooser();
+        this.probelist = new WebclientApp.view.main.chart.ProbeChooser({
+            listeners:{
+                selected: {
+                    scope: this,
+                    fn: this.onProbeSelected
+                }
+            }
+        });
         this.add(this.probelist);
 
         this.datechooser = new WebclientApp.view.main.chart.DateChooser({
@@ -119,7 +131,7 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
         this.add([{
             xtype: 'panel',
-            title: 'p0013 <i>(jeanluc)</i>',
+            title: '</i>Staistic</i>',
             layout: 'fit',
             height: 800,
             monitorResize: true,
