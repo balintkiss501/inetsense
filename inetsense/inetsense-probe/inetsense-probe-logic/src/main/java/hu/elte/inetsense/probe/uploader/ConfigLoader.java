@@ -1,6 +1,7 @@
 
 package hu.elte.inetsense.probe.uploader;
 
+import hu.elte.inetsense.probe.InetsenseProbe;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -21,12 +22,12 @@ public class ConfigLoader {
     
     public ConfigLoader(String path) {
         
-        System.out.println("Loading ini file from: "+path);
+        InetsenseProbe.log.info("Loading ini file from: "+path);
         
         try {
             loadIni(new FileInputStream(path));
         } catch (FileNotFoundException ex) {
-            System.out.println("File not found, loadign default ini");
+            InetsenseProbe.log.error("File not found, loadign default ini");
             loadIni(getDefaultIniStream());
         }
     }
