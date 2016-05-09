@@ -4,12 +4,19 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
 
     bodyPadding: 10,
     layout: 'form',
-    title: 'Pick the desired date',
 
     myrec: null,
 
     onFieldChange: function() {
-        this.fireEvent('datechanged', this, this.getForm().getValues());
+
+        var values = this.getForm().getValues();
+
+        if(values.startDate === undefined || values.startDate == ""
+            || values.endDate === undefined || values.endDate == ""){
+            return;
+        }
+
+        this.fireEvent('datechanged', this, values);
     },
 
     listeners: {

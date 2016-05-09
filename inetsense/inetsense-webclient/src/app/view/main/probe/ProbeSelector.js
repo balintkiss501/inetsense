@@ -1,4 +1,4 @@
-Ext.define('WebclientApp.view.main.probe.ProbeSelector', {    
+Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
     extend: 'Ext.form.Panel',
     xtype: 'probeselector',
     
@@ -6,13 +6,13 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
         'WebclientApp.store.Probes'
     ],
     
-    title: 'Probes',
     layout: 'form',
 
-    onFieldChange: function() {
+
+    onFieldChange: function(evt, dataValue) {
         console.log("onFieldChange", "probechanged triggered");
 
-        this.fireEvent('probechanged', this, this.getForm().getValues());
+        this.fireEvent('probechanged', this, dataValue, {origParam: arguments});
     },
 
 
@@ -27,13 +27,16 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
                 items: [{
                     xtype: 'displayfield',
                     fieldLabel: 'Selected probe',
-                    bind: '{selectedProbe}'
+                    bind: '{selectedProbe}',
+                    hidden: true
                 },{
                     xtype: 'combobox',
                     queryMode: 'local',
                     fieldLabel: 'Select Probe',
                     displayField: 'authId',
                     valueField: 'authId',
+                    autoSelect: true,
+                    autoLoadOnValue: true,
                     listeners: {
                         change: {
                             scope: this,

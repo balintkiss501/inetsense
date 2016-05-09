@@ -3,11 +3,30 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
 
     xtype: 'stock-chart-panel',
 
+    title: 'Bandwidth statistic',
 
-    onDateChanged: function(){
 
+    onDateChanged: function(ctr, val){
     	console.log(">>> onDateChanged", arguments);
+
+    	this.stockChartComp.masterDateFrom = new Date(val.startDate).getTime();
+    	this.stockChartComp.masterDateTo = new Date(val.endDate).getTime();
+
+    	this.stockChartComp.updateChart();
     },
+
+
+    onProbeChanged: function(evt, val){
+		console.log(">>> onProbeChanged", arguments);
+
+		this.stockChartComp.probeId = val;
+		this.stockChartComp.updateChart();
+    },
+
+
+    probeSelector: null,
+    datechooser: null,
+    stockChartComp: null,
 
 
     initComponent: function(){
@@ -22,8 +41,22 @@ Ext.define('WebclientApp.view.main.chart.Chart', {
                 }
             }
         });
+        
+		this.probeSelector = new WebclientApp.view.main.probe.ProbeSelector({
+			listeners: {
+				probechanged: {
+					scope: this,
+					fn: this.onProbeChanged
+				}
+			}
+		});
 
-        this.add(this.datechooser);
+		this.stockChartComp = new WebclientApp.view.main.chart.StockChartComp({
+		});
+
+		this.add(this.probeSelector);
+		this.add(this.datechooser);
+		this.add(this.stockChartComp);
     }
 
 });

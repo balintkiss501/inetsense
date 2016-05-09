@@ -115,6 +115,9 @@ public class MeasurementController {
                     .orElse(0);
             long averageDownload = (long) stepMeasurements.stream().mapToLong(x -> x.getDownloadSpeed()).average()
                     .orElse(0);
+            
+            averageUpload = averageUpload / ( 1000 * 1000);
+            averageDownload = averageDownload / ( 1000 * 1000);
 
             BigDecimal stepStartTime = BigDecimal.valueOf(start + step * i);
             
