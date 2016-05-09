@@ -1,7 +1,8 @@
 
-Ext.define('WebclientApp.Application.CONFIG',{
+Ext.define('WebclientApp.CONFIG',{
     singleton: true,
     baseUrl: 'http://localhost:8080'
+    // baseUrl: ''
 });
 
 

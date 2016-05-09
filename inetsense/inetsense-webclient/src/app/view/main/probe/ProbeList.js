@@ -3,7 +3,7 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
     xtype: 'probelist',
 
     requires: [
-        'WebclientApp.store.Probes',
+        'WebclientApp.store.Probes'
     ],
     
     title: 'Probes',
@@ -39,7 +39,7 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
     onAddClick: function(){
      
         Ext.Ajax.request({
-            url: WebclientApp.Application.CONFIG.baseUrl + '/probes',
+            url: WebclientApp.CONFIG.baseUrl + '/probes',
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             failure: function (response){

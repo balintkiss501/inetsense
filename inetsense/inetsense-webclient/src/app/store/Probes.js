@@ -14,7 +14,7 @@ Ext.define('WebclientApp.store.Probes', {
     // server
     proxy: {
         type: 'rest',
-        url : WebclientApp.Application.CONFIG.baseUrl + '/probes'
+        url : WebclientApp.CONFIG.baseUrl + '/probes'
     }
 
 });
