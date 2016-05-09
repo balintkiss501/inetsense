@@ -5,6 +5,10 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
     bodyPadding: 10,
     layout: 'form',
 
+    requires: [
+        'WebclientApp.model.DateEntry'
+    ],
+
     myrec: null,
 
     onFieldChange: function() {

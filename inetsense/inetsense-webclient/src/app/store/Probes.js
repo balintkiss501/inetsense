@@ -2,6 +2,11 @@ Ext.define('WebclientApp.store.Probes', {
     extend: 'Ext.data.Store',
 
     alias: 'store.probes',
+    storeId: 'probes',
+
+    requires: [
+        'WebclientApp.model.Probe'
+    ],
 
     fields: [
         'authId', 'createdOn'
@@ -10,6 +15,7 @@ Ext.define('WebclientApp.store.Probes', {
     model: 'WebclientApp.model.Probe',
     
     autoLoad: true,
+
 
     // server
     proxy: {

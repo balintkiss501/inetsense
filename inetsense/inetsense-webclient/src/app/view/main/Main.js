@@ -2,7 +2,7 @@
 Ext.define('WebclientApp.CONFIG',{
     singleton: true,
     baseUrl: 'http://localhost:8080'
-    // baseUrl: ''
+    // baseUrl: './'
 });
 
 
@@ -14,7 +14,10 @@ Ext.define('WebclientApp.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
-        // 'WebclientApp.view.main.probe.ProbeSelector',
+        'WebclientApp.view.main.chart.StockChart',
+        'WebclientApp.view.main.probe.ProbeList',
+
+        'WebclientApp.view.main.probe.ProbeSelector',
 
         'WebclientApp.view.main.MainController',
         'WebclientApp.view.main.MainModel'

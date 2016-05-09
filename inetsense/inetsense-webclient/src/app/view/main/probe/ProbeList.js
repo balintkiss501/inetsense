@@ -10,12 +10,13 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
     
     initComponent: function(){
 
+
+        var store = new WebclientApp.store.Probes();
+
         Ext.apply(this,{
             width: 400,
             height: 800,
-            store: {
-                type: 'probes'
-            },
+            store: store,
             
             columns:[{
                 header: 'Id',

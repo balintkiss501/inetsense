@@ -1,9 +1,14 @@
-Ext.define('WebclientApp.view.main.chart.Chart', {
+Ext.define('WebclientApp.view.main.chart.StockChart', {
     extend: 'Ext.Panel',
 
     xtype: 'stock-chart-panel',
 
     title: 'Bandwidth statistic',
+
+    requires: [
+        'WebclientApp.view.main.chart.DateChooser',
+        'WebclientApp.view.main.chart.StockChartComp'
+    ],
 
 
     onDateChanged: function(ctr, val){

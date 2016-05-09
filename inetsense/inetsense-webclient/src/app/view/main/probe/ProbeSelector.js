@@ -5,8 +5,7 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
     /*
     requires: [
         'WebclientApp.store.Probes'
-    ],
-    */
+    ],*/
     
     layout: 'form',
 
@@ -21,6 +20,8 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
     initComponent: function() {
 
         console.log(">>> initComponent", arguments);
+
+        var probeStore = new WebclientApp.store.Probes();
 
         Ext.apply(this, {
             items: [{
@@ -45,9 +46,7 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
                             fn: this.onFieldChange
                         }
                     },
-                    store: {
-                        type: 'probes'
-                    },
+                    store: probeStore,
                     bind: {
                         value: '{selectedProbe}'
                     }
