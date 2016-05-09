@@ -2,10 +2,12 @@ Ext.define('WebclientApp.view.main.probe.ProbeList', {
     extend: 'Ext.grid.Panel',
     xtype: 'probelist',
 
+/*
     requires: [
         'WebclientApp.store.Probes'
-    ],
-    
+    ],    
+*/
+
     title: 'Probes',
     
     initComponent: function(){

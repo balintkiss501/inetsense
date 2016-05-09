@@ -49,4 +49,9 @@ public class MeasurementServiceImpl implements MeasurementService {
         return dtos;
     }
 
+	@Override
+	public List<MeasurementDTO> getAllMeasurementsByProbeAuthId(String probeAuthId) {
+		return entitiesToDTOs(measurementRepository.findAllByProbeAuthIdOrderByCompletedOnAsc(probeAuthId));
+	}
+
 }

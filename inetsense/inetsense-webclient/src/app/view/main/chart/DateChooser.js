@@ -29,8 +29,8 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
             this.myrec = this.getForm().loadRecord(Ext.create('WebclientApp.model.DateEntry', {
                 'startDate': '2016-04-25',
                 'endDate'  : new Date().toISOString().slice(0,10),
-                'startTime': '',
-                'endTime'  : ''
+                'startTime': '00:00',
+                'endTime'  : '23:59'
             }));
         }
     },

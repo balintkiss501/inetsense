@@ -65,8 +65,10 @@ public class MeasurementController {
         Date fromDate = new Date(start);
         Date toDate = new Date(end);
 
-        List<MeasurementDTO> measurements = measurementService.getMeasurementsByProbeAuthIdBetweenDates(probeId,
-                fromDate, toDate);
+//        List<MeasurementDTO> measurements = measurementService.getMeasurementsByProbeAuthIdBetweenDates(probeId,
+//                fromDate, toDate);
+        
+        List<MeasurementDTO> measurements = measurementService.getAllMeasurementsByProbeAuthId(probeId);
 
         if (measurements.isEmpty()) {
             return result;
@@ -78,7 +80,7 @@ public class MeasurementController {
         long diff = end - start;
 
         // this should be sent by the client @zsoltistvanfi
-        // final int resolution = 600;
+//        final int resolution = 600;
 
         long step = diff / resolution;
         if (step == 0) {

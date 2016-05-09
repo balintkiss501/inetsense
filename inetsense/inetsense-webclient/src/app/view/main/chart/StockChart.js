@@ -14,8 +14,8 @@ Ext.define('WebclientApp.view.main.chart.StockChart', {
     onDateChanged: function(ctr, val){
     	console.log(">>> onDateChanged", arguments);
 
-    	this.stockChartComp.masterDateFrom = new Date(val.startDate).getTime();
-    	this.stockChartComp.masterDateTo = new Date(val.endDate).getTime();
+    	this.stockChartComp.masterDateFrom = new Date(val.startDate + " " + (val.startTime || "")).getTime();
+    	this.stockChartComp.masterDateTo = new Date(val.endDate + " " + (val.endTime || "")).getTime();
 
     	this.stockChartComp.updateChart();
     },

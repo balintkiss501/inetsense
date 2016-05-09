@@ -24,6 +24,20 @@ Ext.define('WebclientApp.view.main.chart.StockChartComp', {
         $scope.loadMask.show();
         var $scope = this;
         $scope.getChartData( $scope.masterDateFrom, $scope.masterDateTo, 100, function(data){
+
+            /*
+            data[0] = [].concat(
+                new Array([$scope.masterDateFrom-1, null]),
+                data[0],
+                new Array([$scope.masterDateTo+1, null])
+            );
+
+            data[1] = [].concat(
+                new Array([$scope.masterDateFrom-1, null]),
+                data[1],
+                new Array([$scope.masterDateTo+1, null])
+            );*/
+
             $scope.createChartFN(data);
         });
 
