@@ -1,19 +1,15 @@
 
 package hu.elte.inetsense.probe;
 
+import org.apache.log4j.Logger;
 import hu.elte.inetsense.probe.speedtester.SpeedTester;
-import hu.elte.inetsense.probe.uploader.ConfigLoader;
-import hu.elte.inetsense.probe.uploader.DataUploader;
+import hu.elte.inetsense.probe.uploader.*;
 
-/**
- *
- * Entry point.
- *
- * @author Adam Kecskes
- */
+
 public class InetsenseProbe {
 
-
+    public static Logger log = Logger.getLogger(InetsenseProbe.class.getName());
+    
     public static void main(String[] args) {
 
         ConfigLoader cf = null;
@@ -29,7 +25,9 @@ public class InetsenseProbe {
         if(cf == null) {
             cf = new ConfigLoader();
         }
-
+        
+        log.info("Config loaded");
+        
         DataUploader du = new DataUploader(cf.get("host")+":"+cf.get("port")+"/message-endpoint" ,cf.get("probe-id"));
         SpeedTester se = new SpeedTester(
           du,
