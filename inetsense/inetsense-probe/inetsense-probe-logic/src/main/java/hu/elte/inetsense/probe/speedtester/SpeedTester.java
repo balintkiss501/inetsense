@@ -25,12 +25,7 @@ public class SpeedTester extends Thread {
      * A letöltési sebesség ideje ms-ben
      */
     private long interval;
-    
-    /**
-     * Az aktuális dátumot adja vissza
-     */
-    private Date date;
-    
+        
     /**
      * A feltöltési szerver címe
      */
@@ -59,7 +54,6 @@ public class SpeedTester extends Thread {
         this.downloadLocation = downloadLocation;
         this.du = du;
         this.interval = millis;
-        this.date = new Date();
     }
 
     //
@@ -91,14 +85,14 @@ public class SpeedTester extends Thread {
       while(true){
       			SpeedMeter sp = new SpeedMeter("http://"+this.downloadLocation,"http://"+this.uploadLocation,this.interval,(long) 20000,1000000);
       			sp.run();
+      			Date date = new Date();
 
             du.addMeasurement(new Measurement(
-                    this.date.getTime(),
+                    date.getTime(),
                     sp.getAverageDownloadSpeed(), // max 15Mb
                     sp.getAverageUploadSpeed()  // max  5Mb
             ));
       }
 
     }
-
 }
