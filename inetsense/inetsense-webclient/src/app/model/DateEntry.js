@@ -3,7 +3,7 @@ Ext.define('WebclientApp.model.DateEntry', {
 
     fields: [
         'startDate', 'startTime',
-        'birthDate', 'endTime'
+        'endDate', 'endTime'
     ]
 
 });

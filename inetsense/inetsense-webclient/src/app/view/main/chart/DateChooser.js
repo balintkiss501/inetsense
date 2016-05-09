@@ -1,29 +1,36 @@
-
 Ext.define('WebclientApp.view.main.chart.DateChooser', {
     extend: 'Ext.form.Panel',
     xtype: 'datechooser',
 
-    width: 400,
-
     bodyPadding: 10,
     layout: 'form',
 
-    title: 'Pick the desired date',
+    requires: [
+        'WebclientApp.model.DateEntry'
+    ],
 
     myrec: null,
 
     onFieldChange: function() {
-        this.fireEvent('datechanged', this, this.getForm().getValues());
+
+        var values = this.getForm().getValues();
+
+        if(values.startDate === undefined || values.startDate == ""
+            || values.endDate === undefined || values.endDate == ""){
+            return;
+        }
+
+        this.fireEvent('datechanged', this, values);
     },
 
     listeners: {
         afterrender: function() {
 
             this.myrec = this.getForm().loadRecord(Ext.create('WebclientApp.model.DateEntry', {
-                'startDate': '2016 04 15',
-                'endDate'  : '2016 05 10',
-                'startTime': '',
-                'endTime'  : ''
+                'startDate': '2016-04-25',
+                'endDate'  : new Date().toISOString().slice(0,10),
+                'startTime': '00:00',
+                'endTime'  : '23:59'
             }));
         }
     },
@@ -49,7 +56,7 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
                     xtype: 'datefield',
                     name: 'startDate',
                     margin: '0 5 0 0',
-                    format: 'Y m d'
+                    format: 'Y-m-d'
                     // allowBlank: false
                 }, {
                     xtype: 'timefield',
@@ -74,7 +81,7 @@ Ext.define('WebclientApp.view.main.chart.DateChooser', {
                     xtype: 'datefield',
                     name: 'endDate',
                     margin: '0 5 0 0',
-                    format: 'Y m d'
+                    format: 'Y-m-d'
                     // allowBlank: false
                 }, {
                     xtype: 'timefield',

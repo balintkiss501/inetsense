@@ -1,3 +1,11 @@
+
+Ext.define('WebclientApp.CONFIG',{
+    singleton: true,
+    //baseUrl: 'http://localhost:8080'
+    baseUrl: ''
+});
+
+
 Ext.define('WebclientApp.view.main.Main', {
     extend: 'Ext.tab.Panel',
     xtype: 'app-main',
@@ -6,11 +14,10 @@ Ext.define('WebclientApp.view.main.Main', {
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
 
-        'WebclientApp.view.main.chart.Chart',
-        'WebclientApp.view.main.chart.ChartController',
-
+        'WebclientApp.view.main.chart.StockChart',
         'WebclientApp.view.main.probe.ProbeList',
-        'WebclientApp.view.main.users.UserList',
+
+        'WebclientApp.view.main.probe.ProbeSelector',
 
         'WebclientApp.view.main.MainController',
         'WebclientApp.view.main.MainModel'
@@ -81,35 +88,18 @@ Ext.define('WebclientApp.view.main.Main', {
             '<p vertical-align="middle" padding="40px"><center><font size="40">iNETSense az internet sávszélességének mérésére.</font></center></p>',
             '<a href="https://github.com/zdtorok/inetsense/wiki/Webclient-Felhaszn%C3%A1l%C3%B3i-dokument%C3%A1ci%C3%B3"><center>User Guide</center></a>'
         ]
-    }, /*{
-        title: 'Users',
-        iconCls: 'fa-user',
-        items: [{
-            xtype: 'userlist'
-        }]
-    },*/ {
-        title: 'Probes',
+    }, {
+        title: 'Probe selector',
         iconCls: 'fa-cog',
         items: [{
             xtype: 'probelist'
         }]
-    },
-    {
-        title: 'Bandwidth statistic',
+    },{
+        title: 'Statistic',
         iconCls: 'fa-cog',
         items: [{
-            xtype: 'chart-panel',
-            hcContainer: 'highchart-container'
+            xtype: 'stock-chart-panel'
         }]
-    } /*{
-        title: 'DEMO Bandwidth statistic',
-        iconCls: 'fa-cog',
-        items: [{
-            xtype: 'chart-panel',
-            demo: true,
-            hcContainer: 'highchart-container-demo'
-        }]
-    }*/
-    ]
+    }]
 
 });

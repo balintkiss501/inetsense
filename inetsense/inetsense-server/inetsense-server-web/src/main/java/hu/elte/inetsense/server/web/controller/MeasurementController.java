@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
+import hu.elte.inetsense.server.web.config.ExtJSCORS;
 import hu.elte.inetsense.server.web.service.MeasurementService;
 
 /**
@@ -42,7 +43,7 @@ public class MeasurementController {
      *
      * @return
      */
-    @CrossOrigin(origins = "http://localhost:1841")
+    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
     @RequestMapping("/measurements/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
     public List<List<List<BigDecimal>>> getAllMeasurementsOfProbeIdByTimeWindow(
             @PathVariable("probeId") final String probeId,
@@ -64,8 +65,10 @@ public class MeasurementController {
         Date fromDate = new Date(start);
         Date toDate = new Date(end);
 
-        List<MeasurementDTO> measurements = measurementService.getMeasurementsByProbeAuthIdBetweenDates(probeId,
-                fromDate, toDate);
+//        List<MeasurementDTO> measurements = measurementService.getMeasurementsByProbeAuthIdBetweenDates(probeId,
+//                fromDate, toDate);
+        
+        List<MeasurementDTO> measurements = measurementService.getAllMeasurementsByProbeAuthId(probeId);
 
         if (measurements.isEmpty()) {
             return result;
@@ -77,7 +80,7 @@ public class MeasurementController {
         long diff = end - start;
 
         // this should be sent by the client @zsoltistvanfi
-        // final int resolution = 600;
+//        final int resolution = 600;
 
         long step = diff / resolution;
         if (step == 0) {
@@ -93,9 +96,9 @@ public class MeasurementController {
             final long stepEndTime = start + step * (i + 1);
             Date stepEndDate = new Date(stepEndTime);
 
-            if (!nextMeasurement.getCompletedOn().before(stepEndDate)) {
-                continue;
-            }
+//            if (!nextMeasurement.getCompletedOn().before(stepEndDate)) {
+//                continue;
+//            }
 
             List<MeasurementDTO> stepMeasurements = new ArrayList<>();
             stepMeasurements.add(nextMeasurement);
@@ -114,11 +117,21 @@ public class MeasurementController {
                     .orElse(0);
             long averageDownload = (long) stepMeasurements.stream().mapToLong(x -> x.getDownloadSpeed()).average()
                     .orElse(0);
+            
+            if(averageUpload > 100*1000*1000 || averageDownload > 100*1000*1000){
+            	continue;
+            }
+
+            BigDecimal avgUpload = new BigDecimal(averageUpload);
+            avgUpload = avgUpload.divide(new BigDecimal(1000 * 1000));
+            
+            BigDecimal avgDownload = new BigDecimal(averageDownload);
+            avgDownload = avgDownload.divide(new BigDecimal(1000 * 1000));
 
             BigDecimal stepStartTime = BigDecimal.valueOf(start + step * i);
             
-            uploads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), BigDecimal.valueOf(averageUpload)));
-            downloads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), BigDecimal.valueOf(averageDownload)));
+            uploads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), avgUpload.setScale(2, RoundingMode.DOWN)));
+            downloads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), avgDownload.setScale(2, RoundingMode.DOWN)));
 
             if (!iterator.hasNext()) {
                 break;
@@ -144,7 +157,7 @@ public class MeasurementController {
      * 
      * @return
      */
-    @CrossOrigin(origins = "http://localhost:1841")
+    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
 	@RequestMapping("/measurements/demo/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
 	public List<List<List<BigDecimal>>> getDemoData(
 			@PathVariable("probeId") String probeId,

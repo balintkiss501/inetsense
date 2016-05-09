@@ -19,7 +19,8 @@ public interface MeasurementRepository extends JpaRepository<Measurement, Long> 
 
     List<Measurement> findAllByProbeOrderByIdAsc(Probe probe);
 
-    List<Measurement> findAllByProbeAuthIdAndCompletedOnBetweenOrderByCompletedOnAsc(String probeAuthId, Date from,
-            Date to);
+    List<Measurement> findAllByProbeAuthIdAndCompletedOnBetweenOrderByCompletedOnAsc(String probeAuthId, Date from, Date to);
+    
+    List<Measurement> findAllByProbeAuthIdOrderByCompletedOnAsc(String probeAuthId);
 
 }
