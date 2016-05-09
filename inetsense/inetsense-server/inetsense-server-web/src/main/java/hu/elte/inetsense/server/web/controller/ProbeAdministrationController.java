@@ -47,5 +47,4 @@ public class ProbeAdministrationController {
         return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
     }
 
-
 }

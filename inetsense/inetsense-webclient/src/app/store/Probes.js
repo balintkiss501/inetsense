@@ -7,36 +7,14 @@ Ext.define('WebclientApp.store.Probes', {
         'authId', 'createdOn'
     ],
 
-    mode: 'probe',
+    model: 'WebclientApp.model.Probe',
     
-
-    // demo
-    /*
-    data: {
-        items: [{
-            alias: 'Egyetem',
-            probeId: 'PROBE001'
-        }, {
-            alias: 'Otthoni mobil',
-            probeId: 'PROBE002'
-        }]
-    },
-    
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'json',
-            rootProperty: 'items'
-        }
-    }*/
-
     autoLoad: true,
-    // autoSync: true,
 
     // server
     proxy: {
         type: 'rest',
-        url : 'http://localhost:8080/probes'
+        url : WebclientApp.Application.CONFIG.baseUrl + '/probes'
     }
-    
+
 });

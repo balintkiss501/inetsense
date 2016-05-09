@@ -2,9 +2,11 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
     extend: 'Ext.form.Panel',
     xtype: 'probeselector',
     
+    /*
     requires: [
         'WebclientApp.store.Probes'
     ],
+    */
     
     layout: 'form',
 
@@ -31,7 +33,7 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
                     hidden: true
                 },{
                     xtype: 'combobox',
-                    queryMode: 'local',
+                    queryMode: 'remote',
                     fieldLabel: 'Select Probe',
                     displayField: 'authId',
                     valueField: 'authId',

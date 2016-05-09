@@ -76,7 +76,7 @@ public class ProbeAdministrationTest {
         
 
         for (int i = 0; i < probecount; ++i) {
-            String probejson = mockMvc.perform(MockMvcRequestBuilders.post("/probe")).
+            String probejson = mockMvc.perform(MockMvcRequestBuilders.post("/probes")).
                     andExpect(MockMvcResultMatchers.status().isOk()).
                     andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).
                     andDo(MockMvcResultHandlers.print()).
@@ -115,7 +115,7 @@ public class ProbeAdministrationTest {
     private List<Probe> listProbes(int expectedsize) throws Exception{
         String s= mockMvc.
                 perform(
-                        MockMvcRequestBuilders.get("/probe")).
+                        MockMvcRequestBuilders.get("/probes")).
                 andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).
                 andExpect(MockMvcResultMatchers.status().isOk()).
                 andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(expectedsize))).
