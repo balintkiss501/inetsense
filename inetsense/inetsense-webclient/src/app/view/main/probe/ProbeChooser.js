@@ -1,6 +1,6 @@
 Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
     extend: 'Ext.form.Panel',
-    xtype: 'probelist',
+    xtype: 'probechooser',
     
     requires: [
         'WebclientApp.store.Probes'
@@ -9,40 +9,46 @@ Ext.define('WebclientApp.view.main.chart.ProbeChooser',{
     title: 'Probes',
     width: 400,
     layout: 'form',
-    //viewModel: {},
+    viewModel: {},
     
-
+    onSelected: function(combo, record, index){
+        this.fireEvent('selected',this,record.get(combo.valueField));
+    },
     
+ 
     initComponent: function(){
-        Ext.apply(this,{
-                items: [{
+    
+        var $scope = this;
+        
+        Ext.apply(this, {
+            items: [{
                 xtype: 'fieldset',
                 layout: 'anchor',
                 items: [{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Selected probe',
-                    bind: '{probes.value}'
-                },{
                     xtype: 'combobox',
-                    style: 'font: normal 12px courier',
-                    reference: 'probes',
-                    publishes: 'value',
+                    queryMode: 'local',
                     fieldLabel: 'Select Probe',
-                    displayField: 'probe',
-                    anchor: '-15',
-                    forselecton: true,
+                    displayField: 'authId',
+                    valueField: 'authId',
                     store: {
-                        style: 'font: normal 12px courier',
                         type: 'probes'
                     },
-                    minChars: 0,
-                    //queryMode: 'local',
-                    typeAhead: true
-                    }]
-            }] 
+                    listeners:{
+                        render: function(combobox){
+                           this.getStore().load();
+                        },
+                        select: function(combobox,record,index){
+                          $scope.onSelected(combobox, record, index);
+                        }
+                    }
+
+                }]
+            }]
         });
         this.callParent();
     }
+    
+    
     
     
     
