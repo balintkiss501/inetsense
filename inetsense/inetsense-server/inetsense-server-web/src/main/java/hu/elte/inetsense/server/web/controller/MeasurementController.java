@@ -118,13 +118,20 @@ public class MeasurementController {
             long averageDownload = (long) stepMeasurements.stream().mapToLong(x -> x.getDownloadSpeed()).average()
                     .orElse(0);
             
-            averageUpload = averageUpload / ( 1000 * 1000);
-            averageDownload = averageDownload / ( 1000 * 1000);
+            if(averageUpload > 100*1000*1000 || averageDownload > 100*1000*1000){
+            	continue;
+            }
+
+            BigDecimal avgUpload = new BigDecimal(averageUpload);
+            avgUpload = avgUpload.divide(new BigDecimal(1000 * 1000));
+            
+            BigDecimal avgDownload = new BigDecimal(averageDownload);
+            avgDownload = avgDownload.divide(new BigDecimal(1000 * 1000));
 
             BigDecimal stepStartTime = BigDecimal.valueOf(start + step * i);
             
-            uploads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), BigDecimal.valueOf(averageUpload)));
-            downloads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), BigDecimal.valueOf(averageDownload)));
+            uploads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), avgUpload.setScale(2, RoundingMode.DOWN)));
+            downloads.add(Arrays.asList(stepStartTime.setScale(0, RoundingMode.DOWN), avgDownload.setScale(2, RoundingMode.DOWN)));
 
             if (!iterator.hasNext()) {
                 break;
