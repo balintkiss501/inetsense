@@ -43,7 +43,33 @@ public class ProbeService {
 
         return probe;
     }
+    
+    public Probe addProbe(String authId){
+        Probe probe = new Probe();
+        probe.setCreatedOn(Date.from(Instant.now()));
+        probe.setAuthId(authId);
+        probe = repo.save(probe);
+        
+        return probe;
+    }
 
+    public Probe changeProbe(String authId, String newId){
+        /*
+        Probe probe = repo.getProbe(authId);
+        
+        probe.setAuthId(newId);
+        probe = repo.save(probe);
+        
+        return probe;
+        */
+        
+        Probe probe = new Probe();
+        probe.setCreatedOn(Date.from(Instant.now()));
+        probe.setAuthId(newId);
+        probe = repo.save(probe);
+        return probe;
+    }
+    
     /**
      * Generate random authentication id for new probes
      *

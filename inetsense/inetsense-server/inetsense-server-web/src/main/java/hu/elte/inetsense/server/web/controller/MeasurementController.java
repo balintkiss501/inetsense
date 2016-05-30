@@ -211,5 +211,180 @@ public class MeasurementController {
 
 		return result;
 	}
+    
+    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
+    @RequestMapping("/measurements/table/{probeId}/from/{dateFrom}/to/{dateTo}/res/{mode}/{agg}")
+    public List<MeasurementDTO> getMeasurementsOfProbeIdForTable(
+            @PathVariable("probeId")   final String  probeId,
+            @PathVariable("dateFrom")  final String  dateFrom,
+            @PathVariable("dateTo")    final String  dateTo,
+            @PathVariable("mode")       Integer mode,
+            @PathVariable("agg")        String  agg)
+            {
+        // REVIEW check parameter validity  
+        //mode: 0-raw; 10-10min; 1-1h; 4-4h; 12-12h; 24-24h
+        //agg: min; max; avg;    
+        
+        long start = Long.parseLong(dateFrom);
+        long end =  Long.parseLong(dateTo);
 
+        Date fromDate = new Date(start);
+        Date toDate = new Date(end);
+      
+        long step = 0;
+        
+        List<MeasurementDTO> result = new ArrayList<MeasurementDTO>();       
+        List<MeasurementDTO> measurements =  measurementService.getAllMeasurementsByProbeAuthId(probeId);
+        
+            switch(mode){
+                case 0:
+                    step = 1;
+                    break;
+                case 10:
+                    step = 600000;
+                    break;
+                case 1:
+                    step = 3600000;
+                    break;
+                case 4:
+                    step = 4*3600000;
+                    break;
+                case 12:
+                    step = 12*3600000;
+                    break;
+                case 24:
+                    step = 24*3600000;
+                    break;
+            }    
+        
+            long diff = (end-start)/step;
+            if(diff==0){
+                diff = 1;
+            }
+        
+        
+            List<MeasurementDTO> ms = new ArrayList<>();
+            List<List<MeasurementDTO>> res = new ArrayList<List<MeasurementDTO>>();
+            List<Date> dates = new ArrayList<>();
+            
+            Date newEnd = new Date(start+step);
+            
+            int j=2;
+            int i=0;    
+            
+            long diff2 = 0;    
+            if(mode>0){
+                while(i<measurements.size()){
+                    MeasurementDTO dto = measurements.get(i);
+                    if(dto.getCompletedOn().before(fromDate)){
+                        i++;
+                    }else{                              
+                        if(dto.getCompletedOn().before(newEnd)){
+                            ms.add(dto);
+                            i++;
+                        }else{
+                            newEnd = new Date(start+(j*step));
+                            j++;
+                            res.add(ms);
+                            ms = new ArrayList<>();
+                            diff2++;
+                        }
+
+                    }
+                }
+                if(diff2<diff){
+                    while(diff2<diff){
+                        res.add(new ArrayList<MeasurementDTO>());
+                        diff2++;
+                    }    
+                }
+            
+                for( i=0; i<res.size(); i++){
+                    newEnd = new Date(start +((i+1)*step));    
+                   if(res.get(i).size()>0){
+                        if(agg.equals("max")){
+                            result.add(getMax(res.get(i)));
+                        }else if(agg.equals("min")){
+                            result.add(getMin(res.get(i)));
+                        }else if(agg.equals("avg")){
+                            result.add(getAvg(res.get(i)));
+                        }
+                    }else{
+                        MeasurementDTO mdto = new MeasurementDTO();
+                        mdto.setDownloadSpeed((long) (-1));
+                        mdto.setUploadSpeed((long) (-1));
+                        mdto.setCompletedOn(newEnd);
+                        result.add(mdto);
+                    }
+                }
+            }else{
+                while(i<measurements.size()){
+                    MeasurementDTO dto = measurements.get(i);
+                    if(dto.getCompletedOn().before(fromDate)){
+                        i++;
+                    }else{
+                        if(dto.getCompletedOn().before(toDate)){
+                            result.add(dto);
+                            i++;
+                        }
+                    }
+                }
+                
+            }
+            
+        return result;
+    }
+    
+    private MeasurementDTO getMax(List<MeasurementDTO> ms){
+        int n = 0;
+        int m = 0;
+        for(int i=0; i<ms.size(); i++){
+            if(ms.get(n).getDownloadSpeed()<ms.get(i).getDownloadSpeed()){
+                n = i;
+            }
+            if(ms.get(m).getUploadSpeed()<ms.get(i).getUploadSpeed()){
+                m = i;
+            }
+        }
+
+        MeasurementDTO mdto = new MeasurementDTO();
+        mdto.setDownloadSpeed(ms.get(n).getDownloadSpeed()/(long)(1000*1000));
+        mdto.setUploadSpeed(ms.get(m).getUploadSpeed()/(long)(1000*1000));
+        mdto.setCompletedOn(ms.get(ms.size()-1).getCompletedOn());
+        return mdto;
+    }
+    
+    private MeasurementDTO getMin(List<MeasurementDTO> ms){
+        int n = 0;
+        int m = 0;
+        for(int i=0; i<ms.size(); i++){
+            if(ms.get(n).getDownloadSpeed()>ms.get(i).getDownloadSpeed()){
+                n = i;
+            }
+            if(ms.get(m).getUploadSpeed()>ms.get(i).getUploadSpeed()){
+                m = i;
+            }
+        }
+        MeasurementDTO mdto = new MeasurementDTO();
+        mdto.setDownloadSpeed(ms.get(n).getDownloadSpeed()/(long)(1000*1000));
+        mdto.setUploadSpeed(ms.get(m).getUploadSpeed()/(long)(1000*1000));
+        mdto.setCompletedOn(ms.get(ms.size()-1).getCompletedOn());
+        return mdto;
+    }
+    
+    private MeasurementDTO getAvg(List<MeasurementDTO> ms){
+        long avgDownload = 0;
+        long avgUpload = 0;
+        for(int i=0; i<ms.size(); i++){
+            avgDownload =avgDownload+ ms.get(i).getDownloadSpeed();
+            avgUpload = avgUpload+ms.get(i).getUploadSpeed();
+        }
+        avgDownload = (avgDownload/ms.size())/(long)(1000*1000);
+        avgUpload = (avgUpload/ms.size())/(long)(1000*1000);
+        MeasurementDTO mdto = new MeasurementDTO();
+        mdto.setDownloadSpeed(avgDownload);
+        mdto.setUploadSpeed(avgUpload);
+        mdto.setCompletedOn(ms.get(ms.size()-1).getCompletedOn());
+        return mdto;
+    }
 }

@@ -12,7 +12,6 @@ Ext.define('WebclientApp.view.main.probe.ProbeSelector', {
 
     onFieldChange: function(evt, dataValue) {
         console.log("onFieldChange", "probechanged triggered");
-
         this.fireEvent('probechanged', this, dataValue, {origParam: arguments});
     },
 

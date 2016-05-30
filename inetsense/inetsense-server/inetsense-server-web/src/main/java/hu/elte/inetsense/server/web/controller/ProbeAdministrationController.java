@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hu.elte.inetsense.common.dtos.ProbeDTO;
 import hu.elte.inetsense.server.data.ProbeRepository;
@@ -41,10 +42,25 @@ public class ProbeAdministrationController {
         return repo.findAll().stream().map(p->{return new ProbeDTO(p.getAuthId(), p.getCreatedOn());} ).collect(Collectors.toList());
     }
 
+    @RequestMapping(method = RequestMethod.POST, params={"authId"})
+    public ProbeDTO addProbe(
+    @RequestParam(value="authId") String authId){
+        Probe p = service.addProbe(authId);
+        return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
+    }
+    
     @RequestMapping(method = RequestMethod.POST)
     public ProbeDTO addProbe() {
         Probe p = service.addProbe();
         return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
+    }
+    
+    @RequestMapping(method = RequestMethod.POST, params={"authId","newId"})
+    public ProbeDTO changeProbe(
+    @RequestParam(value="authId") String authId,
+    @RequestParam(value="newId") String newId){
+      Probe p = service.changeProbe(authId,newId);
+      return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
     }
 
 }

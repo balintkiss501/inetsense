@@ -89,13 +89,13 @@ Ext.define('WebclientApp.view.main.Main', {
             '<a href="https://github.com/zdtorok/inetsense/wiki/Webclient-Felhaszn%C3%A1l%C3%B3i-dokument%C3%A1ci%C3%B3"><center>User Guide</center></a>'
         ]
     }, {
-        title: 'Probe selector',
+        title: 'Probes',
         iconCls: 'fa-cog',
         items: [{
             xtype: 'probelist'
         }]
     },{
-        title: 'Statistic',
+        title: 'Mesaurements',
         iconCls: 'fa-cog',
         items: [{
             xtype: 'stock-chart-panel'
