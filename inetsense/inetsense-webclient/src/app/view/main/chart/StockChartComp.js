@@ -61,7 +61,7 @@ Ext.define('WebclientApp.view.main.chart.StockChartComp', {
 
 
     getChartData: function(dFrom, dTo, resolution, cb){
-
+    
         dFrom = (dFrom + "").split(".")[0];
         dTo = (dTo + "").split(".")[0];
 
