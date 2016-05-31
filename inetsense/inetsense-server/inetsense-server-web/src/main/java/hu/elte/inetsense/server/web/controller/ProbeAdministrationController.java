@@ -5,7 +5,6 @@
  */
 package hu.elte.inetsense.server.web.controller;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,14 +31,16 @@ import hu.elte.inetsense.server.web.service.ProbeService;
 public class ProbeAdministrationController {
 
     @Autowired
-    ProbeService service;
+    ProbeService    service;
 
     @Autowired
     ProbeRepository repo;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<ProbeDTO> list() {
-        return repo.findAll().stream().map(p->{return new ProbeDTO(p.getAuthId(), p.getCreatedOn());} ).collect(Collectors.toList());
+        return repo.findAll().stream().map(p -> {
+            return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
+        }).collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.POST, params={"authId"})

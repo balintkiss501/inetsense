@@ -13,7 +13,7 @@ public interface MeasurementService {
     List<MeasurementDTO> getAllMeasurements();
 
     List<MeasurementDTO> getMeasurementsByProbeAuthIdBetweenDates(String probeAuthId, Date from, Date to);
-    
+
     List<MeasurementDTO> getAllMeasurementsByProbeAuthId(String probeAuthId);
 
 }

@@ -29,10 +29,15 @@ public class MeasurementServiceImpl implements MeasurementService {
     }
 
     @Override
-    public List<MeasurementDTO> getMeasurementsByProbeAuthIdBetweenDates(final String probeAuthId, final Date from,
-            final Date to) {
-        return entitiesToDTOs(measurementRepository
-                .findAllByProbeAuthIdAndCompletedOnBetweenOrderByCompletedOnAsc(probeAuthId, from, to));
+    public List<MeasurementDTO> getMeasurementsByProbeAuthIdBetweenDates(final String probeAuthId,
+            final Date from, final Date to) {
+        return entitiesToDTOs(
+                measurementRepository.findAllByProbeAuthIdAndCompletedOnBetweenOrderByCompletedOnAsc(probeAuthId, from, to));
+    }
+
+    @Override
+    public List<MeasurementDTO> getAllMeasurementsByProbeAuthId(final String probeAuthId) {
+        return entitiesToDTOs(measurementRepository.findAllByProbeAuthIdOrderByCompletedOnAsc(probeAuthId));
     }
 
     private List<MeasurementDTO> entitiesToDTOs(final Collection<Measurement> entities) {
@@ -48,10 +53,5 @@ public class MeasurementServiceImpl implements MeasurementService {
         }
         return dtos;
     }
-
-	@Override
-	public List<MeasurementDTO> getAllMeasurementsByProbeAuthId(String probeAuthId) {
-		return entitiesToDTOs(measurementRepository.findAllByProbeAuthIdOrderByCompletedOnAsc(probeAuthId));
-	}
 
 }
