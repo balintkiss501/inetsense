@@ -1,3 +1,4 @@
+@echo off
 
 set DEBUG_PORT=8000
 
