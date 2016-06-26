@@ -1,9 +1,9 @@
 package hu.elte.inetsense.common.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @author Zsolt Istvanfi
@@ -12,7 +12,7 @@ public class MeasurementDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonFormat(timezone = "CET")
+    @JsonFormat(timezone = "UTC")
     private Date              completedOn;
 
     private Float             lat;
