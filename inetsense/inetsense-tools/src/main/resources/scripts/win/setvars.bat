@@ -1,4 +1,4 @@
-@ECHO OFF
+@echo off
 
 
 set JAVA_HOME="c:\jdk1.8.0_60"
