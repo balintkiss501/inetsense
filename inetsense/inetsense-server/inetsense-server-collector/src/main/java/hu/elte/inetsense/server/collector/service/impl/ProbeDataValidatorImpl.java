@@ -5,10 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.server.collector.service.ClockService;
 import hu.elte.inetsense.server.collector.service.ProbeDataValidator;
 import hu.elte.inetsense.server.collector.util.JsonValidationException;
 
@@ -24,6 +26,9 @@ public class ProbeDataValidatorImpl implements ProbeDataValidator {
     private static final int LATITUDE_LIMIT = 90;
 	private static final int LONGITUDE_LIMIT = 180;
 
+    @Autowired
+    private ClockService clockService;
+    
     /* (non-Javadoc)
      * @see hu.elte.inetsense.server.collector.service.ProbeDataValidator#validate(hu.elte.inetsense.common.dtos.ProbeDataDTO)
      */
@@ -61,7 +66,9 @@ public class ProbeDataValidatorImpl implements ProbeDataValidator {
 	}
 
 	private void validateCompletedDate(Date completedOn, List<String> errors) {
-		// TODO validate completed on date should not be in the future.
+	    if(clockService.getCurrentTime().before(completedOn)) {
+	        errors.add("Completed on date cannot be in the future. completed on Date: " + completedOn);
+	    }
 	}
 
 	private void validateMeasuredSpeed(Long speed, String type, List<String> errors) {
@@ -84,6 +91,9 @@ public class ProbeDataValidatorImpl implements ProbeDataValidator {
 		} else if(lat != null || lng != null) {
 			errors.add("One of the coordinates is missing from this measurement!");
 		}
-		
 	}
+	
+	public void setClockService(ClockService clockService) {
+        this.clockService = clockService;
+    }
 }

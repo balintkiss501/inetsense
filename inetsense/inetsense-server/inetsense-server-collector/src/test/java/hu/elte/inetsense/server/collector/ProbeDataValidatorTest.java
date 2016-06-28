@@ -7,22 +7,27 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
-import hu.elte.inetsense.server.collector.service.ProbeDataValidator;
+import hu.elte.inetsense.server.collector.service.ClockService;
 import hu.elte.inetsense.server.collector.service.impl.ProbeDataValidatorImpl;
 import hu.elte.inetsense.server.collector.util.JsonValidationException;
 
 public class ProbeDataValidatorTest {
 
-    private ProbeDataValidator validator;
+    private ProbeDataValidatorImpl validator;
 
     @Before
     public void setUp() throws Exception {
         validator = new ProbeDataValidatorImpl();
+        ClockService clockService = EasyMock.createNiceMock(ClockService.class);
+        EasyMock.expect(clockService.getCurrentTime()).andReturn(new Date(System.currentTimeMillis() + 60000)).anyTimes();
+        EasyMock.replay(clockService);
+        validator.setClockService(clockService);
     }
 
     @Test

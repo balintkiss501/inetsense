@@ -4,6 +4,7 @@
 set JAVA_HOME="c:\jdk1.8.0_60"
 
 set INETSENSE_INSTALL_DIR="d:\install\inetsense"
+set INETSENSE_CLOCK_DIR_NAME="clock-server"
 set INETSENSE_COLLECTOR_DIR_NAME="collector-server"
 set INETSENSE_UPLOAD_DIR_NAME="upload-server"
 
@@ -12,11 +13,17 @@ set DB_PORT=3306
 set DB_NAME=inetsense
 set DB_USER=inetsense
 set DB_PWD=inetsense
+set DB_URL=jdbc:mysql://%DB_HOST%:%DB_PORT%/%DB_NAME%
+
+set CLOCK_DEBUG_PORT=8010
+set COLLECTOR_DEBUG_PORT=8000
+
+set COLLECTOR_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%COLLECTOR_DEBUG_PORT%,suspend=n"
+set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.datasource.url=%DB_URL%?autoReconnect=true&useSSL=false"
+set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.datasource.username=%DB_USER%"
+set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.datasource.password=%DB_PWD%"
+set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.config.location=collector-server.properties"
 
 
-rem enable remote debug
-set JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%DEBUG_PORT%,suspend=n"
-
-set JAVA_OPT=%JAVA_OPT% "-Dspring.datasource.url=jdbc:mysql://%DB_HOST%:%DB_PORT%/%DB_NAME%?autoReconnect=true&useSSL=false"
-set JAVA_OPT=%JAVA_OPT% "-Dspring.datasource.username=%DB_USER%"
-set JAVA_OPT=%JAVA_OPT% "-Dspring.datasource.password=%DB_PWD%"
+set CLOCK_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%CLOCK_DEBUG_PORT%,suspend=n"
+set CLOCK_JAVA_OPT=%CLOCK_JAVA_OPT% "-Dspring.config.location=clock-server.properties"

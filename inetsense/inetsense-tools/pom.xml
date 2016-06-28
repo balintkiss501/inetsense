@@ -33,6 +33,11 @@
             <artifactId>inetsense-server-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>hu.elte.inetsense</groupId>
+            <artifactId>inetsense-server-clock</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 	<build>
@@ -63,16 +68,32 @@
 				<version>3.0.1</version>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>copy-scripts</id>
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/scripts</outputDirectory>
+							<outputDirectory>${project.build.directory}/scripts</outputDirectory>
 							<resources>          
 								<resource>
 									<directory>src/main/resources/scripts</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>              
+						</configuration>            
+					</execution>
+					<execution>
+						<id>copy-config</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/dist/config</outputDirectory>
+							<resources>          
+								<resource>
+									<directory>src/main/resources/config</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>              

@@ -12,6 +12,7 @@
     </parent>
 
     <modules>
+        <module>inetsense-server-clock</module>
         <module>inetsense-server-collector</module>
         <module>inetsense-server-web</module>
         <module>inetsense-server-upload</module>
