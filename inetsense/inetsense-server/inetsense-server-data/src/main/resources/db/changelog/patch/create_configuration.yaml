@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_configuration
+      author: abodo
+      changes:
+        - createTable:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  type: char(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: value
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: char(255)
+                  constraints:
+                    nullable: true
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: upload.server.host
+              - column:
+                  name: value
+                  value: localhost
+              - column:
+                  name: comment
+                  value: Host of the upload server that can be used by the probes
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: upload.server.port
+              - column:
+                  name: value
+                  value: 8888
+              - column:
+                  name: comment
+                  value: Port of the upload server that can be used by the probes
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.targetfile
+              - column:
+                  name: value
+                  value: www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_50mb.mp4, http://eu.mouser.com/catalog/English/103/dload/pdf/PASSIVESECTION.pdf
+              - column:
+                  name: comment
+                  value: Probes will measure download speed using one these files

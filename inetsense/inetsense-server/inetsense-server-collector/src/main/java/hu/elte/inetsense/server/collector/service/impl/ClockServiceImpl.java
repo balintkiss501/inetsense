@@ -65,8 +65,10 @@ public class ClockServiceImpl implements ClockService {
     
     @PostConstruct
     private void init() {
-        restTemplate = new RestTemplate();
-        restTemplate.getForObject(getClockServerURL(), Date.class);
+        if (clockServerProperties.isRemote()) {
+            restTemplate = new RestTemplate();
+            restTemplate.getForObject(getClockServerURL(), Date.class);
+        }
     }
 
 }
