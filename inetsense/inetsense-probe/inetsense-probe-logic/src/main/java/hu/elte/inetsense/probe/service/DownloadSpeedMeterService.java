@@ -7,14 +7,12 @@ import java.util.Random;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
+import hu.elte.inetsense.probe.service.util.HTTPUtil;
 
 public class DownloadSpeedMeterService implements SpeedMeterService {
 
@@ -75,10 +73,7 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
             url = "http://";
         }
         url = url + downloadTarget;
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpget = new HttpGet(url);
-        CloseableHttpResponse response = httpclient.execute(httpget);
-        return response;
+        return HTTPUtil.get(url);
     }
 
     private String getDownloadTarget() {

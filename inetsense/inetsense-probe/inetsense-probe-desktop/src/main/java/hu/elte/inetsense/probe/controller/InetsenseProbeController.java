@@ -7,14 +7,17 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.elte.inetsense.probe.service.MeasurementService;
+import hu.elte.inetsense.probe.service.configuration.ClockService;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
+import hu.elte.inetsense.probe.service.util.HTTPUtil;
 
 @Component
 public class InetsenseProbeController {
@@ -29,28 +32,37 @@ public class InetsenseProbeController {
 
     @Autowired
     private MeasurementService measurementService;
+    
+    @Autowired
+    private ClockService clockService;
 
     public void start() {
         printProbeInformation();
         initProbeId();
         ScheduledExecutorService ses = (ScheduledExecutorService) taskExecutor;
         int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
-        ses.scheduleAtFixedRate(() -> doMeasurement(), 100, delay, TimeUnit.MILLISECONDS);
+        int timeDelay = 10 * 60 * 1000;
+        ses.scheduleAtFixedRate(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
+        ses.scheduleAtFixedRate(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
     }
 
-    private void doMeasurement() {
-        measurementService.measure();
-    }
 
     private void initProbeId() {
-        if (isDefaultProbeId()) {
-            String newProbeId = JOptionPane.showInputDialog("Enter probe id");
-            configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID.getKey(), newProbeId);
+        String probeId = configurationProvider.getString(ConfigurationNames.PROBE_ID);
+        while (isDefaultProbeId(probeId) || !isExistingProbe(probeId)) {
+            log.info("Pobe ID is not valid: {}", probeId);
+            probeId = JOptionPane.showInputDialog("Enter probe id");
+            configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID.getKey(), probeId);
         }
     }
 
-    private boolean isDefaultProbeId() {
-        String probeId = configurationProvider.getString(ConfigurationNames.PROBE_ID);
+    private boolean isExistingProbe(String probeId) {
+        String baseUrl = configurationProvider.getCollectorBaseURL();
+        CloseableHttpResponse response = HTTPUtil.get(baseUrl + "/probe/" + probeId);
+        return 200 == response.getStatusLine().getStatusCode();
+    }
+
+    private boolean isDefaultProbeId(String probeId) {
         return Objects.equals(probeId, ConfigurationNames.PROBE_ID.getDefalultValue());
     }
 

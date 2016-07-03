@@ -13,6 +13,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 import hu.elte.inetsense.probe.service.DownloadSpeedMeterService;
 import hu.elte.inetsense.probe.service.MeasurementService;
+import hu.elte.inetsense.probe.service.configuration.ClockService;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
 import hu.elte.inetsense.probe.service.configuration.EnvironmentService;
 
@@ -48,7 +49,12 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     }
     
     @Bean
-    public MeasurementService measurementService(ConfigurationProvider configurationProvider, DownloadSpeedMeterService downloadSpeedMeterService) {
-        return new MeasurementService(configurationProvider, downloadSpeedMeterService);
+    public ClockService clockService(ConfigurationProvider configurationProvider) {
+        return new ClockService(configurationProvider);
+    }
+    
+    @Bean
+    public MeasurementService measurementService(ConfigurationProvider configurationProvider, DownloadSpeedMeterService downloadSpeedMeterService, ClockService clockService) {
+        return new MeasurementService(configurationProvider, downloadSpeedMeterService, clockService);
     }
 }

@@ -9,7 +9,7 @@ public enum ConfigurationNames {
     TEST_INTERVAL("test-interval", 60000),
     INETSENSE_PROJECT_VERSION("inetsense.project.version", null),
     INETSENSE_PROJECT_BUILD_DATE("inetsense.project.build", null),
-    PROBE_DOWNLOAD_MIN_SIZE("probe.download.minsize", 100000L),
+    PROBE_DOWNLOAD_MIN_SIZE("probe.download.minsize", 50000L),
     PROBE_DOWNLOAD_MAX_TIME("probe.download.maxtime", 20000),
     PROBE_UPLOAD_SIZE("probe.upload.size", 100000L);
     

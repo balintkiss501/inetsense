@@ -89,4 +89,8 @@ public class ConfigurationProvider {
             throw new RuntimeException(e);
         }
     }
+
+    public String getCollectorBaseURL() {
+        return "http://localhost:8080";
+    }
 }

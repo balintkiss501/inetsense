@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.probe.service.configuration.ClockService;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
 
@@ -34,12 +35,14 @@ public class MeasurementService {
     private ProbeDataDTO probeDataDTO;
     private ConfigurationProvider configurationProvider;
     private DownloadSpeedMeterService downloadSpeedMeterService;
+    private ClockService clockService;
     private String probeId;
 
     public MeasurementService(ConfigurationProvider configurationProvider,
-            DownloadSpeedMeterService downloadSpeedMeterService) {
+            DownloadSpeedMeterService downloadSpeedMeterService, ClockService clockService) {
         this.configurationProvider = configurationProvider;
         this.downloadSpeedMeterService = downloadSpeedMeterService;
+        this.clockService = clockService;
         probeId = this.configurationProvider.getString(ConfigurationNames.PROBE_ID);
     }
 
@@ -69,6 +72,7 @@ public class MeasurementService {
         MeasurementDTO measurement = new MeasurementDTO();
         measurement.setDownloadSpeed(downloadSpeed);
         measurement.setUploadSpeed(uploadSpeed);
+        measurement.setCompletedOn(clockService.getCurrentTime());
         return measurement;
     }
 
