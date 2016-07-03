@@ -11,8 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.springframework.stereotype.Component;
 
+import hu.elte.inetsense.probe.service.configuration.EnvironmentService;
+
 @Component
-public class EnvironmentService {
+public class EnvironmentServiceImpl implements EnvironmentService {
 
     private static final String BASE_DIRECTORY = ".inetsense";
     private static final String LOG_DIRECTORY = "log";
@@ -21,7 +23,7 @@ public class EnvironmentService {
     
     private final String userHome;
     
-    public EnvironmentService() {
+    public EnvironmentServiceImpl() {
         userHome = System.getProperty("user.home");
         reInitializeLogger();
     }
@@ -46,6 +48,10 @@ public class EnvironmentService {
         }
     }
 
+    /* (non-Javadoc)
+     * @see hu.elte.inetsense.probe.service.EnvironmentService#getConfigurationFilePath()
+     */
+    @Override
     public String getConfigurationFilePath() {
         return String.format("%s/%s/%s/%s", userHome, BASE_DIRECTORY, CONFIGURATION_DIRECTORY, CONFIGURATION_FILE_NAME);
     }

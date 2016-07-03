@@ -12,8 +12,8 @@ public class InetsenseProbeLauncher {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ProbeConfiguration.class);
         InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
         app.start();
-        
-        context.close();
+        while(true){}
+//        context.close();
 
     }
 

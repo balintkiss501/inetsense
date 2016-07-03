@@ -58,3 +58,39 @@ databaseChangeLog:
               - column:
                   name: comment
                   value: Probes will measure download speed using one these files
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.download.minsize
+              - column:
+                  name: value
+                  value: 100000
+              - column:
+                  name: comment
+                  value: Minimum size of target files in bytes
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.download.maxtime
+              - column:
+                  name: value
+                  value: 40000
+              - column:
+                  name: comment
+                  value: Maximum allowed download time in ms
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.upload.size
+              - column:
+                  name: value
+                  value: 100000
+              - column:
+                  name: comment
+                  value: Size of data to measure upload speed in bytes

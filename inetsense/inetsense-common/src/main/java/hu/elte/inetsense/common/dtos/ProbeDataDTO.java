@@ -1,5 +1,6 @@
 package hu.elte.inetsense.common.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,23 +8,26 @@ import java.util.List;
  */
 public class ProbeDataDTO {
 
-    private String               probeAuthId;
-    private List<MeasurementDTO> measurements;
+    private String probeAuthId;
+    private List<MeasurementDTO> measurements = new ArrayList<>();
 
     public String getProbeAuthId() {
-        return this.probeAuthId;
+        return probeAuthId;
     }
 
-    public void setProbeAuthId(final String probeAuthId) {
+    public void setProbeAuthId(String probeAuthId) {
         this.probeAuthId = probeAuthId;
     }
 
     public List<MeasurementDTO> getMeasurements() {
-        return this.measurements;
+        return measurements;
     }
 
-    public void setMeasurements(final List<MeasurementDTO> measurements) {
+    public void setMeasurements(List<MeasurementDTO> measurements) {
         this.measurements = measurements;
     }
 
+    public void addMeasurement(MeasurementDTO measurement) {
+        measurements.add(measurement);
+    }
 }

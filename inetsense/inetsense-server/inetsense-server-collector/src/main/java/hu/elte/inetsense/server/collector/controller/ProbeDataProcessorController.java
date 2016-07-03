@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
-import hu.elte.inetsense.common.util.JsonConverter;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
 import hu.elte.inetsense.server.collector.service.ProbeDataValidator;
 
@@ -28,16 +27,12 @@ public class ProbeDataProcessorController {
     private ProbeDataValidator validator;
 
     @Autowired
-    private JsonConverter jsonConverter;
-
-    @Autowired
     private ProbeDataService probeDataService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> processMessage(@RequestBody String message) {
+    public ResponseEntity<String> processMessage(@RequestBody ProbeDataDTO probeDataDTO) {
 
         try {
-            ProbeDataDTO probeDataDTO = jsonConverter.json2Object(message, ProbeDataDTO.class);
             validator.validate(probeDataDTO);
             probeDataService.saveProbeData(probeDataDTO);
         } catch (Exception e) {
