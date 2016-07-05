@@ -15,8 +15,9 @@ set DB_USER=inetsense
 set DB_PWD=inetsense
 set DB_URL=jdbc:mysql://%DB_HOST%:%DB_PORT%/%DB_NAME%
 
-set CLOCK_DEBUG_PORT=8010
 set COLLECTOR_DEBUG_PORT=8000
+set CLOCK_DEBUG_PORT=8010
+set UPLOAD_DEBUG_PORT=8020
 
 set COLLECTOR_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%COLLECTOR_DEBUG_PORT%,suspend=n"
 set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.datasource.url=%DB_URL%?autoReconnect=true&useSSL=false"
@@ -27,3 +28,6 @@ set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.config.location=collector-
 
 set CLOCK_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%CLOCK_DEBUG_PORT%,suspend=n"
 set CLOCK_JAVA_OPT=%CLOCK_JAVA_OPT% "-Dspring.config.location=clock-server.properties"
+
+set UPLOAD_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%UPLOAD_DEBUG_PORT%,suspend=n"
+set UPLOAD_JAVA_OPT=%UPLOAD_JAVA_OPT% "-Dspring.config.location=upload-server.properties"

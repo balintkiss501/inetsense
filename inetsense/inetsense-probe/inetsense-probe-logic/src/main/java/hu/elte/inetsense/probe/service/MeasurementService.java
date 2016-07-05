@@ -35,13 +35,15 @@ public class MeasurementService {
     private ProbeDataDTO probeDataDTO;
     private ConfigurationProvider configurationProvider;
     private DownloadSpeedMeterService downloadSpeedMeterService;
+    private UploadSpeedMeterService uploadSpeedMeterService;
     private ClockService clockService;
     private String probeId;
 
     public MeasurementService(ConfigurationProvider configurationProvider,
-            DownloadSpeedMeterService downloadSpeedMeterService, ClockService clockService) {
+            DownloadSpeedMeterService downloadSpeedMeterService, UploadSpeedMeterService uploadSpeedMeterService, ClockService clockService) {
         this.configurationProvider = configurationProvider;
         this.downloadSpeedMeterService = downloadSpeedMeterService;
+        this.uploadSpeedMeterService = uploadSpeedMeterService;
         this.clockService = clockService;
         probeId = this.configurationProvider.getString(ConfigurationNames.PROBE_ID);
     }
@@ -56,11 +58,12 @@ public class MeasurementService {
     private MeasurementDTO doMeasure() {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<Long> downloadFuture = executor.submit(new SpeedMeter(downloadSpeedMeterService));
+        Future<Long> uploadFuture = executor.submit(new SpeedMeter(uploadSpeedMeterService));
         executor.shutdown();
         try {
             executor.awaitTermination(1L, TimeUnit.MINUTES);
             long downloadSpeed = downloadFuture.get();
-            long uploadSpeed = 1;
+            long uploadSpeed = uploadFuture.get();
             return createMeasurement(downloadSpeed, uploadSpeed);
         } catch (Exception e) {
             log.error(e);

@@ -10,6 +10,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import hu.elte.inetsense.common.util.InetsenseUtil;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
 import hu.elte.inetsense.probe.service.util.HTTPUtil;
@@ -47,17 +48,14 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
         byte[] b = new byte[1024];
         int count;
         long downloadedSize = 0;
-        InputStream in = response.getEntity().getContent();
-        while (timeout > stopWatch.getTime() && (count = in.read(b)) > 0) {
-            downloadedSize += count;
+        try(InputStream in = response.getEntity().getContent()) {
+            while (timeout > stopWatch.getTime() && (count = in.read(b)) > 0) {
+                downloadedSize += count;
+            }
         }
         stopWatch.stop();
-        long downloadSpeed = calculateDownloadSpeed(downloadedSize, stopWatch.getTime());
+        long downloadSpeed = InetsenseUtil.calculateSpeed(downloadedSize, stopWatch.getTime());
         return downloadSpeed;
-    }
-
-    private long calculateDownloadSpeed(long downloadedSize, long elapsedTime) {
-        return (long) ((downloadedSize * 8) / (elapsedTime / 1000));
     }
 
     private void validateSize(String downloadTarget, long size) {
