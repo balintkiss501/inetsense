@@ -49,7 +49,6 @@ public class UploadSpeedMeterService implements SpeedMeterService {
 
     private URL getUploadUrl() throws MalformedURLException {
         String host = configurationProvider.getString(ConfigurationNames.UPLOAD_SERVER_HOST);
-//        host = "80.99.186.6";
         int port = configurationProvider.getInt(ConfigurationNames.UPLOAD_SERVER_PORT);
         return new URL(String.format("http://%s:%d/upload", host, port));
     }
