@@ -7,7 +7,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import hu.elte.inetsense.probe.service.util.HTTPUtil;
+import hu.elte.inetsense.common.util.HTTPUtil;
+
 
 public class ClockService {
     

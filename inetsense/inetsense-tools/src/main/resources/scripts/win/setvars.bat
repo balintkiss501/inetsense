@@ -30,4 +30,3 @@ set CLOCK_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%CLOCK_D
 set CLOCK_JAVA_OPT=%CLOCK_JAVA_OPT% "-Dspring.config.location=clock-server.properties"
 
 set UPLOAD_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%UPLOAD_DEBUG_PORT%,suspend=n"
-set UPLOAD_JAVA_OPT=%UPLOAD_JAVA_OPT% "-Dspring.config.location=upload-server.properties"

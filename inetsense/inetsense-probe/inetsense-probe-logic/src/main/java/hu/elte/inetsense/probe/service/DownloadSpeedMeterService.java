@@ -10,10 +10,10 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import hu.elte.inetsense.common.util.HTTPUtil;
 import hu.elte.inetsense.common.util.InetsenseUtil;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
-import hu.elte.inetsense.probe.service.util.HTTPUtil;
 
 public class DownloadSpeedMeterService implements SpeedMeterService {
 

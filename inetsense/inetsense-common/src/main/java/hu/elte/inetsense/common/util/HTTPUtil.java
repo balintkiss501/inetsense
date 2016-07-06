@@ -1,4 +1,4 @@
-package hu.elte.inetsense.probe.service.util;
+package hu.elte.inetsense.common.util;
 
 import java.io.IOException;
 

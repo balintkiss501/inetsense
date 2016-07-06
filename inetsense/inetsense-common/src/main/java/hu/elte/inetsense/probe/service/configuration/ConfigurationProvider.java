@@ -31,15 +31,19 @@ public class ConfigurationProvider {
         log.info("Initializing probe configuration...");
         try {
             loadDefaultConfiguration();
-            loadProbeConfiguration();
+            loadEnvironmentConfigurationFromFile();
         } catch (ConfigurationException e) {
             log.fatal("Unable to load default configuration!", e);
         }
     }
 
-    private void loadProbeConfiguration() throws ConfigurationException {
+    private void loadEnvironmentConfigurationFromFile() throws ConfigurationException {
         String probeConfiguration = environmentService.getConfigurationFilePath();
-        log.info("Loading default configuration from {}", probeConfiguration );
+        if(probeConfiguration == null) {
+            log.info("No configuration file, skipping envornment configuration.");
+            return;
+        }
+        log.info("Loading configuration from {}", probeConfiguration );
         Parameters params = new Parameters();
         localConfigurationBuilder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                 PropertiesConfiguration.class).configure(params.fileBased().setFileName(probeConfiguration));

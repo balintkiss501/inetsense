@@ -1,15 +1,12 @@
 package hu.elte.inetsense.probe.service;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,28 +29,29 @@ public class UploadSpeedMeterService implements SpeedMeterService {
 
     private long upload() throws Exception {
         log.info("Measuring upload speed...");
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpEntity entity = MultipartEntityBuilder.create()
-                .addBinaryBody("file", createBinaryData(), ContentType.create("application/octet-stream"), "filename")
-                .build();
+        URL u = getUploadUrl();
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
 
-        HttpPost httpPost = new HttpPost(getUploadUrl());
-        httpPost.setEntity(entity);
-        HttpResponse response = httpclient.execute(httpPost);
-        HttpEntity result = response.getEntity();
-        log.info("Upload server responded with status: {} ", response.getStatusLine().getStatusCode());
-        try(Scanner sc = new Scanner(result.getContent())) {
+        OutputStream os = conn.getOutputStream();
+        os.write(createBinaryData());
+        os.flush();
+        try(Scanner sc = new Scanner(conn.getInputStream())) {
             if(sc.hasNextLong()) {
-                return sc.nextLong();
+                long nextLong = sc.nextLong();
+                log.info("Upload done. Measured speed: {} Bps.", nextLong);
+                return nextLong;
             }
         }
         return Long.MAX_VALUE;
     }
 
-    private String getUploadUrl() {
+    private URL getUploadUrl() throws MalformedURLException {
         String host = configurationProvider.getString(ConfigurationNames.UPLOAD_SERVER_HOST);
+//        host = "80.99.186.6";
         int port = configurationProvider.getInt(ConfigurationNames.UPLOAD_SERVER_PORT);
-        return String.format("http://%s:%d/upload", host, port);
+        return new URL(String.format("http://%s:%d/upload", host, port));
     }
 
     private byte[] createBinaryData() {
@@ -61,6 +59,7 @@ public class UploadSpeedMeterService implements SpeedMeterService {
         log.info("...Using upload data size: {} bytes.", fileSize);
         byte[] b = new byte[fileSize];
         Arrays.fill(b, (byte) 1);
+        b[b.length-1] = '\n';
         return b;
     }
 

@@ -57,12 +57,12 @@ public class MeasurementService {
 
     private MeasurementDTO doMeasure() {
         ExecutorService executor = Executors.newFixedThreadPool(2);
-        Future<Long> downloadFuture = executor.submit(new SpeedMeter(downloadSpeedMeterService));
+//        Future<Long> downloadFuture = executor.submit(new SpeedMeter(downloadSpeedMeterService));
         Future<Long> uploadFuture = executor.submit(new SpeedMeter(uploadSpeedMeterService));
         executor.shutdown();
         try {
             executor.awaitTermination(1L, TimeUnit.MINUTES);
-            long downloadSpeed = downloadFuture.get();
+            long downloadSpeed = 0l;//downloadFuture.get();
             long uploadSpeed = uploadFuture.get();
             return createMeasurement(downloadSpeed, uploadSpeed);
         } catch (Exception e) {

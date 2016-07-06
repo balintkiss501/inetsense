@@ -13,11 +13,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import hu.elte.inetsense.common.util.HTTPUtil;
 import hu.elte.inetsense.probe.service.MeasurementService;
 import hu.elte.inetsense.probe.service.configuration.ClockService;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
-import hu.elte.inetsense.probe.service.util.HTTPUtil;
 
 @Component
 public class InetsenseProbeController {
