@@ -9,6 +9,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +30,8 @@ public class UploadServer {
     private ConfigurationProvider configurationProvider;
     
     private ExecutorService executor = Executors.newFixedThreadPool(150);
+
+    private ServerSocket serverSocket;
 
     private class UploadTask implements Callable<Void> {
         private Socket socket;
@@ -57,14 +61,20 @@ public class UploadServer {
     }
     
     public void start(int port) throws Exception {
-        ServerSocket s = new ServerSocket(port);
+        serverSocket = new ServerSocket(port);
 
-        for (;;) {
-            Socket socket = s.accept();
+        while(!serverSocket.isClosed()) {
+            Socket socket = serverSocket.accept();
             executor.submit(new UploadTask(socket));
         }
     }
 
+    @PreDestroy
+    private void closeSocket() throws IOException {
+        log.info("Predestroy closing socket....");
+        serverSocket.close();
+        log.info("server socket is closed.");
+    }
 
     private long processData(StopWatch stopWatch, Socket socket) throws IOException {
         int timeout = configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_MAX_TIME);
@@ -80,5 +90,6 @@ public class UploadServer {
         long downloadSpeed = InetsenseUtil.calculateSpeed(downloadedSize, stopWatch.getTime());
         return downloadSpeed;
     }
+
 
 }

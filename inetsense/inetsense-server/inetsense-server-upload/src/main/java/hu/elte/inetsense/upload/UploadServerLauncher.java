@@ -9,12 +9,14 @@ public class UploadServerLauncher {
 
     public static void main(final String[] args) {
 
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(UploadServerConfiguration.class);
-        UploadServerController app = context.getBean(UploadServerController.class);
-        app.start();
-        while(true){}
-//        context.close();
-
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+                UploadServerConfiguration.class)) {
+            context.registerShutdownHook();
+            UploadServerController app = context.getBean(UploadServerController.class);
+            app.start();
+            while (true) {
+            }
+        }
     }
 
 }

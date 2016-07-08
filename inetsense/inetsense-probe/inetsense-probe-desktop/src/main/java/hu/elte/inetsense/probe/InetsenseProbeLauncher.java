@@ -9,11 +9,13 @@ public class InetsenseProbeLauncher {
 
     public static void main(final String[] args) {
 
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ProbeConfiguration.class);
-        InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
-        app.start();
-        while(true){}
-//        context.close();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+                ProbeConfiguration.class)) {
+            context.registerShutdownHook();
+            InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
+            app.start();
+            while(true){}
+        }
 
     }
 
