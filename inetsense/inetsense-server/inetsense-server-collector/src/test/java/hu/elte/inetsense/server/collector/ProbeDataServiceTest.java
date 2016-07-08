@@ -69,16 +69,16 @@ public class ProbeDataServiceTest {
         measurement1.setCompletedOn(new Date());
         measurement1.setDownloadSpeed(100L);
         measurement1.setUploadSpeed(10L);
-        measurement1.setLat(10.1f);
-        measurement1.setLng(20.2f);
+        measurement1.setLat(10.1d);
+        measurement1.setLng(20.2d);
         measurements.add(measurement1);
 
         MeasurementDTO measurement2 = new MeasurementDTO();
         measurement2.setCompletedOn(new Date());
         measurement2.setDownloadSpeed(200L);
         measurement2.setUploadSpeed(20L);
-        measurement2.setLat(20.2f);
-        measurement2.setLng(40.4f);
+        measurement2.setLat(20.2d);
+        measurement2.setLng(40.4d);
         measurements.add(measurement2);
 
         probeData.setMeasurements(measurements);

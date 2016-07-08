@@ -4,7 +4,7 @@
 
     <groupId>hu.elte.inetsense</groupId>
     <artifactId>inetsense</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>inetsense</name>
@@ -24,7 +24,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.3.1.RELEASE</spring.version>
 		<springboot.version>1.3.6.RELEASE</springboot.version>
-		<inetsense.version>${project.version}</inetsense.version>
     </properties>
 	
     <dependencies>

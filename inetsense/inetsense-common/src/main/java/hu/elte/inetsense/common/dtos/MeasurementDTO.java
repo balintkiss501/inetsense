@@ -3,6 +3,11 @@ package hu.elte.inetsense.common.dtos;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
+
+import org.hibernate.validator.constraints.Range;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -13,26 +18,34 @@ public class MeasurementDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonFormat(timezone = "UTC")
+    @Past
     private Date              completedOn;
 
-    private Float             lat;
-    private Float             lng;
+    @Range(min = -90, max = 90)
+    private Double             lat;
+
+    @Range(min = -180, max = 180)
+    private Double             lng;
+    
+    @Min(0)
     private Long              downloadSpeed;
+
+    @Min(0)
     private Long              uploadSpeed;
 
-    public Float getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(final Float lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public Float getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(final Float lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
@@ -48,7 +61,7 @@ public class MeasurementDTO implements Serializable {
         return downloadSpeed;
     }
 
-    public void setDownloadSpeed(final Long downloadSpeed) {
+    public void setDownloadSpeed(Long downloadSpeed) {
         this.downloadSpeed = downloadSpeed;
     }
 
@@ -56,7 +69,7 @@ public class MeasurementDTO implements Serializable {
         return uploadSpeed;
     }
 
-    public void setUploadSpeed(final Long uploadSpeed) {
+    public void setUploadSpeed(Long uploadSpeed) {
         this.uploadSpeed = uploadSpeed;
     }
 

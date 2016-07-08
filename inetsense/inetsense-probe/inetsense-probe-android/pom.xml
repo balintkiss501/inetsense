@@ -8,14 +8,14 @@
     <parent>
         <groupId>hu.elte.inetsense</groupId>
         <artifactId>inetsense-probe</artifactId>
-        <version>${inetsense.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     
     <dependencies>
         <dependency>
             <groupId>hu.elte.inetsense</groupId>
             <artifactId>inetsense-probe-logic</artifactId>
-            <version>${inetsense.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

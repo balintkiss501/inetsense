@@ -8,7 +8,7 @@
     <parent>
         <groupId>hu.elte.inetsense</groupId>
         <artifactId>inetsense-server</artifactId>
-        <version>${inetsense.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
