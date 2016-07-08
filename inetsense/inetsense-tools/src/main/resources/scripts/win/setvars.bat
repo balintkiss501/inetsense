@@ -1,7 +1,7 @@
 @echo off
 
 
-set JAVA_HOME="c:\jdk1.8.0_60"
+set JAVA_HOME="c:\java\jdk1.8.0_92"
 
 set INETSENSE_INSTALL_DIR="d:\install\inetsense"
 set INETSENSE_CLOCK_DIR_NAME="clock-server"

@@ -7,9 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
@@ -29,18 +32,15 @@ public class ProbeDataProcessorController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> processMessage(@Valid @RequestBody ProbeDataDTO probeDataDTO) {
+        probeDataService.saveProbeData(probeDataDTO);
+        return ResponseEntity.ok("HTTP 200: Incoming JSON message validation and data saving was successfull.");
+    }
 
-        try {
-            probeDataService.saveProbeData(probeDataDTO);
-        } catch (Exception e) {
-            log.error("Incoming JSON message validation has failed due to this reason:\n" + e.getMessage());
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("HTTP 500 error: Incoming JSON message validation has failed due to this reason:\n"
-                            + e.getMessage()); // TODO: adding Spring's default
-                                               // JSON-based response
-        }
-
-        return ResponseEntity.ok("HTTP 200: Incoming JSON message validation and data saving was successfull."); 
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private String handleException(Exception e) {
+        log.error("Incoming JSON message validation has failed due to this reason:\n" + e.getMessage());
+        return e.getMessage();
     }
 }

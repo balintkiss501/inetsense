@@ -88,7 +88,7 @@ public class ProbeDataServiceTest {
     public void testSaveProbeData() {
         probeDataService.saveProbeData(probeData);
 
-        Probe testProbe = probeRepository.findOneByAuthId(probeData.getProbeAuthId());
+        Probe testProbe = probeRepository.findOneByAuthId(probeData.getProbeAuthId()).get();
         List<Measurement> measurements = measurementRepository.findAllByProbeOrderByIdAsc(testProbe);
 
         assertEquals(measurements.size(), 2);

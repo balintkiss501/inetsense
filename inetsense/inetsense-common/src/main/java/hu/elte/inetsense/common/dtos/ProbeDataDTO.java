@@ -7,16 +7,19 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Length;
+
 /**
  * Created by balintkiss on 3/22/16.
  */
 public class ProbeDataDTO {
 
-    @NotNull
-    @Size(max = 8)
+    @NotNull(message = "Probe auth id cannot be null!")
+    @Length(min = 1, max = 8, message = "Probe auth id length must be between 1 and 8!")
     private String probeAuthId;
     
-    @NotNull
+    @NotNull(message = "Measurements list cannot be null!")
+    @Size(min = 1, message = "Measurement must contain at 1 measurement!")
     @Valid
     private List<MeasurementDTO> measurements = new ArrayList<>();
 

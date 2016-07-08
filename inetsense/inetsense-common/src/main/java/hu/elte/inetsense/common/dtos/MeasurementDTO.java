@@ -18,20 +18,20 @@ public class MeasurementDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonFormat(timezone = "UTC")
-    @Past
-    private Date              completedOn;
+    @Past(message = "Completed on time must be in the past!")
+    private Date completedOn;
 
-    @Range(min = -90, max = 90)
-    private Double             lat;
+    @Range(min = -90, max = 90, message = "Latitude value must be between -90 and 90!")
+    private Double lat;
 
-    @Range(min = -180, max = 180)
-    private Double             lng;
-    
-    @Min(0)
-    private Long              downloadSpeed;
+    @Range(min = -180, max = 180, message = "Longitude value must be between -180 and 180!")
+    private Double lng;
 
-    @Min(0)
-    private Long              uploadSpeed;
+    @Min(value = 0, message = "Download speed cannot be negative!")
+    private Long downloadSpeed;
+
+    @Min(value = 0, message = "Upload speed cannot be negative!")
+    private Long uploadSpeed;
 
     public Double getLat() {
         return lat;

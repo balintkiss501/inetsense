@@ -1,6 +1,7 @@
 package hu.elte.inetsense.server.collector.service.impl;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,16 +35,21 @@ public class ProbeDataServiceImpl implements ProbeDataService {
     @Override
     @Transactional(readOnly = false)
     public void saveProbeData(final ProbeDataDTO probeData) {
-        Probe probe = probeRepository.findOneByAuthId(probeData.getProbeAuthId());
-        if (probe == null) {
-            log.error("Unable to find probe based on auth id. Measurements can be saved only for an existing probe! auth ID: " + probeData.getProbeAuthId());
-            throw new RuntimeException("Unable to find probe based on auth id. Measurements can be saved only for an existing probe!");
-        }
+        Probe probe = getProbe(probeData.getProbeAuthId());
 
         for (MeasurementDTO measurementDTO : probeData.getMeasurements()) {
             Measurement measurement = measurementDto2Entity(probe, measurementDTO);
             measurementRepository.save(measurement);
         }
+    }
+
+    private Probe getProbe(final String authId) {
+        Optional<Probe> optionalProbe = probeRepository.findOneByAuthId(authId);
+        Probe probe = optionalProbe.orElseThrow(() -> {
+            log.error("Unable to find probe based on auth id. Measurements can be saved only for an existing probe! auth ID: " + authId);
+            return new RuntimeException("Unable to find probe based on auth id. Measurements can be saved only for an existing probe!");
+        });
+        return probe;
     }
 
     private Measurement measurementDto2Entity(Probe probe, MeasurementDTO measurementDTO) {
