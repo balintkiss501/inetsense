@@ -54,7 +54,7 @@ databaseChangeLog:
                   value: probe.targetfile
               - column:
                   name: value
-                  value: www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_50mb.mp4, http://eu.mouser.com/catalog/English/103/dload/pdf/PASSIVESECTION.pdf
+                  value: http://www.nist.gov/pml/wmd/metric/upload/size-and-scale-sesson.pdf, http://eu.mouser.com/catalog/English/103/dload/pdf/PASSIVESECTION.pdf
               - column:
                   name: comment
                   value: Probes will measure download speed using one these files
@@ -90,7 +90,7 @@ databaseChangeLog:
                   value: probe.upload.size
               - column:
                   name: value
-                  value: 100000
+                  value: 1000000
               - column:
                   name: comment
                   value: Size of data to measure upload speed in bytes

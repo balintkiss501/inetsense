@@ -15,6 +15,11 @@ public class JsonConverter {
     public JsonConverter() {
         mapper = new ObjectMapper();
 	}
+
+    public <T> String object2Json(T probeDataDTO) {
+        JsonNode json = mapper.valueToTree(probeDataDTO);
+        return json.toString();
+    }
     
     public <T> T json2Object(String jsonString, Class<T> clazz) throws Exception {
     	if(StringUtils.isBlank(jsonString)) {

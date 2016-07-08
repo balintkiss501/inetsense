@@ -33,6 +33,7 @@ public class UploadSpeedMeterService implements SpeedMeterService {
         HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
+        conn.setConnectTimeout(configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_MAX_TIME) / 2);
 
         OutputStream os = conn.getOutputStream();
         os.write(createBinaryData());
@@ -44,7 +45,7 @@ public class UploadSpeedMeterService implements SpeedMeterService {
                 return nextLong;
             }
         }
-        return Long.MAX_VALUE;
+        return 0;
     }
 
     private URL getUploadUrl() throws MalformedURLException {

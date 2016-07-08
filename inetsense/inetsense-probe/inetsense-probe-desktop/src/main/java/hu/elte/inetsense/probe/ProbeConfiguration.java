@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
+import hu.elte.inetsense.common.util.JsonConverter;
 import hu.elte.inetsense.probe.service.DownloadSpeedMeterService;
 import hu.elte.inetsense.probe.service.MeasurementService;
 import hu.elte.inetsense.probe.service.UploadSpeedMeterService;
@@ -58,9 +59,17 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     public ClockService clockService(ConfigurationProvider configurationProvider) {
         return new ClockService(configurationProvider);
     }
-    
+
     @Bean
-    public MeasurementService measurementService(ConfigurationProvider configurationProvider, DownloadSpeedMeterService downloadSpeedMeterService, UploadSpeedMeterService uploadSpeedMeterService, ClockService clockService) {
-        return new MeasurementService(configurationProvider, downloadSpeedMeterService, uploadSpeedMeterService, clockService);
+    public JsonConverter jsonConverter(ConfigurationProvider configurationProvider) {
+        return new JsonConverter();
+    }
+
+    @Bean
+    public MeasurementService measurementService(ConfigurationProvider configurationProvider,
+            DownloadSpeedMeterService downloadSpeedMeterService, UploadSpeedMeterService uploadSpeedMeterService,
+            ClockService clockService, JsonConverter jsonConverter) {
+        return new MeasurementService(configurationProvider, downloadSpeedMeterService, uploadSpeedMeterService,
+                clockService, jsonConverter);
     }
 }

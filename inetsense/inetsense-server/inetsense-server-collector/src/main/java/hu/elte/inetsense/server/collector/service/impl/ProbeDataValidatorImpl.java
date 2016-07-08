@@ -75,7 +75,7 @@ public class ProbeDataValidatorImpl implements ProbeDataValidator {
 		if(speed == null) {
 			errors.add("Measured value for '" + type + "' is missing!");
 		}
-		if(speed <= 0) {
+		if(speed < 0) {
 			errors.add("Measured value for '" + type + "' = " + speed + " is incorrect!");
 		}
 	}
