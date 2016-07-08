@@ -7,7 +7,7 @@
     <parent>
         <groupId>hu.elte.inetsense</groupId>
         <artifactId>inetsense</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${inetsense.version}</version>
     </parent>
 
 	<groupId>hu.elte.inetsense</groupId>

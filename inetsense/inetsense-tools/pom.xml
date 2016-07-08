@@ -8,7 +8,7 @@
     <parent>
         <groupId>hu.elte.inetsense</groupId>
         <artifactId>inetsense</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${inetsense.version}</version>
     </parent>
 
 
@@ -16,27 +16,27 @@
         <dependency>
             <groupId>hu.elte.inetsense</groupId>
             <artifactId>inetsense-probe-desktop</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${inetsense.version}</version>
         </dependency>
         <dependency>
             <groupId>hu.elte.inetsense</groupId>
             <artifactId>inetsense-server-collector</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${inetsense.version}</version>
         </dependency>
         <dependency>
             <groupId>hu.elte.inetsense</groupId>
             <artifactId>inetsense-server-upload</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${inetsense.version}</version>
         </dependency>
         <dependency>
             <groupId>hu.elte.inetsense</groupId>
             <artifactId>inetsense-server-web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${inetsense.version}</version>
         </dependency>
         <dependency>
             <groupId>hu.elte.inetsense</groupId>
             <artifactId>inetsense-server-clock</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${inetsense.version}</version>
         </dependency>
     </dependencies>
 

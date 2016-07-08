@@ -8,20 +8,20 @@
 	<parent>
 		<groupId>hu.elte.inetsense</groupId>
 		<artifactId>inetsense-probe</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${inetsense.version}</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>hu.elte.inetsense</groupId>
 			<artifactId>inetsense-probe-logic</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${inetsense.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.3.0.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 	</dependencies>
 
