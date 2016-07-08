@@ -13,3 +13,6 @@ bin/
 nbproject/private/
 build/
 lib/
+
+# inetsense
+*setvars.bat*
