@@ -14,11 +14,11 @@ import org.apache.logging.log4j.Logger;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.service.configuration.ClockService;
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
+import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
 import hu.elte.inetsense.common.util.HTTPUtil;
 import hu.elte.inetsense.common.util.JsonConverter;
-import hu.elte.inetsense.probe.service.configuration.ClockService;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
 
 /**
  * Coordinating upload/download speed measurement tasks and data upload to the collector server

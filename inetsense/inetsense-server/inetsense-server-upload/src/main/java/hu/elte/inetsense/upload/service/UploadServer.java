@@ -17,9 +17,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.common.util.InetsenseUtil;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
 
 @Component
 public class UploadServer {
@@ -27,7 +27,7 @@ public class UploadServer {
     private static final Logger log = LogManager.getLogger();
 
     @Autowired
-    private ConfigurationProvider configurationProvider;
+    private BaseConfigurationProvider configurationProvider;
     
     private ExecutorService executor = Executors.newFixedThreadPool(150);
 

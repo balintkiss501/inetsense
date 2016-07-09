@@ -40,7 +40,7 @@ public class ProbeDataProcessorController {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     private String handleException(Exception e) {
-        log.error("Incoming JSON message validation has failed due to this reason:\n" + e.getMessage());
+        log.error("Processing JSON message has failed :\n" + e.getMessage());
         return e.getMessage();
     }
 }

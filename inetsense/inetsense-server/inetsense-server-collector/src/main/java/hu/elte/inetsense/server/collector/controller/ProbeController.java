@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.elte.inetsense.server.data.ProbeRepository;
 
 @RestController
-@RequestMapping
+@RequestMapping("/probe")
 public class ProbeController {
 
     @Autowired
     private ProbeRepository probeRepository;
 
-    @RequestMapping("/probe/{probeId}")
+    @RequestMapping("/{probeId}")
     public ResponseEntity<Void> processMessage(@PathVariable String probeId) {
         probeRepository.findOneByAuthId(probeId).get();
         return ResponseEntity.ok(null);

@@ -1,4 +1,4 @@
-package hu.elte.inetsense.probe.service.configuration;
+package hu.elte.inetsense.common.service.configuration;
 
 import java.util.Date;
 import java.util.Scanner;

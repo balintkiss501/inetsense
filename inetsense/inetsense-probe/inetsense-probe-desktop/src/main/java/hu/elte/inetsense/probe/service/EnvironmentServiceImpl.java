@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.springframework.stereotype.Component;
 
-import hu.elte.inetsense.probe.service.configuration.EnvironmentService;
+import hu.elte.inetsense.common.service.configuration.EnvironmentService;
 
 @Component
 public class EnvironmentServiceImpl implements EnvironmentService {

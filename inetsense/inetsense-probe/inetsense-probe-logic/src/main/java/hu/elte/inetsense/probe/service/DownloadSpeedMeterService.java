@@ -10,18 +10,18 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.common.util.HTTPUtil;
 import hu.elte.inetsense.common.util.InetsenseUtil;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
 
 public class DownloadSpeedMeterService implements SpeedMeterService {
 
     private static final Logger log = LogManager.getLogger();
-    private ConfigurationProvider configurationProvider;
+    private BaseConfigurationProvider configurationProvider;
     private Random rnd = new Random();
 
-    public DownloadSpeedMeterService(ConfigurationProvider configurationProvider) {
+    public DownloadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         this.configurationProvider = configurationProvider;
     }
 

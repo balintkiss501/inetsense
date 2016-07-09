@@ -8,36 +8,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.server.collector.util.VersionInfo;
-import hu.elte.inetsense.server.data.ConfigurationRepository;
-import hu.elte.inetsense.server.data.entities.Configuration;
+import hu.elte.inetsense.server.collector.service.impl.CollectorConfigurationProvider;
 
 @RestController
 @RequestMapping("/configuration.properties")
 public class ConfigurationController {
 
     @Autowired
-    private ConfigurationRepository configurationRepository;
-    
-    @Autowired
-    private VersionInfo versionInfo;
+    private CollectorConfigurationProvider configurationProvider;
 
     @RequestMapping(method = RequestMethod.GET)
     public String processMessage() {
-        List<Configuration> configList = configurationRepository.findAll();
-        addVersionToConfig(configList);
-        return configList.stream().map(Configuration::toString).collect(Collectors.joining("\n"));
+        List<String> configList = configurationProvider.getKeys();//configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_MAX_TIME)
+        return configList.stream().map(s->getConfigString(s)).collect(Collectors.joining("\n"));
     }
 
-    private void addVersionToConfig(List<Configuration> configList) {
-        configList.add(create("inetsense.project.version", versionInfo.getVersion()));
-        configList.add(create("inetsense.project.build", versionInfo.getBuilddate()));
-    }
-
-    private Configuration create(String key, String value) {
-        Configuration config = new Configuration();
-        config.setKey(key);
-        config.setValue(value);
-        return config;
+    private String getConfigString(String key) {
+        String value = configurationProvider.getString(key);
+        return String.format("%s = %s", key, value);
     }
 }

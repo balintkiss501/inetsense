@@ -11,13 +11,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
+import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
+import hu.elte.inetsense.common.service.configuration.ClockService;
+import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
+import hu.elte.inetsense.common.service.configuration.EnvironmentService;
 import hu.elte.inetsense.common.util.JsonConverter;
 import hu.elte.inetsense.probe.service.DownloadSpeedMeterService;
 import hu.elte.inetsense.probe.service.MeasurementService;
 import hu.elte.inetsense.probe.service.UploadSpeedMeterService;
-import hu.elte.inetsense.probe.service.configuration.ClockService;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
-import hu.elte.inetsense.probe.service.configuration.EnvironmentService;
 
 @Configuration
 @ComponentScan(value = "hu.elte.inetsense.probe")
@@ -46,12 +47,12 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     }
     
     @Bean
-    public DownloadSpeedMeterService downloadSpeedMeterService(ConfigurationProvider configurationProvider) {
+    public DownloadSpeedMeterService downloadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         return new DownloadSpeedMeterService(configurationProvider);
     }
     
     @Bean
-    public UploadSpeedMeterService uploadSpeedMeterService(ConfigurationProvider configurationProvider) {
+    public UploadSpeedMeterService uploadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         return new UploadSpeedMeterService(configurationProvider);
     }
     
@@ -61,7 +62,7 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     }
 
     @Bean
-    public JsonConverter jsonConverter(ConfigurationProvider configurationProvider) {
+    public JsonConverter jsonConverter(BaseConfigurationProvider configurationProvider) {
         return new JsonConverter();
     }
 

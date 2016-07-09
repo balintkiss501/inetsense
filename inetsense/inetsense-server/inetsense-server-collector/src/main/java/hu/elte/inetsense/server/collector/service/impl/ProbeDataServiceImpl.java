@@ -1,6 +1,7 @@
 package hu.elte.inetsense.server.collector.service.impl;
 
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class ProbeDataServiceImpl implements ProbeDataService {
         Optional<Probe> optionalProbe = probeRepository.findOneByAuthId(authId);
         Probe probe = optionalProbe.orElseThrow(() -> {
             log.error("Unable to find probe based on auth id. Measurements can be saved only for an existing probe! auth ID: " + authId);
-            return new RuntimeException("Unable to find probe based on auth id. Measurements can be saved only for an existing probe!");
+            return new NoSuchElementException("Unable to find probe based on auth id. Measurements can be saved only for an existing probe!");
         });
         return probe;
     }

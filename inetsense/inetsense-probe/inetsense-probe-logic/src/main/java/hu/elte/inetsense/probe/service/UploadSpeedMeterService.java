@@ -10,15 +10,15 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import hu.elte.inetsense.probe.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.probe.service.configuration.ConfigurationProvider;
+import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 
 public class UploadSpeedMeterService implements SpeedMeterService {
 
     private static final Logger log = LogManager.getLogger();
-    private ConfigurationProvider configurationProvider;
+    private BaseConfigurationProvider configurationProvider;
 
-    public UploadSpeedMeterService(ConfigurationProvider configurationProvider) {
+    public UploadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         this.configurationProvider = configurationProvider;
     }
 
