@@ -1,44 +1,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>inetsense-tools</artifactId>
-    <packaging>pom</packaging>
+	<artifactId>inetsense-tools</artifactId>
+	<packaging>pom</packaging>
 
-    <parent>
-        <groupId>hu.elte.inetsense</groupId>
-        <artifactId>inetsense</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>hu.elte.inetsense</groupId>
+		<artifactId>inetsense</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
 
 
-    <dependencies>
-        <dependency>
-            <groupId>hu.elte.inetsense</groupId>
-            <artifactId>inetsense-probe-desktop</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>hu.elte.inetsense</groupId>
-            <artifactId>inetsense-server-collector</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>hu.elte.inetsense</groupId>
-            <artifactId>inetsense-server-upload</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>hu.elte.inetsense</groupId>
-            <artifactId>inetsense-server-web</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>hu.elte.inetsense</groupId>
-            <artifactId>inetsense-server-clock</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>hu.elte.inetsense</groupId>
+			<artifactId>inetsense-probe-desktop</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>hu.elte.inetsense</groupId>
+			<artifactId>inetsense-server-collector</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>hu.elte.inetsense</groupId>
+			<artifactId>inetsense-server-upload</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>hu.elte.inetsense</groupId>
+			<artifactId>inetsense-server-web</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>hu.elte.inetsense</groupId>
+			<artifactId>inetsense-server-clock</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -47,25 +47,60 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.10</version>
 				<executions>
-				  <execution>
-					<id>copy-dependencies</id>
-					<phase>package</phase>
-					<goals>
-					  <goal>copy-dependencies</goal>
-					</goals>
-					<configuration>
-					  <outputDirectory>${project.build.directory}/dist</outputDirectory>
-					  <overWriteReleases>false</overWriteReleases>
-					  <overWriteSnapshots>true</overWriteSnapshots>
-					  <excludeTransitive>true</excludeTransitive>
-					</configuration>
-				  </execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/dist</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
-		  
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy-probe</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>inetsense</groupId>
+									<artifactId>inetsense-probe-desktop</artifactId>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/dist/static/jnlp</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/dist/static/jnlp</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<excludeTransitive>true</excludeTransitive>
+							<includeArtifactIds>inetsense-probe-desktop</includeArtifactIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.0.1</version>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>jks</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
 				<executions>
 					<execution>
 						<id>copy-scripts</id>
@@ -75,13 +110,13 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${project.build.directory}/scripts</outputDirectory>
-							<resources>          
+							<resources>
 								<resource>
 									<directory>src/main/resources/scripts</directory>
 									<filtering>true</filtering>
 								</resource>
-							</resources>              
-						</configuration>            
+							</resources>
+						</configuration>
 					</execution>
 					<execution>
 						<id>copy-config</id>
@@ -91,17 +126,33 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${project.build.directory}/dist/config</outputDirectory>
-							<resources>          
+							<resources>
 								<resource>
 									<directory>src/main/resources/config</directory>
 									<filtering>true</filtering>
 								</resource>
-							</resources>              
-						</configuration>            
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-sign</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/dist/static/jnlp</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/jnlp</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
-  </build>
-  
+	</build>
+
 </project>

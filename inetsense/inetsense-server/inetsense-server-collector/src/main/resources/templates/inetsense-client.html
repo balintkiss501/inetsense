@@ -11,10 +11,12 @@
 </head>
 <body>
 	<div style="margin: 0 auto;width: 620px; margin-top: 60px; font-family: tahoma; text-align: center;">
-		<img th:src="@{/images/inetsense.png}"/>
-		<p style="font-size: 46px;letter-spacing:3px;font-family: tahoma; color:#444;">
-			Inet-Sense Probe
-		</p>
+		<a th:href="@{/jnlp/inetsense.jnlp}"> <img
+			th:src="@{/images/inetsense.png}" />
+			<p
+				style="font-size: 46px; letter-spacing: 3px; font-family: tahoma; color: #444;">
+				Inet-Sense Probe</p>
+		</a>
 		<p style="font-size: 14px; text-align: center; color:#777; letter-spacing:1px;">
 			Version: <span class="meta" th:text="${version}" th:remove="tag">version</span> | Built: <span class="meta" th:text="${built}" th:remove="tag">built</span>
 		</p>
