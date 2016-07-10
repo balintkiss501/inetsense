@@ -59,7 +59,6 @@ public class MeasurementService {
         this.uploadSpeedMeterService = uploadSpeedMeterService;
         this.clockService = clockService;
         this.jsonConverter = jsonConverter;
-        probeId = this.configurationProvider.getString(ConfigurationNames.PROBE_ID);
     }
 
     /**
@@ -129,6 +128,13 @@ public class MeasurementService {
 
     private void createProbeData() {
         probeDataDTO = new ProbeDataDTO();
-        probeDataDTO.setProbeAuthId(probeId);
+        probeDataDTO.setProbeAuthId(getProbeId());
+    }
+    
+    public String getProbeId() {
+        if(probeId == null) {
+            probeId = configurationProvider.getString(ConfigurationNames.PROBE_ID);
+        }
+        return probeId;
     }
 }

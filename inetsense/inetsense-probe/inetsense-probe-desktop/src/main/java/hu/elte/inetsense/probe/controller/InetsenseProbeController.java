@@ -42,8 +42,8 @@ public class InetsenseProbeController {
         ScheduledExecutorService ses = (ScheduledExecutorService) taskExecutor;
         int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
         int timeDelay = 10 * 60 * 1000;
-        ses.scheduleAtFixedRate(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
-        ses.scheduleAtFixedRate(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
+        ses.scheduleWithFixedDelay(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
+        ses.scheduleWithFixedDelay(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
     }
 
 
@@ -52,7 +52,7 @@ public class InetsenseProbeController {
         while (isDefaultProbeId(probeId) || !isExistingProbe(probeId)) {
             log.info("Pobe ID is not valid: {}", probeId);
             probeId = JOptionPane.showInputDialog("Enter probe id");
-            configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID.getKey(), probeId);
+            configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID, probeId);
         }
     }
 

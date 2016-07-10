@@ -18,6 +18,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 
     private static final String BASE_DIRECTORY = ".inetsense";
     private static final String LOG_DIRECTORY = "log";
+    private static final String LOG_FILE_NAME = "inetsense-probe.log";
     private static final String CONFIGURATION_DIRECTORY = "configuration";
     private static final String CONFIGURATION_FILE_NAME = "probe-configuration.properties";
     
@@ -29,9 +30,18 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }
 
     private void reInitializeLogger() {
-        System.setProperty("log-location", String.format("%s/%s/%s", userHome, BASE_DIRECTORY, LOG_DIRECTORY));
+        System.setProperty("log-location", getLogFileBaseLocation());
         LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         ctx.reconfigure();
+    }
+
+    private String getLogFileBaseLocation() {
+        return String.format("%s/%s/%s", userHome, BASE_DIRECTORY, LOG_DIRECTORY);
+    }
+    
+    @Override
+    public String getLogFileLocation() {
+        return String.format("%s/%s", getLogFileBaseLocation(), LOG_FILE_NAME);
     }
     
     @PostConstruct

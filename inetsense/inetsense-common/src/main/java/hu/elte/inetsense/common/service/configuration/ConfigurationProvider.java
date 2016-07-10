@@ -9,6 +9,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 public class ConfigurationProvider extends BaseConfigurationProvider {
 
     private EnvironmentService environmentService;
@@ -42,23 +43,25 @@ public class ConfigurationProvider extends BaseConfigurationProvider {
 
     private URL getDefaultConfigurationURL() {
         try {
-            return new URL("http://localhost:8080/configuration.properties");
+            return new URL(getCollectorBaseURL() + "/configuration.properties");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public <T> void changeLocalProperty(String property, T value) {
+    public <T> void changeLocalProperty(ConfigurationNames property, T value) {
         try {
-            localConfigurationBuilder.getConfiguration().setProperty(property, value);
+            localConfigurationBuilder.getConfiguration().setProperty(property.getKey(), value);
             localConfigurationBuilder.save();
         } catch (ConfigurationException e) {
-            log.error("Failed to change property: {} to value: {}", property, value, e);
+            log.error("Failed to change property: {} to value: {}", property.getKey(), value, e);
             throw new RuntimeException(e);
         }
     }
 
     public String getCollectorBaseURL() {
-        return "http://localhost:8080";
+        String host = getString(ConfigurationNames.COLLECTOR_SERVER_HOST);
+        int port = getInt(ConfigurationNames.COLLECTOR_SERVER_PORT);
+        return String.format("http://%s:%d", host, port);
     }
 }
