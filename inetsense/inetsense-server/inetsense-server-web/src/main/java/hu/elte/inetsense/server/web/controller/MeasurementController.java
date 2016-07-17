@@ -11,13 +11,11 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
-import hu.elte.inetsense.server.web.config.ExtJSCORS;
 import hu.elte.inetsense.server.web.service.MeasurementService;
 
 /**
@@ -45,7 +43,6 @@ public class MeasurementController {
      *
      * @return
      */
-    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
     @RequestMapping("/measurements/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
     public List<List<List<BigDecimal>>> getAllMeasurementsOfProbeIdByTimeWindow(
             @PathVariable("probeId") final String probeId,
@@ -151,7 +148,6 @@ public class MeasurementController {
      *
      * @return
      */
-    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
     @RequestMapping("/measurements/demo/{probeId}/from/{dateFrom}/to/{dateTo}/{resolution}")
     public List<List<List<BigDecimal>>> getDemoData(
             @PathVariable("probeId") final String probeId,
@@ -204,7 +200,6 @@ public class MeasurementController {
         return result;
     }
     
-    @CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
     @RequestMapping("/measurements/table/{probeId}/from/{dateFrom}/to/{dateTo}/res/{mode}/{agg}")
     public List<MeasurementDTO> getMeasurementsOfProbeIdForTable(
             @PathVariable("probeId")   final String  probeId,
