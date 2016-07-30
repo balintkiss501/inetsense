@@ -80,7 +80,7 @@
 									<groupId>inetsense</groupId>
 									<artifactId>inetsense-probe-desktop</artifactId>
 									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/dist/static/jnlp</outputDirectory>
+									<outputDirectory>${project.build.directory}/static/jnlp</outputDirectory>
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/dist/static/jnlp</outputDirectory>
@@ -88,6 +88,30 @@
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<excludeTransitive>true</excludeTransitive>
 							<includeArtifactIds>inetsense-probe-desktop</includeArtifactIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>jnlp-to-colelctor</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${env.JAVA_HOME}\bin\jar</executable>
+							<workingDirectory>${project.build.directory}/dist</workingDirectory>
+							<arguments>
+								<argument>uf</argument>
+								<argument>inetsense-server-collector-${project.version}.jar</argument>
+								<argument>static/jnlp/inetsense-probe-desktop-${project.version}.jar</argument>
+							</arguments>
 						</configuration>
 					</execution>
 				</executions>
@@ -129,22 +153,6 @@
 							<resources>
 								<resource>
 									<directory>src/main/resources/config</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-sign</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/dist/static/jnlp</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src/main/resources/jnlp</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>

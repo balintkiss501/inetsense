@@ -32,9 +32,6 @@
 			<scope>system</scope>
 			<systemPath>${java.home}/lib/javaws.jar</systemPath>
 		</dependency>
-
-
-
 	</dependencies>
 
 	<build>
@@ -59,6 +56,35 @@
 						<goals>
 							<goal>single</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>jar-signer</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>${env.JAVA_HOME}\bin\jarsigner</executable>
+							<workingDirectory>${project.build.directory}</workingDirectory>
+							<arguments>
+								<argument>-tsa</argument>
+								<argument>http://timestamp.digicert.com</argument>
+								<argument>-keystore</argument>
+								<argument>classes/jnlp/keystore.jks</argument>
+								<argument>-storepass</argument>
+								<argument>server</argument>
+								<argument>inetsense-probe-desktop-${project.version}.jar</argument>
+								<argument>server</argument>
+							</arguments>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

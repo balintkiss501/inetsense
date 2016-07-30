@@ -21,11 +21,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
         registry.addResourceHandler("/").addResourceLocations("/index.html");
     }
-//    
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("forward:/index.html");
-//    }
 
     @Bean
     public ObjectMapper objectMapper() {
