@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_configuration
+      author: abodo
+      changes:
+        - createTable:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  type: char(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: value
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: char(255)
+                  constraints:
+                    nullable: true
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: upload.server.host
+              - column:
+                  name: value
+                  value: localhost
+              - column:
+                  name: comment
+                  value: Host of the upload server that can be used by the probes
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: upload.server.port
+              - column:
+                  name: value
+                  value: 8888
+              - column:
+                  name: comment
+                  value: Port of the upload server that can be used by the probes
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.targetfile
+              - column:
+                  name: value
+                  value: http://www.nist.gov/pml/wmd/metric/upload/size-and-scale-sesson.pdf, http://eu.mouser.com/catalog/English/103/dload/pdf/PASSIVESECTION.pdf
+              - column:
+                  name: comment
+                  value: Probes will measure download speed using one these files
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.download.minsize
+              - column:
+                  name: value
+                  value: 100000
+              - column:
+                  name: comment
+                  value: Minimum size of target files in bytes
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.download.maxtime
+              - column:
+                  name: value
+                  value: 40000
+              - column:
+                  name: comment
+                  value: Maximum allowed download time in ms
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.upload.size
+              - column:
+                  name: value
+                  value: 1000000
+              - column:
+                  name: comment
+                  value: Size of data to measure upload speed in bytes

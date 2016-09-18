@@ -9,16 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.ProbeDTO;
 import hu.elte.inetsense.server.data.ProbeRepository;
 import hu.elte.inetsense.server.data.entities.Probe;
-import hu.elte.inetsense.server.web.config.ExtJSCORS;
 import hu.elte.inetsense.server.web.service.ProbeService;
 
 /**
@@ -26,7 +24,6 @@ import hu.elte.inetsense.server.web.service.ProbeService;
  * @author Bekfi Richárd
  */
 @RestController
-@CrossOrigin(origins = ExtJSCORS.EXTJS_LOCAL)
 @RequestMapping("/probes")
 public class ProbeAdministrationController {
 
