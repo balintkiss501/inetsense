@@ -16,3 +16,6 @@ lib/
 
 # inetsense
 *setvars.bat*
+
+# generated extJs app
+inetsense/inetsense-server/inetsense-server-web/target/classes/static/extapp
