@@ -16,9 +16,10 @@ lib/
 
 # inetsense
 *setvars.bat*
+*setvars.sh*
 
 # generated extJs app
-inetsense/inetsense-server/inetsense-server-web/target/classes/static/extapp
+inetsense/inetsense-server/inetsense-server-web/target/classes/static/extapp*
 
 # Mac
 *.DS_Store
