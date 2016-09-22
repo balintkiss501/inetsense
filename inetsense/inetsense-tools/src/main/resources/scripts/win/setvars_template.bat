@@ -1,6 +1,5 @@
 @echo off
 
-
 set JAVA_HOME="c:\java\jdk1.8.0_92"
 
 set INETSENSE_INSTALL_DIR="d:\install\inetsense"
@@ -27,7 +26,6 @@ set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.datasource.username=%DB_US
 set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.datasource.password=%DB_PWD%"
 set COLLECTOR_JAVA_OPT=%COLLECTOR_JAVA_OPT% "-Dspring.config.location=collector-server.properties"
 
-
 set CLOCK_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=%CLOCK_DEBUG_PORT%,suspend=n"
 set CLOCK_JAVA_OPT=%CLOCK_JAVA_OPT% "-Dspring.config.location=clock-server.properties"
 
@@ -38,4 +36,3 @@ set WEB_JAVA_OPT=%WEB_JAVA_OPT% "-Dspring.datasource.url=%DB_URL%?autoReconnect=
 set WEB_JAVA_OPT=%WEB_JAVA_OPT% "-Dspring.datasource.username=%DB_USER%"
 set WEB_JAVA_OPT=%WEB_JAVA_OPT% "-Dspring.datasource.password=%DB_PWD%"
 set WEB_JAVA_OPT=%WEB_JAVA_OPT% "-Dspring.config.location=web-server.properties"
-
