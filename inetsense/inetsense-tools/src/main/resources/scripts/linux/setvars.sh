@@ -1,18 +1,18 @@
 #!/bin/bash
 
-JAVA_HOME="/opt/java/jdk1.8.0_92"
+JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_74.jdk/Contents/Home"
 
-INETSENSE_INSTALL_DIR="/opt/inetsense"
+INETSENSE_INSTALL_DIR="/Users/zdtorok/inetsense-install"
 INETSENSE_CLOCK_DIR_NAME="clock-server"
 INETSENSE_COLLECTOR_DIR_NAME="collector-server"
 INETSENSE_UPLOAD_DIR_NAME="upload-server"
 INETSENSE_WEB_DIR_NAME="web-server"
 
 DB_HOST="localhost"
-DB_PORT=3306
+DB_PORT=8889
 DB_NAME="inetsense"
-DB_USER="inetsense"
-DB_PWD="inetsense"
+DB_USER="isuser"
+DB_PWD="isuser"
 DB_URL="jdbc:mysql://$DB_HOST:$DB_PORT/$DB_NAME"
 
 COLLECTOR_DEBUG_PORT=8000
