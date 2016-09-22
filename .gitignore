@@ -21,4 +21,4 @@ lib/
 inetsense/inetsense-server/inetsense-server-web/target/classes/static/extapp
 
 # Mac
-.DS_Store
+*.DS_Store
