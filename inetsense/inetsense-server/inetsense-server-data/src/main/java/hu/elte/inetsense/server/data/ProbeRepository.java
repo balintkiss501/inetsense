@@ -13,6 +13,6 @@ import hu.elte.inetsense.server.data.entities.Probe;
 @Repository
 public interface ProbeRepository extends JpaRepository<Probe, Long> {
 
-    public Optional<Probe> findOneByAuthId(String id);
+    Optional<Probe> findOneByAuthId(String id);
 
 }
