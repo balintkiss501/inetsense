@@ -1,62 +1,95 @@
 package hu.elte.inetsense.server.collector;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.orm.jpa.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
-import hu.elte.inetsense.server.collector.service.ProbeDataService;
+import hu.elte.inetsense.server.collector.service.impl.ProbeDataServiceImpl;
 import hu.elte.inetsense.server.data.MeasurementRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
 import hu.elte.inetsense.server.data.entities.Measurement;
 import hu.elte.inetsense.server.data.entities.Probe;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 
 /**
  * @author Zsolt Istvanfi
  */
-// FIXME: Application context errors, needs to be more modular, needs to be moved to other file
-@Transactional
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ProbeDataServiceTest.TestConfig.class)
 public class ProbeDataServiceTest {
 
-    @Configuration
-    @EnableAutoConfiguration
-    @EnableJpaRepositories("hu.elte.inetsense.server.data")
-    @EntityScan("hu.elte.inetsense.server.data.entities")
-    @ComponentScan("hu.elte.inetsense.server.collector.service")
-    public static class TestConfig {
-    }
+    @Mock
+    private ProbeRepository probeRepository;
 
-    @Autowired
-    private ProbeRepository       probeRepository;
-    @Autowired
+    @Mock
     private MeasurementRepository measurementRepository;
 
-    @Autowired
-    private ProbeDataService      probeDataService;
+    @InjectMocks
+    private ProbeDataServiceImpl probeDataService;
 
-    private ProbeDataDTO          probeData;
+    private Long measurementGlobalId = 0L;
+
+    private ProbeDataDTO probeData;
+
+    private List<Probe> probeRepositoryList;
+    private List<Measurement> measurementRepositoryList;
 
     @Before
     public void before() {
+        MockitoAnnotations.initMocks(this);
+        probeRepositoryList = new ArrayList<>();
+        measurementRepositoryList = new ArrayList<>();
+
+        // Mock probe repository save
+        doAnswer(invocation -> {
+                probeRepositoryList.add((Probe)invocation.getArguments()[0]);
+                return null;
+        }).when(probeRepository).save(any(Probe.class));
+
+        // Mock probe repository findOneByAuthId
+        doAnswer(invocation -> {
+                String authId = (String)invocation.getArguments()[0];
+
+                for (Probe p : probeRepositoryList) {
+                    if (authId.equals(p.getAuthId())) {
+                        return Optional.of(p);
+                    }
+                }
+                return Optional.empty();
+        }).when(probeRepository).findOneByAuthId(anyString());
+
+        // Mock measurement repository save
+        doAnswer(invocation -> {
+                Measurement measurement = (Measurement)invocation.getArguments()[0];
+                measurement.setId(measurementGlobalId++);
+                measurementRepositoryList.add(measurement);
+                return null;
+        }).when(measurementRepository).save(any(Measurement.class));
+
+        // Mock measurement repository findAllByProbeOrderByIdAsc
+        doAnswer(invocation -> {
+                Probe currentProbe = (Probe)invocation.getArguments()[0];
+                List<Measurement> measurements = new ArrayList<>();
+                for (Measurement m : measurementRepositoryList) {
+                    if (m.getProbe().equals(currentProbe)) {
+                        measurements.add(m);
+                    }
+                }
+
+                measurements.sort((m1, m2) -> m1.getId().compareTo(m2.getId()));
+                return measurements;
+        }).when(measurementRepository).findAllByProbeOrderByIdAsc(any(Probe.class));
+
         probeData = new ProbeDataDTO();
         probeData.setProbeAuthId("PROBE001");
 
@@ -86,7 +119,6 @@ public class ProbeDataServiceTest {
         probeData.setMeasurements(measurements);
     }
 
-    @Ignore
     @Test
     public void testSaveProbeData() {
         probeDataService.saveProbeData(probeData);
@@ -107,5 +139,4 @@ public class ProbeDataServiceTest {
             assertEquals(measurement.getLongitude(), measurementDTO.getLng());
         }
     }
-
 }
