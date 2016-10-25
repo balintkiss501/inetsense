@@ -13,15 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Zsolt Istvanfi
@@ -40,63 +40,17 @@ public class ProbeDataServiceTest {
     private Long measurementGlobalId = 0L;
 
     private ProbeDataDTO probeData;
+    private Probe testProbe;
 
-    private List<Probe> probeRepositoryList;
     private List<Measurement> measurementRepositoryList;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        probeRepositoryList = new ArrayList<>();
         measurementRepositoryList = new ArrayList<>();
-
-        // Mock probe repository save
-        doAnswer(invocation -> {
-                probeRepositoryList.add((Probe)invocation.getArguments()[0]);
-                return null;
-        }).when(probeRepository).save(any(Probe.class));
-
-        // Mock probe repository findOneByAuthId
-        doAnswer(invocation -> {
-                String authId = (String)invocation.getArguments()[0];
-
-                for (Probe p : probeRepositoryList) {
-                    if (authId.equals(p.getAuthId())) {
-                        return Optional.of(p);
-                    }
-                }
-                return Optional.empty();
-        }).when(probeRepository).findOneByAuthId(anyString());
-
-        // Mock measurement repository save
-        doAnswer(invocation -> {
-                Measurement measurement = (Measurement)invocation.getArguments()[0];
-                measurement.setId(measurementGlobalId++);
-                measurementRepositoryList.add(measurement);
-                return null;
-        }).when(measurementRepository).save(any(Measurement.class));
-
-        // Mock measurement repository findAllByProbeOrderByIdAsc
-        doAnswer(invocation -> {
-                Probe currentProbe = (Probe)invocation.getArguments()[0];
-                List<Measurement> measurements = new ArrayList<>();
-                for (Measurement m : measurementRepositoryList) {
-                    if (m.getProbe().equals(currentProbe)) {
-                        measurements.add(m);
-                    }
-                }
-
-                measurements.sort((m1, m2) -> m1.getId().compareTo(m2.getId()));
-                return measurements;
-        }).when(measurementRepository).findAllByProbeOrderByIdAsc(any(Probe.class));
 
         probeData = new ProbeDataDTO();
         probeData.setProbeAuthId("PROBE001");
-
-        Probe testProbe = new Probe();
-        testProbe.setAuthId(probeData.getProbeAuthId());
-        testProbe.setCreatedOn(new Date());
-        probeRepository.save(testProbe);
 
         List<MeasurementDTO> measurements = new ArrayList<>(2);
 
@@ -117,19 +71,36 @@ public class ProbeDataServiceTest {
         measurements.add(measurement2);
 
         probeData.setMeasurements(measurements);
+
+        testProbe = new Probe();
+        testProbe.setAuthId(probeData.getProbeAuthId());
+        testProbe.setCreatedOn(new Date());
+
+        // Mock probe repository findOneByAuthId
+        when(probeRepository.findOneByAuthId(eq("PROBE001")))
+                .thenReturn(Optional.of(testProbe));
+        when(probeRepository.findOneByAuthId(not(eq("PROBE001"))))
+                .thenReturn(Optional.empty());
+
+        // Mock measurement repository save
+        doAnswer(invocation -> {
+            Measurement measurement = (Measurement)invocation.getArguments()[0];
+            measurement.setId(measurementGlobalId++);
+            measurementRepositoryList.add(measurement);
+            return null;
+        }).when(measurementRepository).save(any(Measurement.class));
     }
 
     @Test
     public void testSaveProbeData() {
+        assertTrue(measurementRepositoryList.isEmpty());
+
         probeDataService.saveProbeData(probeData);
 
-        Probe testProbe = probeRepository.findOneByAuthId(probeData.getProbeAuthId()).get();
-        List<Measurement> measurements = measurementRepository.findAllByProbeOrderByIdAsc(testProbe);
-
-        assertEquals(measurements.size(), 2);
+        assertEquals(measurementRepositoryList.size(), 2);
 
         for (int i = 0; i < probeData.getMeasurements().size(); ++i) {
-            Measurement measurement = measurements.get(i);
+            Measurement measurement = measurementRepositoryList.get(i);
             MeasurementDTO measurementDTO = probeData.getMeasurements().get(i);
 
             assertEquals(measurement.getCompletedOn().getTime(), measurementDTO.getCompletedOn().getTime());
@@ -138,5 +109,11 @@ public class ProbeDataServiceTest {
             assertEquals(measurement.getLatitude(), measurementDTO.getLat());
             assertEquals(measurement.getLongitude(), measurementDTO.getLng());
         }
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testSaveProbeDataIllegalProbeId() {
+        probeData.setProbeAuthId("XXXXXXXX");
+        probeDataService.saveProbeData(probeData);
     }
 }
