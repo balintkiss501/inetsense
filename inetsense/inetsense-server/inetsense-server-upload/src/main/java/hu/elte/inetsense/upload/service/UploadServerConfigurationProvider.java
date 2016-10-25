@@ -16,16 +16,17 @@ public class UploadServerConfigurationProvider extends ConfigurationProvider {
     @Override
     @PostConstruct
     public void loadConfiguration() {
+    	initLocalConfiguration();
         super.loadConfiguration();
     }
     
     @Override
     protected void doLoadConfiguration() throws ConfigurationException {
-        URL defaultConfigurationURL = getDefaultConfigurationURL();
-        loadConfigurationFromURL(defaultConfigurationURL);
+    	loadDefaultConfiguration();
     }
 
-    private URL getDefaultConfigurationURL() {
+    @Override
+    protected URL getDefaultConfigurationURL() {
         try {
             return new URL("http://localhost:8080/configuration.properties");
         } catch (MalformedURLException e) {

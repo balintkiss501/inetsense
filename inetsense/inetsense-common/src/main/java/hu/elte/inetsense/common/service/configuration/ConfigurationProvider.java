@@ -36,12 +36,12 @@ public class ConfigurationProvider extends BaseConfigurationProvider {
         localConfigurationBuilder = loadConfigurationFromPropertyFile(probeConfiguration);
     }
 
-    private void loadDefaultConfiguration() throws ConfigurationException {
+    protected void loadDefaultConfiguration() throws ConfigurationException {
         URL defaultConfigurationURL = getDefaultConfigurationURL();
         loadConfigurationFromURL(defaultConfigurationURL);
     }
 
-    private URL getDefaultConfigurationURL() {
+    protected URL getDefaultConfigurationURL() {
         try {
             return new URL(getCollectorBaseURL() + "/configuration.properties");
         } catch (MalformedURLException e) {

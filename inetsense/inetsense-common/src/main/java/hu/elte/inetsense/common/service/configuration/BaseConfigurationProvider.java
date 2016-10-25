@@ -25,10 +25,18 @@ public abstract class BaseConfigurationProvider {
     
     private static final Logger log = LogManager.getLogger();
 
-    public void loadConfiguration() {
-        log.info("Initializing probe configuration...");
+    public void initLocalConfiguration() {
+        log.info("Initializing local configuration...");
         try {
             setupRuntimeConfig();
+        } catch (ConfigurationException e) {
+            log.fatal("Unable to initialize local configuration!", e);
+        }
+    }
+    
+    public void loadConfiguration() {
+        log.info("Loading configuration...");
+        try {
             doLoadConfiguration();
         } catch (ConfigurationException e) {
             log.fatal("Unable to load default configuration!", e);
