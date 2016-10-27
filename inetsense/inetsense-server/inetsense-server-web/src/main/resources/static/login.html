@@ -1,0 +1,28 @@
+<div class="login-page">
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4">
+            <img src="images/user-avatar.png" width="150px" class="user-avatar" />
+            <h1>iNETSense</h1>
+            <form role="form" ng-submit="controller.login()">
+                <div class="form-content">
+                    <div class="form-group">
+                        <input id="email" type="text" ng-model="controller.credentials.username"
+                            class="form-control input-underline input-lg" placeholder="E-mail">
+                    </div>
+
+                    <div class="form-group">
+                        <input id="password" type="password" ng-model="controller.credentials.password"
+                            class="form-control input-underline input-lg" placeholder="Jelszó">
+                    </div>
+
+                    <div class="alert alert-danger" ng-show="error">
+                        Hiba történt a bejelentkezés során. Kérjük, próbálja újra.
+                    </div>
+                </div>
+                <button type="submit" class="btn rounded-btn">Bejelentkezés</button>
+                <button class="btn rounded-btn">Regisztráció</button>
+            </form>
+        </div>
+    </div>
+
+</div>
