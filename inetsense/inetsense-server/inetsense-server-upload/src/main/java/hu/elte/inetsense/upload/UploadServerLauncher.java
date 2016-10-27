@@ -14,8 +14,6 @@ public class UploadServerLauncher {
             context.registerShutdownHook();
             UploadServerController app = context.getBean(UploadServerController.class);
             app.start();
-            while (true) {
-            }
         }
     }
 

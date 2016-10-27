@@ -23,7 +23,6 @@ public class InetsenseProbeLauncher {
             });
             InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
             app.start();
-            while(true){}
         }
 
     }
