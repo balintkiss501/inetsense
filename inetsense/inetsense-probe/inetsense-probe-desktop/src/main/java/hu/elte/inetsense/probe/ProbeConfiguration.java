@@ -38,8 +38,9 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     @Bean
     public ConfigurationProvider configurationProvider(EnvironmentService environmentService) {
         ConfigurationProvider configurationProvider = new ConfigurationProvider(environmentService);
-        configurationProvider.loadConfiguration();
+        configurationProvider.initLocalConfiguration();
         fixURLConfiguration(configurationProvider);
+        configurationProvider.loadConfiguration();
         return configurationProvider;
     }
 

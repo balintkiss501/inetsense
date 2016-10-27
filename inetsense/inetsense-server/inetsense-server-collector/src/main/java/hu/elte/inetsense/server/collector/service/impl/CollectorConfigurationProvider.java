@@ -26,6 +26,7 @@ public class CollectorConfigurationProvider extends BaseConfigurationProvider {
     @Override
     @PostConstruct
     public void loadConfiguration() {
+    	initLocalConfiguration();
         super.loadConfiguration();
     }
     
