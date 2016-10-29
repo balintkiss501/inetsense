@@ -1,18 +1,23 @@
+'use strict';
+/**
+ * @ngdoc overview
+ * @name inetsense
+ * @description
+ * # inetsense
+ *
+ * Main module of the application.
+ */
 angular.module('inetsense', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider) {
 
-    $routeProvider.when('/', {
-        templateUrl : 'login.html',
-        controller : 'login',
-        controllerAs : 'controller'
-    }).when('/login', {
-        templateUrl : 'login.html',
+    $routeProvider.when('/login', {
+        templateUrl : 'app/login/login.html',
         controller : 'login',
         controllerAs : 'controller'
     }).when('/dashboard', {
-        templateUrl : 'dashboard.html',
+        templateUrl : 'app/dashboard/dashboard.html',
         controller : 'dashboard',
         controllerAs : 'controller'
-    }).otherwise('/');
+    }).otherwise('/login');
 
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
