@@ -7,82 +7,52 @@
  *
  * Main module of the application.
  */
-angular.module('inetsense', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider) {
+angular.module('inetsense', [
+        'oc.lazyLoad',
+        'ui.router',
+        'ui.bootstrap',
+        'angular-loading-bar'
+    ])
+    .config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $httpProvider) {
 
-    $routeProvider.when('/login', {
-        templateUrl : 'app/login/login.html',
-        controller : 'login',
-        controllerAs : 'controller'
-    }).when('/dashboard', {
-        templateUrl : 'app/dashboard/dashboard.html',
-        controller : 'dashboard',
-        controllerAs : 'controller'
-    }).otherwise('/login');
+        $ocLazyLoadProvider.config({
+            debug : true,
+            events : true,
+        });
 
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-}).controller('login',
+        $urlRouterProvider.otherwise('/login');
 
-    function($rootScope, $http, $location, $route) {
-
-        var self = this;
-
-        self.tab = function(route) {
-            return $route.current && route === $route.current.controller;
-        };
-
-        var authenticate = function(credentials, callback) {
-
-            var headers = credentials ? {
-                authorization : "Basic "
-                    + btoa(credentials.username + ":"
-                        + credentials.password)
-            } : {};
-
-            $http.get('user', {
-                headers : headers
-            }).then(function(response) {
-                if (response.data.name) {
-                    $rootScope.authenticated = true;
-                } else {
-                    $rootScope.authenticated = false;
-                }
-                callback && callback($rootScope.authenticated);
-            }, function() {
-                $rootScope.authenticated = false;
-                callback && callback(false);
-            });
-
-        }
-
-        authenticate();
-
-        self.credentials = {};
-        self.login = function() {
-            authenticate(self.credentials, function(authenticated) {
-                if (authenticated) {
-                    console.log("Login succeeded")
-                    $location.path("/dashboard");
-                    self.error = false;
-                    $rootScope.authenticated = true;
-                } else {
-                    console.log("Login failed")
-                    $location.path("/login");
-                    self.error = true;
-                    $rootScope.authenticated = false;
+        $stateProvider
+            .state('dashboard', {
+                controller : 'DashboardController as controller',
+                url : '/dashboard',
+                templateUrl : 'app/dashboard/dashboard.html',
+                resolve : {
+                    loadMyFiles : function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name : 'dashboard',
+                            files : [
+                                'app/dashboard/dashboard.controller.js'
+                            ]
+                        })
+                    }
                 }
             })
-        };
-
-        $rootScope.logout = function() {
-            $http.post('logout', {}).success(function() {
-                $rootScope.authenticated = false;
-                $location.path("/");
-            }).error(function(data) {
-                $rootScope.authenticated = false;
+            .state('login', {
+                controller : 'LoginController as controller',
+                url : '/login',
+                templateUrl : 'app/login/login.html',
+                resolve : {
+                    loadMyFiles : function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name : 'login',
+                            files : [
+                                'app/login/login.controller.js'
+                            ]
+                        })
+                    }
+                }
             });
-        };
-
-    }).controller('dashboard', function($http) {
-        // TODO
-});
+    });

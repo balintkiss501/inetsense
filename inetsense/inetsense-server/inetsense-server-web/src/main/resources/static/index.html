@@ -11,6 +11,10 @@
     <link href="css/external-libs.css" rel="stylesheet">
     <link href="css/inetsense.css" rel="stylesheet">
 
+    <script src="js/external-libs.js"></script>
+    <script src="app/app.js"></script>
+    <!-- <script src="js/inetsense.js"></script> -->
+
     <style type="text/css">
         [ng\:cloak], [ng-cloak], .ng-cloak {
             display: none !important;
@@ -20,10 +24,7 @@
 
 <body ng-app="inetsense" ng-cloak class="ng-cloak">
 
-    <div ng-view></div>
+    <div ui-view></div>
 
-    <script src="js/external-libs.js"></script>
-    <script src="app/app.js"></script>
-    <!-- <script src="js/inetsense.js"></script> -->
 </body>
 </html>
