@@ -2,6 +2,11 @@ package hu.elte.inetsense.common.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * @author Zsolt Istvanfi
  */
@@ -9,7 +14,11 @@ public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
+    @Email
     private String            email;
+
+    @NotEmpty
     private String            password;
 
     public String getEmail() {

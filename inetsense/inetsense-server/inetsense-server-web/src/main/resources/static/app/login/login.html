@@ -6,21 +6,29 @@
             <form role="form" ng-submit="controller.login()">
                 <div class="form-content">
                     <div class="form-group">
-                        <input id="email" type="text" ng-model="controller.credentials.email"
-                            class="form-control input-underline input-lg" placeholder="E-mail">
+                        <input id="email" type="email" ng-model="controller.credentials.email"
+                            class="form-control input-underline input-lg" placeholder="E-mail" required>
                     </div>
 
                     <div class="form-group">
                         <input id="password" type="password" ng-model="controller.credentials.password"
-                            class="form-control input-underline input-lg" placeholder="Jelszó">
-                    </div>
-
-                    <div class="alert alert-danger" ng-show="error">
-                        Hiba történt a bejelentkezés során. Kérjük, próbálja újra.
+                            class="form-control input-underline input-lg" placeholder="Jelszó" required>
                     </div>
                 </div>
-                <button type="submit" class="btn rounded-btn">Bejelentkezés</button>
-                <button class="btn rounded-btn" ng-click="controller.register()">Regisztráció</button>
+                <div class="form-footer">
+                    <button type="submit" class="btn rounded-btn">Bejelentkezés</button>
+                    <button type="button" class="btn rounded-btn" ng-click="controller.register()">Regisztráció</button>
+                </div>
+
+                <div class="alert alert-danger" ng-show="controller.loginError">
+                    Hiba történt a bejelentkezés során. Kérjük, próbálja újra.
+                </div>
+                <div class="alert alert-danger" ng-show="controller.registerError">
+                    Hiba történt a regisztráció során.
+                </div>
+                <div class="alert alert-success" ng-show="controller.registerSuccess">
+                   Sikeres regisztráció!
+                </div>
             </form>
         </div>
     </div>

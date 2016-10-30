@@ -3,7 +3,7 @@ package hu.elte.inetsense.server.web.service;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,10 @@ import hu.elte.inetsense.server.data.entities.User;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository  userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = false)
     public User addUser(final UserDTO userDTO) {
@@ -32,7 +35,6 @@ public class UserService {
         user.setCreatedOn(new Date());
         user.setEmail(userDTO.getEmail());
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
 
         user.setPassword(hashedPassword);

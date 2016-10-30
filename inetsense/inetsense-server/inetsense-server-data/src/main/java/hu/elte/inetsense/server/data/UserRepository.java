@@ -11,4 +11,6 @@ import hu.elte.inetsense.server.data.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User findByEmail(String email);
+
 }

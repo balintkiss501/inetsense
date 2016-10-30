@@ -75,6 +75,10 @@
     padding: 40px 0;
 }
 
+.login-page .form-footer {
+    margin-bottom: 20px;
+}
+
 .user-avatar {
     border: 3px solid #fff;
     border-radius: 50%;

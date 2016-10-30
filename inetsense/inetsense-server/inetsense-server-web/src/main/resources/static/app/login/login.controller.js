@@ -32,24 +32,33 @@ angular.module('inetsense')
 
         self.credentials = {};
         self.login = function() {
+            self.loginError = false;
+            self.registerError = false;
+            self.registerSuccess = false;
+
             authenticate(self.credentials, function(authenticated) {
                 if (authenticated) {
                     console.log("Login succeeded");
                     $location.path("/dashboard");
-                    self.error = false;
                 } else {
                     console.log("Login failed");
                     $location.path("/login");
-                    self.error = true;
+                    self.loginError = true;
                 }
             })
         };
 
         self.register = function() {
+            self.loginError = false;
+            self.registerError = false;
+            self.registerSuccess = false;
+
             $http.post('register', self.credentials).then(function() {
                 console.log("Register succeeded");
+                self.registerSuccess = true;
             }, function() {
                 console.log("Register failed");
+                self.registerError = true;
             });
         };
 
