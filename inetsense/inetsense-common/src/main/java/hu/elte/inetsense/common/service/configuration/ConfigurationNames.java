@@ -18,7 +18,7 @@ public enum ConfigurationNames {
     private String key;
     private Object defalultValue;
     
-    private ConfigurationNames(String key, Object defalultValue) {
+    ConfigurationNames(String key, Object defalultValue) {
         this.key = key;
         this.defalultValue = defalultValue;
     }
