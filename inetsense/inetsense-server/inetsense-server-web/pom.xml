@@ -12,7 +12,6 @@
 	</parent>
 
 	<properties>
-		<sencha.env>production</sencha.env>
         <fontAwesomeVersion>4.7.0</fontAwesomeVersion>
         <bootstrapVersion>3.3.7</bootstrapVersion>
 	</properties>
@@ -47,74 +46,10 @@
 
 	<profiles>
 		<profile>
-			<id>extClient</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.3.2</version>
-						<executions>
-							<execution>
-								<id>sencha-upgrade</id>
-								<phase>compile</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>${env.SENCHA_CMD}</executable>
-									<workingDirectory>${project.basedir}/src/main/extjs</workingDirectory>
-									<arguments>
-										<argument>app</argument>
-										<argument>upgrade</argument>
-										<argument>${env.SENCHA_SDK}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.3.2</version>
-						<executions>
-							<execution>
-								<id>sencha-compile</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>${env.SENCHA_CMD}</executable>
-									<workingDirectory>${project.basedir}/src/main/extjs</workingDirectory>
-									<arguments>
-										<argument>app</argument>
-										<argument>build</argument>
-										<argument>--clean</argument>
-										<argument>--destination</argument>
-										<argument>${project.basedir}/src/resources/static/extapp</argument>
-										<!-- <argument>classic</argument> -->
-										<argument>${sencha.env}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
 			<id>default</id>
-			<activation>
-				<property>
-					<name>!skipFirstProfile</name>
-				</property>
-			</activation>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
 			<build>
                 <resources>
                     <resource>
