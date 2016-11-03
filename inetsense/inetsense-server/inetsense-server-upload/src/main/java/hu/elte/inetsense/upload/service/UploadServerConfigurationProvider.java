@@ -28,7 +28,7 @@ public class UploadServerConfigurationProvider extends ConfigurationProvider {
     @Override
     protected URL getDefaultConfigurationURL() {
         try {
-            return new URL("http://localhost:8080/configuration.properties");
+            return new URL("http://localhost:8082/configuration.properties");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
