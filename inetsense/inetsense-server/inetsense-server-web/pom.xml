@@ -12,7 +12,8 @@
 	</parent>
 
 	<properties>
-		<sencha.env>production</sencha.env>
+        <fontAwesomeVersion>4.7.0</fontAwesomeVersion>
+        <bootstrapVersion>3.3.7</bootstrapVersion>
 	</properties>
 
 	<dependencies>
@@ -35,118 +36,210 @@
 			<artifactId>inetsense-server-common</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
+
+        <!-- Dependency for Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 	</dependencies>
 
 	<profiles>
 		<profile>
-			<id>extClient</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.3.2</version>
-						<executions>
-							<execution>
-								<id>sencha-upgrade</id>
-								<phase>compile</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>${env.SENCHA_CMD}</executable>
-									<workingDirectory>${project.basedir}/src/main/extjs</workingDirectory>
-									<arguments>
-										<argument>app</argument>
-										<argument>upgrade</argument>
-										<argument>${env.SENCHA_SDK}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.3.2</version>
-						<executions>
-							<execution>
-								<id>sencha-compile</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>${env.SENCHA_CMD}</executable>
-									<workingDirectory>${project.basedir}/src/main/extjs</workingDirectory>
-									<arguments>
-										<argument>app</argument>
-										<argument>build</argument>
-										<argument>--clean</argument>
-										<argument>--destination</argument>
-										<argument>${project.basedir}/src/resources/static/extapp</argument>
-										<!-- <argument>classic</argument> -->
-										<argument>${sencha.env}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
 			<id>default</id>
-			<activation>
-				<property>
-					<name>!skipFirstProfile</name>
-				</property>
-			</activation>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
 			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<version>${springboot.version}</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>repackage</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>${project.build.directory}/generated-resources</directory>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>${springboot.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-					<plugin>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>copy-resources</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<resources>
-										<resource>
-											<directory>${project.basedir}/src/resources</directory>
-											<includes>
-												<include>**</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
+                    <!-- Unpack fonts from font-awesome and bootstrap webjars -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.10</version>
+                        <executions>
+                            <execution>
+                                <id>unpack-fonts</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.webjars.bower</groupId>
+                                            <artifactId>font-awesome</artifactId>
+                                            <version>${fontAwesomeVersion}</version>
+                                            <type>jar</type>
+                                            <overWrite>false</overWrite>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.webjars</groupId>
+                                            <artifactId>bootstrap</artifactId>
+                                            <version>${bootstrapVersion}</version>
+                                            <type>jar</type>
+                                            <overWrite>false</overWrite>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <includes>**/fonts/**/*</includes>
+                                    <outputDirectory>${project.build.directory}/unpacked</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.7</version>
+                        <executions>
+                            <execution>
+                                <!-- Serves *only* to filter the wro.xml so it can get an absolute path for the 
+                                    project -->
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/wro</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/wro</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <!-- Copy unpacked fonts into generated-resources folder -->
+                            <execution>
+                                <id>copy-fonts</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/classes/static/fonts</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/unpacked/META-INF/resources/webjars/font-awesome/${fontAwesomeVersion}/fonts</directory>
+                                            <includes>
+                                                <include>**/*</include>
+                                            </includes>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                        <resource>
+                                            <directory>${project.build.directory}/unpacked/META-INF/resources/webjars/bootstrap/${bootstrapVersion}/fonts</directory>
+                                            <includes>
+                                                <include>**/*</include>
+                                            </includes>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>ro.isdc.wro4j</groupId>
+                        <artifactId>wro4j-maven-plugin</artifactId>
+                        <version>1.8.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <wroManagerFactory>ro.isdc.wro.maven.plugin.manager.factory.ConfigurableWroManagerFactory</wroManagerFactory>
+                            <cssDestinationFolder>${project.build.directory}/generated-resources/static/css</cssDestinationFolder>
+                            <jsDestinationFolder>${project.build.directory}/generated-resources/static/js</jsDestinationFolder>
+                            <wroFile>${project.build.directory}/wro/wro.xml</wroFile>
+                            <extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
+                            <contextFolder>${basedir}/src/main/wro</contextFolder>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.webjars</groupId>
+                                <artifactId>jquery</artifactId>
+                                <version>3.1.1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars</groupId>
+                                <artifactId>angularjs</artifactId>
+                                <version>1.5.8</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars</groupId>
+                                <artifactId>bootstrap</artifactId>
+                                <version>${bootstrapVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>font-awesome</artifactId>
+                                <version>${fontAwesomeVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>Chart.js</artifactId>
+                                <version>2.3.0</version>
+                            </dependency>
+
+                            <!-- angular plugins -->
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>angular-ui-router</artifactId>
+                                <version>0.3.1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>angular-bootstrap</artifactId>
+                                <version>2.2.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>angular-loading-bar</artifactId>
+                                <version>0.9.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>ocLazyLoad</artifactId>
+                                <version>1.0.9</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars.bower</groupId>
+                                <artifactId>angular-toggle-switch</artifactId>
+                                <version>1.3.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.webjars</groupId> <!-- bower version does not work for this dep... -->
+                                <artifactId>angular-chart.js</artifactId>
+                                <version>0.8.8</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
 			</build>
 		</profile>
 	</profiles>
