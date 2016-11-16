@@ -33,7 +33,7 @@ public class UserService {
         User user = new User();
 
         user.setCreatedOn(new Date());
-        user.setEmail(userDTO.getEmail());
+        user.setEmail(userDTO.getEmail().toLowerCase());
 
         String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
 
@@ -42,4 +42,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User findUserByEmail(final String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("email cannot be null");
+        }
+
+        return userRepository.findByEmail(email.toLowerCase());
+    }
 }

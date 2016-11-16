@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.UserDTO;
+import hu.elte.inetsense.server.data.entities.User;
 import hu.elte.inetsense.server.web.service.UserService;
 
 /**
@@ -18,6 +19,11 @@ import hu.elte.inetsense.server.web.service.UserService;
  */
 @RestController
 public class UserController {
+
+    private enum RegisterResponse {
+        OK,
+        USER_ALREADY_EXISTS;
+    }
 
     @Autowired
     private UserService userService;
@@ -33,8 +39,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@Valid @RequestBody final UserDTO user) {
+    public RegisterResponse register(@Valid @RequestBody final UserDTO user) {
+        User userEntity = userService.findUserByEmail(user.getEmail());
+        if (userEntity != null) {
+            return RegisterResponse.USER_ALREADY_EXISTS;
+        }
+
         userService.addUser(user);
+
+        return RegisterResponse.OK;
     }
 
 }
