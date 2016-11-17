@@ -52,6 +52,12 @@ public class ProbeConfiguration implements SchedulingConfigurer {
             configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_HOST, host);
             configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_PORT, port);
         } catch (UnavailableServiceException ue) {
+            
+            int port = Integer.parseInt(System.getProperty("collector.port"));
+            String host = System.getProperty("collector.host");
+            configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_HOST, host);
+            configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_PORT, port);
+            
         }
     }
 
