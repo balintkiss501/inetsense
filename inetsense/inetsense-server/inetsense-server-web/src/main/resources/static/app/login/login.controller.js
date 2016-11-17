@@ -53,12 +53,26 @@ angular.module('inetsense')
             self.registerError = false;
             self.registerSuccess = false;
 
-            $http.post('register', self.credentials).then(function() {
-                console.log("Register succeeded");
-                self.registerSuccess = true;
+            $http.post('register', self.credentials).then(function(result) {
+                var resultString = result.data;
+                console.log("Register result: " + resultString);
+
+                switch (resultString) {
+                case "OK":
+                    self.registerSuccess = true;
+                    break;
+                case "USER_ALREADY_EXISTS":
+                    self.registerError = true;
+                    self.registerErrorMsg = "A megadott e-mail címmel már létezik felhasználó a rendszerben.";
+                    break;
+                default:
+                    self.registerError = true;
+                    self.registerErrorMsg = "Hiba történt a regisztráció során.";
+                }
             }, function() {
                 console.log("Register failed");
                 self.registerError = true;
+                self.registerErrorMsg = "Hiba történt a regisztráció során."
             });
         };
 

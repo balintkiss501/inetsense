@@ -24,7 +24,7 @@
                     Hiba történt a bejelentkezés során. Kérjük, próbálja újra.
                 </div>
                 <div class="alert alert-danger" ng-show="controller.registerError">
-                    Hiba történt a regisztráció során.
+                    {{ controller.registerErrorMsg }}
                 </div>
                 <div class="alert alert-success" ng-show="controller.registerSuccess">
                    Sikeres regisztráció! Most már bejelentkezhet.
