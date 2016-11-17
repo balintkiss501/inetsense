@@ -45,20 +45,20 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     }
 
     private void fixURLConfiguration(ConfigurationProvider configurationProvider) {
+        int port = 0;
+        String host = null;
+        // FIXME: find proper way to check if we have jnlp basic service
+        // see: INS-65 for further information
         try {
             BasicService bs = (BasicService) ServiceManager.lookup("javax.jnlp.BasicService");
-            String host = bs.getCodeBase().getHost();
-            int port = bs.getCodeBase().getPort();
-            configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_HOST, host);
-            configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_PORT, port);
-        } catch (UnavailableServiceException ue) {
-            
-            int port = Integer.parseInt(System.getProperty("collector.port"));
-            String host = System.getProperty("collector.host");
-            configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_HOST, host);
-            configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_PORT, port);
-            
+            host = bs.getCodeBase().getHost();
+            port = bs.getCodeBase().getPort();
+        } catch (Throwable ue) {
+            port = Integer.parseInt(System.getProperty("collector.port"));
+            host = System.getProperty("collector.host");
         }
+        configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_HOST, host);
+        configurationProvider.changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_PORT, port);
     }
 
     @Override
