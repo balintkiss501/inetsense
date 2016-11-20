@@ -13,12 +13,8 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 @EnableScheduling
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = { "classpath:/META-INF/resources/",
-            "classpath:/resources/", "classpath:/static/extapp/", "classpath:/public/" };
-
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/").addResourceLocations("/index.html");
     }
 
@@ -29,4 +25,5 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         om.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
         return om;
     }
+
 }

@@ -7,28 +7,8 @@
  * Controller of the login-register form
  */
 angular.module('inetsense')
-    .controller('LoginController', function($rootScope, $http, $location) {
+    .controller('LoginController', function($scope, $http, $location) {
         var self = this;
-
-        var authenticate = function(credentials, callback) {
-
-            var headers = credentials ? {
-                authorization : "Basic "
-                    + btoa(credentials.email + ":"
-                        + credentials.password)
-            } : {};
-
-            $http.get('user', {
-                headers : headers
-            }).then(function(response) {
-                var authenticated = response.data.name ? true : false;
-                callback && callback(authenticated);
-            }, function() {
-                callback && callback(false);
-            });
-        }
-
-        authenticate();
 
         self.credentials = {};
         self.login = function() {
@@ -36,16 +16,23 @@ angular.module('inetsense')
             self.registerError = false;
             self.registerSuccess = false;
 
-            authenticate(self.credentials, function(authenticated) {
-                if (authenticated) {
+            var req = {
+                method: 'POST',
+                url: 'login',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({ email: self.credentials.email, password: self.credentials.password }),
+            };
+
+            $http(req).then(
+                function(response) {
                     console.log("Login succeeded");
                     $location.path("/dashboard");
-                } else {
+                },
+                function(response){
                     console.log("Login failed");
-                    $location.path("/login");
                     self.loginError = true;
                 }
-            })
+            );
         };
 
         self.register = function() {
@@ -73,15 +60,6 @@ angular.module('inetsense')
                 console.log("Register failed");
                 self.registerError = true;
                 self.registerErrorMsg = "Hiba történt a regisztráció során."
-            });
-        };
-
-        $rootScope.logout = function() {
-            $http.post('logout', {}).then(function() {
-                console.log("Logout succeeded");
-                $location.path("/");
-            }, function() {
-                console.log("Logout failed");
             });
         };
     });
