@@ -9,14 +9,21 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
+import hu.elte.inetsense.server.common.exception.InetsenseServiceException;
+import hu.elte.inetsense.server.data.ConfigurationRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
+import hu.elte.inetsense.server.data.entities.Configuration;
 import hu.elte.inetsense.server.data.entities.Probe;
+import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.web.util.UserUtils;
 
 /**
  *
@@ -26,50 +33,69 @@ import hu.elte.inetsense.server.data.entities.Probe;
 public class ProbeService {
 
     @Autowired
-    ProbeRepository            repo;
+    ProbeRepository                 repo;
 
-    private final SecureRandom random = new SecureRandom();
+    @Autowired
+    private ConfigurationRepository configurationRepository;
+
+    private final SecureRandom      random = new SecureRandom();
 
     @PostConstruct
     private void init() {
         random.setSeed(System.currentTimeMillis());
     }
 
-    public Probe addProbe() {
-        Probe probe = new Probe();
-        probe.setCreatedOn(Date.from(Instant.now()));
-        probe.setAuthId(nextAuthId());
-        probe = repo.save(probe);
-
-        return probe;
+    public List<Probe> getAllProbesOfCurrentUser() {
+        User user = UserUtils.getLoggedInUser();
+        return repo.findAllByUserId(user.getId());
     }
-    
-    public Probe addProbe(String authId){
+
+    public int getProbeCountLimit() {
+        Configuration conf = configurationRepository.findOne(ConfigurationNames.PROBE_LIMIT_PER_USER.getKey());
+        return Integer.parseInt(conf.getValue());
+    }
+
+    public Probe addProbe() throws InetsenseServiceException {
+        return addProbe(nextAuthId());
+    }
+
+    public Probe addProbe(final String authId) throws InetsenseServiceException {
+        User user = UserUtils.getLoggedInUser();
+
+        int probeCountLimit = getProbeCountLimit();
+        int currentProbeCountOfUser = repo.countByUserId(user.getId());
+
+        if (currentProbeCountOfUser >= probeCountLimit) {
+            throw new InetsenseServiceException("Tried to create a new probe for user with id [" + user.getId()
+                    + "] (already existing probes: " + currentProbeCountOfUser + ")");
+        }
+
         Probe probe = new Probe();
         probe.setCreatedOn(Date.from(Instant.now()));
         probe.setAuthId(authId);
+        probe.setUser(user);
         probe = repo.save(probe);
-        
+
         return probe;
     }
 
-    public Probe changeProbe(String authId, String newId){
+    public Probe changeProbe(final String authId, final String newId) {
         /*
-        Probe probe = repo.getProbe(authId);
-        
-        probe.setAuthId(newId);
-        probe = repo.save(probe);
-        
-        return probe;
-        */
-        
+         * Probe probe = repo.getProbe(authId);
+         *
+         * probe.setAuthId(newId);
+         * probe = repo.save(probe);
+         *
+         * return probe;
+         */
+
         Probe probe = new Probe();
         probe.setCreatedOn(Date.from(Instant.now()));
         probe.setAuthId(newId);
         probe = repo.save(probe);
         return probe;
     }
-    
+
     /**
      * Generate random authentication id for new probes
      *
@@ -85,8 +111,7 @@ public class ProbeService {
             next = new BigInteger(40, random);
             id = next.toString(32);
 
-            unique = repo.findOneByAuthId(id) == null;
-
+            unique = !repo.findOneByAuthId(id).isPresent();
         }
 
         return id;
