@@ -1,12 +1,11 @@
 package hu.elte.inetsense.probe;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import javax.jnlp.BasicService;
-import javax.jnlp.ServiceManager;
-import javax.jnlp.UnavailableServiceException;
-
+import hu.elte.inetsense.common.service.configuration.*;
+import hu.elte.inetsense.common.util.JsonConverter;
+import hu.elte.inetsense.probe.service.DownloadSpeedMeterService;
+import hu.elte.inetsense.probe.service.MeasurementService;
+import hu.elte.inetsense.probe.service.UploadSpeedMeterService;
+import hu.elte.inetsense.probe.view.ProbeView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,15 +14,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
-import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
-import hu.elte.inetsense.common.service.configuration.ClockService;
-import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
-import hu.elte.inetsense.common.service.configuration.EnvironmentService;
-import hu.elte.inetsense.common.util.JsonConverter;
-import hu.elte.inetsense.probe.service.DownloadSpeedMeterService;
-import hu.elte.inetsense.probe.service.MeasurementService;
-import hu.elte.inetsense.probe.service.UploadSpeedMeterService;
+import javax.jnlp.BasicService;
+import javax.jnlp.ServiceManager;
+import javax.jnlp.UnavailableServiceException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Configuration
 @ComponentScan(value = "hu.elte.inetsense.probe")
@@ -97,5 +92,15 @@ public class ProbeConfiguration implements SchedulingConfigurer {
             ClockService clockService, JsonConverter jsonConverter) {
         return new MeasurementService(configurationProvider, downloadSpeedMeterService, uploadSpeedMeterService,
                 clockService, jsonConverter);
+    }
+
+    @Bean
+    public ProbeView probeView(EnvironmentService environmentService) {
+        String headless = System.getProperty("headless");
+
+        if (headless != null && !headless.isEmpty() && headless.equals("true")) {
+            return null;
+        }
+        return new ProbeView(environmentService);
     }
 }
