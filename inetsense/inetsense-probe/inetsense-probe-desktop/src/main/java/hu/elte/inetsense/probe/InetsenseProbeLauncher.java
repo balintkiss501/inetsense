@@ -1,19 +1,21 @@
 
 package hu.elte.inetsense.probe;
 
-import hu.elte.inetsense.probe.controller.InetsenseProbeController;
-import hu.elte.inetsense.probe.view.ProbeView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
+import hu.elte.inetsense.probe.controller.InetsenseProbeController;
+import hu.elte.inetsense.probe.view.ProbeView;
 
 public class InetsenseProbeLauncher {
 
-    private static final Logger log = LogManager.getLogger();
-
+	// !!!!!  WARNING !!!!! 
+	// logger cannot be used before spring context is created!!!
+	// !!!!!!!!!!!!!!!!!!!!
+	
     public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(

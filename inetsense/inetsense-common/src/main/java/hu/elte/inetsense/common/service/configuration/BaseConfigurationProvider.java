@@ -25,24 +25,16 @@ public abstract class BaseConfigurationProvider {
     
     private static final Logger log = LogManager.getLogger();
 
-    public void initLocalConfiguration() {
-        log.info("Initializing local configuration...");
+    public void loadConfiguration() {
+        log.info("Initializing configuration...");
         try {
             setupRuntimeConfig();
+            doLoadConfiguration();
         } catch (ConfigurationException e) {
-            log.fatal("Unable to initialize local configuration!", e);
+            log.fatal("Unable to initialize configuration!", e);
         }
     }
     
-    public void loadConfiguration() {
-        log.info("Loading configuration...");
-        try {
-            doLoadConfiguration();
-        } catch (ConfigurationException e) {
-            log.fatal("Unable to load default configuration!", e);
-        }
-    }
-
     private void setupRuntimeConfig() throws ConfigurationException {
         runtimeConfigurationBuilder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                 PropertiesConfiguration.class).configure();
@@ -66,8 +58,10 @@ public abstract class BaseConfigurationProvider {
         Parameters params = new Parameters();
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                 PropertiesConfiguration.class)
-                        .configure(params.fileBased().setURL(defaultConfigurationURL)
-                                .setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+                        .configure(
+                        	params.fileBased()
+                        		  .setListDelimiterHandler(new DefaultListDelimiterHandler(','))
+                        		  .setURL(defaultConfigurationURL));
         config.addConfiguration(builder.getConfiguration());
     }
 

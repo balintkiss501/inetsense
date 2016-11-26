@@ -60,7 +60,7 @@ public class InetsenseProbeController {
             if (probeId == null) {
                 int confirmResult = JOptionPane.showConfirmDialog(null, "Would you like to close this window?", null, JOptionPane.YES_NO_OPTION);
                 if (confirmResult == JOptionPane.YES_OPTION) {
-                    return false;
+                	System.exit(0);
                 }
             } else {
                 configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID, probeId);

@@ -16,7 +16,6 @@ public class UploadServerConfigurationProvider extends ConfigurationProvider {
     @Override
     @PostConstruct
     public void loadConfiguration() {
-    	initLocalConfiguration();
         super.loadConfiguration();
     }
     
