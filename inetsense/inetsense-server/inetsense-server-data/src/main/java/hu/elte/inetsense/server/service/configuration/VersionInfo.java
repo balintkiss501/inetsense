@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.collector.util;
+package hu.elte.inetsense.server.service.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

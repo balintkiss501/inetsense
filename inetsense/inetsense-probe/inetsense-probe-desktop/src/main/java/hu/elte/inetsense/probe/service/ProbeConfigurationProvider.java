@@ -5,15 +5,11 @@ import javax.jnlp.ServiceManager;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
+import hu.elte.inetsense.common.service.configuration.CollectorLocationAwareConfigurationProvider;
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
 import hu.elte.inetsense.common.service.configuration.EnvironmentService;
-import hu.elte.inetsense.common.util.PropertyUtil;
 
-public class ProbeConfigurationProvider extends ConfigurationProvider {
-
-	private String collectorHost;
-	private int collectorPort;
+public class ProbeConfigurationProvider extends CollectorLocationAwareConfigurationProvider {
 	
 	public ProbeConfigurationProvider(EnvironmentService environmentService) {
 		super(environmentService);
@@ -21,20 +17,18 @@ public class ProbeConfigurationProvider extends ConfigurationProvider {
 	
 	@Override
     protected void doLoadConfiguration() throws ConfigurationException {
-		fixURLConfiguration();
-        loadDefaultConfiguration();
-        loadEnvironmentConfigurationFromFile();
+        super.doLoadConfiguration();
         storeFixedUrlConfiguration();
     }
 	
-	private void fixURLConfiguration() {
+	@Override
+	protected void fixURLConfiguration() {
         try {
             BasicService bs = (BasicService) ServiceManager.lookup("javax.jnlp.BasicService");
             collectorHost = bs.getCodeBase().getHost();
             collectorPort = bs.getCodeBase().getPort();
         } catch (Throwable ue) {
-        	collectorPort = PropertyUtil.getIntProperty("collector.port");
-        	collectorHost = PropertyUtil.getProperty("collector.host");
+        	fixURLConfigurationFromProperty();
         }
     }
 
@@ -42,9 +36,5 @@ public class ProbeConfigurationProvider extends ConfigurationProvider {
 		changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_HOST, collectorHost);
 		changeLocalProperty(ConfigurationNames.COLLECTOR_SERVER_PORT, collectorPort);
 	}
-	
-	public String getCollectorBaseURL() {
-        return String.format("http://%s:%d", collectorHost, collectorPort);
-    }
 
 }
