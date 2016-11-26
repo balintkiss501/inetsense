@@ -9,6 +9,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
+import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
+import hu.elte.inetsense.server.service.configuration.VersionInfo;
+
 @Configuration
 @EnableScheduling
 public class AppConfig extends WebMvcConfigurerAdapter {
@@ -24,6 +27,16 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         ObjectMapper om = new ObjectMapper();
         om.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
         return om;
+    }
+
+    @Bean
+    public ServerConfigurationProvider serverConfigurationProvider() {
+        return new ServerConfigurationProvider();
+    }
+
+    @Bean
+    public VersionInfo versionInfo() {
+        return new VersionInfo();
     }
 
 }

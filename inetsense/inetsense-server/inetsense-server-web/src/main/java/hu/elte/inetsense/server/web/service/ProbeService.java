@@ -18,11 +18,10 @@ import org.springframework.stereotype.Service;
 
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.server.common.exception.InetsenseServiceException;
-import hu.elte.inetsense.server.data.ConfigurationRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
-import hu.elte.inetsense.server.data.entities.Configuration;
 import hu.elte.inetsense.server.data.entities.Probe;
 import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
 import hu.elte.inetsense.server.web.util.UserUtils;
 
 /**
@@ -33,12 +32,12 @@ import hu.elte.inetsense.server.web.util.UserUtils;
 public class ProbeService {
 
     @Autowired
-    ProbeRepository                 repo;
+    ProbeRepository                     repo;
 
     @Autowired
-    private ConfigurationRepository configurationRepository;
+    private ServerConfigurationProvider configProvider;
 
-    private final SecureRandom      random = new SecureRandom();
+    private final SecureRandom          random = new SecureRandom();
 
     @PostConstruct
     private void init() {
@@ -51,8 +50,7 @@ public class ProbeService {
     }
 
     public int getProbeCountLimit() {
-        Configuration conf = configurationRepository.findOne(ConfigurationNames.PROBE_LIMIT_PER_USER.getKey());
-        return Integer.parseInt(conf.getValue());
+        return configProvider.getInt(ConfigurationNames.PROBE_LIMIT_PER_USER);
     }
 
     public Probe addProbe() throws InetsenseServiceException {
