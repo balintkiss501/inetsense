@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.server.collector.service.impl.CollectorConfigurationProvider;
+import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
 
 @Controller
 @RequestMapping("/Inetsense-Client")
@@ -21,7 +21,7 @@ import hu.elte.inetsense.server.collector.service.impl.CollectorConfigurationPro
 public class JWSClientController {
 
     @Autowired
-    private CollectorConfigurationProvider configurationProvider;
+    private ServerConfigurationProvider configurationProvider;
 
     @RequestMapping(method = RequestMethod.GET)
     public String showClient(Model model) {

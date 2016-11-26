@@ -16,7 +16,7 @@ public class ConfigurationProvider extends BaseConfigurationProvider {
 
     private static final Logger log = LogManager.getLogger();
 
-    private FileBasedConfigurationBuilder<FileBasedConfiguration> localConfigurationBuilder;
+    protected FileBasedConfigurationBuilder<FileBasedConfiguration> localConfigurationBuilder;
 
     public ConfigurationProvider(EnvironmentService environmentService) {
         this.environmentService = environmentService;
@@ -31,7 +31,7 @@ public class ConfigurationProvider extends BaseConfigurationProvider {
         loadEnvironmentConfigurationFromFile();
     }
 
-    private void loadEnvironmentConfigurationFromFile() throws ConfigurationException {
+    protected void loadEnvironmentConfigurationFromFile() throws ConfigurationException {
         String probeConfiguration = environmentService.getConfigurationFilePath();
         localConfigurationBuilder = loadConfigurationFromPropertyFile(probeConfiguration);
     }

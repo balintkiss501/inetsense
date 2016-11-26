@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.server.collector.service.impl.CollectorConfigurationProvider;
+import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
 
 @RestController
 @RequestMapping("/configuration.properties")
 public class ConfigurationController {
 
     @Autowired
-    private CollectorConfigurationProvider configurationProvider;
+    private ServerConfigurationProvider configurationProvider;
 
     @RequestMapping(method = RequestMethod.GET)
     public String processMessage() {

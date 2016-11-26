@@ -1,23 +1,21 @@
 package hu.elte.inetsense.probe.controller;
 
-import java.util.Objects;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.JOptionPane;
-
+import hu.elte.inetsense.common.service.configuration.ClockService;
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
+import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
+import hu.elte.inetsense.common.util.HTTPUtil;
+import hu.elte.inetsense.probe.service.MeasurementService;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import hu.elte.inetsense.common.service.configuration.ClockService;
-import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
-import hu.elte.inetsense.common.util.HTTPUtil;
-import hu.elte.inetsense.probe.service.MeasurementService;
+import javax.swing.*;
+import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class InetsenseProbeController {
@@ -36,24 +34,39 @@ public class InetsenseProbeController {
     @Autowired
     private ClockService clockService;
 
+    private boolean guiEnabled;
+
     public void start() {
         printProbeInformation();
-        initProbeId();
-        ScheduledExecutorService ses = (ScheduledExecutorService) taskExecutor;
-        int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
-        int timeDelay = 10 * 60 * 1000;
-        ses.scheduleWithFixedDelay(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
-        ses.scheduleWithFixedDelay(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
+        if (initProbeId()) {
+            ScheduledExecutorService ses = (ScheduledExecutorService) taskExecutor;
+            int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
+            int timeDelay = 10 * 60 * 1000;
+            ses.scheduleWithFixedDelay(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
+            ses.scheduleWithFixedDelay(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
+        }
     }
 
-
-    private void initProbeId() {
+    private boolean initProbeId() {
         String probeId = configurationProvider.getString(ConfigurationNames.PROBE_ID);
         while (isDefaultProbeId(probeId) || !isExistingProbe(probeId)) {
             log.info("Pobe ID is not valid: {}", probeId);
+
+            if (!guiEnabled) {
+                return false;
+            }
+
             probeId = JOptionPane.showInputDialog("Enter probe id");
-            configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID, probeId);
+            if (probeId == null) {
+                int confirmResult = JOptionPane.showConfirmDialog(null, "Would you like to close this window?", null, JOptionPane.YES_NO_OPTION);
+                if (confirmResult == JOptionPane.YES_OPTION) {
+                	System.exit(0);
+                }
+            } else {
+                configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID, probeId);
+            }
         }
+        return true;
     }
 
     private boolean isExistingProbe(String probeId) {
@@ -80,4 +93,7 @@ public class InetsenseProbeController {
         log.info("=====================================================================");
     }
 
+    public void setGuiEnabled(boolean enabled) {
+        guiEnabled = enabled;
+    }
 }

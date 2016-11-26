@@ -12,19 +12,40 @@ import hu.elte.inetsense.probe.view.ProbeView;
 
 public class InetsenseProbeLauncher {
 
-    public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
+	// !!!!! WARNING !!!!!
+	// logger cannot be used before spring context is created!!!
+	// !!!!!!!!!!!!!!!!!!!!
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-                ProbeConfiguration.class)) {
-            context.registerShutdownHook();
-            SwingUtilities.invokeAndWait(() -> {
-                ProbeView view = context.getBean(ProbeView.class);
-                view.setVisible(true);
-            });
-            InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
-            app.start();
-        }
+	public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ProbeConfiguration.class);
+		context.registerShutdownHook();
+		InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
+		initView(context, app);
+		app.start();
+		registerShutdownHook(context);
+	}
 
-    }
+	private static void initView(AnnotationConfigApplicationContext context, InetsenseProbeController app)
+			throws InterruptedException, InvocationTargetException {
+		ProbeView view = context.getBean(ProbeView.class);
 
+		if (view == null) {
+			app.setGuiEnabled(false);
+		} else {
+			app.setGuiEnabled(true);
+			SwingUtilities.invokeAndWait(() -> {
+				view.setVisible(true);
+			});
+		}
+	}
+
+	private static void registerShutdownHook(AnnotationConfigApplicationContext context) {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    public void run() {
+		    	if(context != null) {
+		    		context.close();
+		    	}
+		    }
+		});
+	}
 }

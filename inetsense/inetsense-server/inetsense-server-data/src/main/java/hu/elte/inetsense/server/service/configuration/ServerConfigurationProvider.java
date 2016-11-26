@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.collector.service.impl;
+package hu.elte.inetsense.server.service.configuration;
 
 import java.util.List;
 
@@ -6,16 +6,16 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.server.collector.util.VersionInfo;
 import hu.elte.inetsense.server.data.ConfigurationRepository;
 import hu.elte.inetsense.server.data.entities.Configuration;
 
 @Component
-public class CollectorConfigurationProvider extends BaseConfigurationProvider {
+public class ServerConfigurationProvider extends BaseConfigurationProvider {
 
     @Autowired
     private ConfigurationRepository configurationRepository;
@@ -26,15 +26,20 @@ public class CollectorConfigurationProvider extends BaseConfigurationProvider {
     @Override
     @PostConstruct
     public void loadConfiguration() {
-    	initLocalConfiguration();
         super.loadConfiguration();
     }
     
     @Override
     protected void doLoadConfiguration() throws ConfigurationException {
-        List<Configuration> configs = configurationRepository.findAll();
-        configs.forEach(c -> addRuntimeProperty(c.getKey(), c.getValue()));
+        loadConfigurationFromDatabase();
         addRuntimeProperty(ConfigurationNames.INETSENSE_PROJECT_VERSION.getKey(), versionInfo.getVersion());
         addRuntimeProperty(ConfigurationNames.INETSENSE_PROJECT_BUILD_DATE.getKey(), versionInfo.getBuilddate());
     }
+
+
+    @Scheduled(initialDelay = 10 * 60 * 1000, fixedRate = 10 * 60 * 1000)
+	private void loadConfigurationFromDatabase() {
+		List<Configuration> configs = configurationRepository.findAll();
+        configs.forEach(c -> addRuntimeProperty(c.getKey(), c.getValue()));
+	}
 }
