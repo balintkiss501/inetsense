@@ -8,8 +8,8 @@ package hu.elte.inetsense.server.web.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +33,7 @@ import hu.elte.inetsense.server.web.service.ProbeService;
 @RequestMapping("/probes")
 public class ProbeAdministrationController {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LogManager.getLogger();
 
     @Autowired
     ProbeService         service;
