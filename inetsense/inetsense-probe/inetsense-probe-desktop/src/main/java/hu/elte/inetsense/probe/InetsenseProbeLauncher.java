@@ -12,28 +12,40 @@ import hu.elte.inetsense.probe.view.ProbeView;
 
 public class InetsenseProbeLauncher {
 
-	// !!!!!  WARNING !!!!! 
+	// !!!!! WARNING !!!!!
 	// logger cannot be used before spring context is created!!!
 	// !!!!!!!!!!!!!!!!!!!!
-	
-    public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-                ProbeConfiguration.class)) {
-            context.registerShutdownHook();
-            InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
-            ProbeView view = context.getBean(ProbeView.class);
+	public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ProbeConfiguration.class);
+		context.registerShutdownHook();
+		InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
+		initView(context, app);
+		app.start();
+		registerShutdownHook(context);
+	}
 
-            if (view == null) {
-                app.setGuiEnabled(false);
-            } else {
-                app.setGuiEnabled(true);
-                SwingUtilities.invokeAndWait(() -> {
-                    view.setVisible(true);
-                });
-            }
+	private static void initView(AnnotationConfigApplicationContext context, InetsenseProbeController app)
+			throws InterruptedException, InvocationTargetException {
+		ProbeView view = context.getBean(ProbeView.class);
 
-            app.start();
-        }
-    }
+		if (view == null) {
+			app.setGuiEnabled(false);
+		} else {
+			app.setGuiEnabled(true);
+			SwingUtilities.invokeAndWait(() -> {
+				view.setVisible(true);
+			});
+		}
+	}
+
+	private static void registerShutdownHook(AnnotationConfigApplicationContext context) {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    public void run() {
+		    	if(context != null) {
+		    		context.close();
+		    	}
+		    }
+		});
+	}
 }
