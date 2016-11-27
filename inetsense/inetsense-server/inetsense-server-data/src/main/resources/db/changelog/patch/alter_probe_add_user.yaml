@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter_probe_add_user
+      author: zsoltistvanfi
+      changes:
+        - addColumn:
+            tableName: probe
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_probe_user
+                    references: user(user_id)

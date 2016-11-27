@@ -61,4 +61,8 @@ public class InetsenseUserDetails implements UserDetails {
         return true;
     }
 
+    public User getUser() {
+        return user;
+    }
+
 }

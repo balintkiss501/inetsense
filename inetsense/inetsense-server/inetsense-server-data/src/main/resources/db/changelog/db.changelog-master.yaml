@@ -14,3 +14,9 @@ databaseChangeLog:
   - include:
       file: patch/create_table_user.yaml
       relativeToChangelogFile: true
+  - include:
+      file: patch/alter_probe_add_user.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/insert_into_configuration_probe_limit.yaml
+      relativeToChangelogFile: true
