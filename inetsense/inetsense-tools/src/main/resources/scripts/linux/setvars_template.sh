@@ -30,6 +30,8 @@ CLOCK_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=$CLOCK_DEBUG
 CLOCK_JAVA_OPT="$CLOCK_JAVA_OPT -Dspring.config.location=clock-server.properties"
 
 UPLOAD_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=$UPLOAD_DEBUG_PORT,suspend=n"
+UPLOAD_JAVA_OPT="$UPLOAD_JAVA_OPT -Dcollector.host=localhost"
+UPLOAD_JAVA_OPT="$UPLOAD_JAVA_OPT -Dcollector.port=8082"
 
 WEB_JAVA_OPT="-agentlib:jdwp=transport=dt_socket,server=y,address=$WEB_DEBUG_PORT,suspend=n"
 WEB_JAVA_OPT="$WEB_JAVA_OPT -Dspring.datasource.url=$DB_URL?autoReconnect=true&useSSL=false"
