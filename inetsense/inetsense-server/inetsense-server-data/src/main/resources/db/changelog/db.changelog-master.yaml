@@ -18,6 +18,9 @@ databaseChangeLog:
       file: patch/create_table_role.yaml
       relativeToChangelogFile: true
   - include:
+      file: patch/insert_into_roles.yaml
+      relativeToChangelogFile: true
+  - include:
       file: patch/create_table_user_role.yaml
       relativeToChangelogFile: true
   - include:
