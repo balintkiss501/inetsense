@@ -15,6 +15,12 @@ databaseChangeLog:
       file: patch/create_table_user.yaml
       relativeToChangelogFile: true
   - include:
+      file: patch/create_table_role.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/create_table_user_role.yaml
+      relativeToChangelogFile: true
+  - include:
       file: patch/alter_probe_add_user.yaml
       relativeToChangelogFile: true
   - include:
