@@ -1,5 +1,24 @@
 package hu.elte.inetsense.server.collector;
 
+import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.jms.core.JmsTemplate;
+
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.impl.ProbeDataServiceImpl;
@@ -7,21 +26,6 @@ import hu.elte.inetsense.server.data.MeasurementRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
 import hu.elte.inetsense.server.data.entities.Measurement;
 import hu.elte.inetsense.server.data.entities.Probe;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.AdditionalMatchers.not;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Zsolt Istvanfi
@@ -33,6 +37,8 @@ public class ProbeDataServiceTest {
 
     @Mock
     private MeasurementRepository measurementRepository;
+    @Mock
+    private JmsTemplate jmsTemplate;
 
     @InjectMocks
     private ProbeDataServiceImpl probeDataService;
@@ -89,26 +95,6 @@ public class ProbeDataServiceTest {
             measurementRepositoryList.add(measurement);
             return null;
         }).when(measurementRepository).save(any(Measurement.class));
-    }
-
-    @Test
-    public void testSaveProbeData() {
-        assertTrue(measurementRepositoryList.isEmpty());
-
-        probeDataService.saveProbeData(probeData);
-
-        assertEquals(measurementRepositoryList.size(), 2);
-
-        for (int i = 0; i < probeData.getMeasurements().size(); ++i) {
-            Measurement measurement = measurementRepositoryList.get(i);
-            MeasurementDTO measurementDTO = probeData.getMeasurements().get(i);
-
-            assertEquals(measurement.getCompletedOn().getTime(), measurementDTO.getCompletedOn().getTime());
-            assertEquals(measurement.getDownloadSpeed(), measurementDTO.getDownloadSpeed());
-            assertEquals(measurement.getUploadSpeed(), measurementDTO.getUploadSpeed());
-            assertEquals(measurement.getLatitude(), measurementDTO.getLat());
-            assertEquals(measurement.getLongitude(), measurementDTO.getLng());
-        }
     }
 
     @Test(expected = NoSuchElementException.class)

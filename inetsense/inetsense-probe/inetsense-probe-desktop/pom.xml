@@ -108,8 +108,8 @@
 							<executable>${env.JAVA_HOME}\bin\jarsigner</executable>
 							<workingDirectory>${project.build.directory}</workingDirectory>
 							<arguments>
-								<argument>-tsa</argument>
-								<argument>http://timestamp.digicert.com</argument>
+<!-- 								<argument>-tsa</argument> -->
+<!-- 								<argument>http://timestamp.digicert.com</argument> -->
 								<argument>-keystore</argument>
 								<argument>classes/jnlp/inetsenseStore</argument>
 								<argument>-storepass</argument>

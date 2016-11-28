@@ -7,12 +7,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
+import hu.elte.inetsense.server.collector.service.message.MeasurementReciever;
 import hu.elte.inetsense.server.data.MeasurementRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
 import hu.elte.inetsense.server.data.entities.Measurement;
@@ -32,6 +34,9 @@ public class ProbeDataServiceImpl implements ProbeDataService {
     
     @Autowired
     private MeasurementRepository measurementRepository;
+    
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @Override
     @Transactional(readOnly = false)
@@ -40,10 +45,16 @@ public class ProbeDataServiceImpl implements ProbeDataService {
 
         for (MeasurementDTO measurementDTO : probeData.getMeasurements()) {
             Measurement measurement = measurementDto2Entity(probe, measurementDTO);
-            measurementRepository.save(measurement);
+        	jmsTemplate.convertAndSend(MeasurementReciever.DESTINATION, measurement);
         }
     }
 
+	@Override
+    @Transactional(readOnly = false)
+	public void processMeasurement(Measurement measurement) {
+		measurementRepository.save(measurement);
+	}
+	
     private Probe getProbe(final String authId) {
         Optional<Probe> optionalProbe = probeRepository.findOneByAuthId(authId);
         Probe probe = optionalProbe.orElseThrow(() -> {
