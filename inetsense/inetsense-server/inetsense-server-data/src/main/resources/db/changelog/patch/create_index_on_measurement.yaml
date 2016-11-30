@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_index_on_measurement
+      author: zoltantorok
+      changes:
+        - createIndex:
+            tableName: measurement
+            columns:
+              - column:
+                  name: completed_on
+                  type: timestamp
+            indexName: idx_completed_on
+        - createIndex:
+            tableName: measurement
+            columns:
+              - column:
+                  name: probe_id
+                  type: bigint 
+          indexName: idx_probe_id

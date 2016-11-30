@@ -29,3 +29,6 @@ databaseChangeLog:
   - include:
       file: patch/insert_into_configuration_probe_limit.yaml
       relativeToChangelogFile: true
+  - include:
+      file: patch/create_index_on_measurement.yaml
+      relativeToChangelogFile: true
