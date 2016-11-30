@@ -33,7 +33,6 @@ public class UserRole implements Serializable {
         this.user_id = user_id;
     }
 
-    @Id
     @Column(name = "role_id")
     public Long getRoleId() {
         return role_id;
