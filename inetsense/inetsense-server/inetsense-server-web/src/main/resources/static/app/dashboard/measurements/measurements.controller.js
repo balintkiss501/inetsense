@@ -7,7 +7,10 @@
  * Controller of the measurements screen
  */
 angular.module('inetsense')
-    .controller('MeasurementsController', function ($scope, $cacheFactory, $http) {
-        var cF = $cacheFactory('myCache');
-        console.log("User's role in Meas: " + cF.get('roleCache'));
+    .controller('MeasurementsController', function ($scope, $rootScope, $window, $http) {
+    console.log("Role (Meas): " + $rootScope.userRole);
+    if ($rootScope.userRole == "ADMIN") {
+        console.log("Admin...");
+        $window.location.href = "#/dashboard";
+    }
 });
