@@ -26,18 +26,19 @@ import hu.elte.inetsense.common.util.InetsenseUtil;
 public class DownloadSpeedMeterService implements SpeedMeterService {
 
     private static final Logger log = LogManager.getLogger();
-    private static int threadCount = 2;
+    private int threadCount;
     private BaseConfigurationProvider configurationProvider;
     private Random rnd = new Random();
 
     public DownloadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         this.configurationProvider = configurationProvider;
+        this.threadCount = configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_THREAD_COUNT);
     }
 
     @Override
     public long measure() throws Exception {
         long downloadSpeed = 0;
-        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        ExecutorService executor = Executors.newFixedThreadPool(this.threadCount);
         List<Future<Long>> downloadFutures = getDownloadFutures(executor);
         executor.shutdown();
         try{
@@ -55,7 +56,7 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
     
     private Long getDownloadSpeed(List<Future<Long>> downloadFutures) throws Exception{
         long downloadSpeed = 0;
-        for(int i =0 ; i < threadCount; ++i){
+        for(int i =0 ; i < this.threadCount; ++i){
             Future<Long> downloadFuture = downloadFutures.get(i);
             downloadSpeed += downloadFuture.get();
         }

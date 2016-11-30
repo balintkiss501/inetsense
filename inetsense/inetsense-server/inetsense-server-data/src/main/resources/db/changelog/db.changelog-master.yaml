@@ -23,3 +23,6 @@ databaseChangeLog:
   - include:
       file: patch/insert_into_configuration_probe_limit.yaml
       relativeToChangelogFile: true
+  - include:
+      file: patch/insert_into_configuration_probe_download_thread_count.yaml
+      relativeToChangelogFile: true
