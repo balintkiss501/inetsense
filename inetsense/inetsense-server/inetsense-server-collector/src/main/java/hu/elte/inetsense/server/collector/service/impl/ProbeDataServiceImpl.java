@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
-import hu.elte.inetsense.server.collector.service.message.MeasurementReciever;
+import hu.elte.inetsense.server.collector.service.message.ProbeDataReceiver;
 import hu.elte.inetsense.server.data.MeasurementRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
 import hu.elte.inetsense.server.data.entities.Measurement;
@@ -39,20 +39,28 @@ public class ProbeDataServiceImpl implements ProbeDataService {
     private JmsTemplate jmsTemplate;
 
     @Override
-    @Transactional(readOnly = false)
-    public void saveProbeData(final ProbeDataDTO probeData) {
-        Probe probe = getProbe(probeData.getProbeAuthId());
-
-        for (MeasurementDTO measurementDTO : probeData.getMeasurements()) {
-            Measurement measurement = measurementDto2Entity(probe, measurementDTO);
-        	jmsTemplate.convertAndSend(MeasurementReciever.DESTINATION, measurement);
-        }
+    @Transactional(readOnly = true)
+    public void saveProbeData(ProbeDataDTO probeData) {
+        validateProbeData(probeData);
+    	jmsTemplate.convertAndSend(ProbeDataReceiver.DESTINATION, probeData);
     }
 
 	@Override
     @Transactional(readOnly = false)
-	public void processMeasurement(Measurement measurement) {
-		measurementRepository.save(measurement);
+	public void processProbeData(ProbeDataDTO probeData) {
+		Probe probe = getProbe(probeData.getProbeAuthId());
+		for (MeasurementDTO measurementDTO : probeData.getMeasurements()) {
+          processMeasurement(probe, measurementDTO);
+		}
+	}
+
+	private void processMeasurement(Probe probe, MeasurementDTO measurementDTO) {
+		Measurement measurement = measurementDto2Entity(probe, measurementDTO);
+        measurementRepository.save(measurement);
+	}
+
+	private void validateProbeData(final ProbeDataDTO probeData) {
+		getProbe(probeData.getProbeAuthId());
 	}
 	
     private Probe getProbe(final String authId) {

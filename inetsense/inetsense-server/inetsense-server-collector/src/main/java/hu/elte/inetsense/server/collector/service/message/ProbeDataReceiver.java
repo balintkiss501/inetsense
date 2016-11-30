@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
+import hu.elte.inetsense.common.dtos.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
-import hu.elte.inetsense.server.data.entities.Measurement;
 
 @Component
-public class MeasurementReciever {
+public class ProbeDataReceiver {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     
@@ -20,8 +20,8 @@ public class MeasurementReciever {
     private ProbeDataService probeDataService;
     
 	@JmsListener(destination = DESTINATION, concurrency = "1-10", containerFactory = "inetsenseJmsFactory")
-	public void onMessage(Measurement measurement) {
-		log.info("Recieved meausrement for probe: " + measurement.getProbe().getAuthId());
-		probeDataService.processMeasurement(measurement);
+	public void onMessage(ProbeDataDTO probeData) {
+		log.info("Recieved meausrement for probe: " + probeData.getProbeAuthId());
+		probeDataService.processProbeData(probeData);
 	}
 }
