@@ -7,13 +7,9 @@ databaseChangeLog:
             tableName: measurement
             columns:
               - column:
+                  name: probe_id
+                  type: bigint
+              - column:
                   name: completed_on
                   type: timestamp
-            indexName: idx_completed_on
-        - createIndex:
-            tableName: measurement
-            columns:
-              - column:
-                  name: probe_id
-                  type: bigint 
-          indexName: idx_probe_id
+            indexName: idx_measurement
