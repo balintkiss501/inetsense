@@ -82,6 +82,7 @@ public class ProbeDataServiceImpl implements ProbeDataService {
         measurement.setUploadSpeed(measurementDTO.getUploadSpeed());
         measurement.setLatitude(measurementDTO.getLat());
         measurement.setLongitude(measurementDTO.getLng());
+        measurement.setIsp(measurementDTO.getIsp());
         return measurement;
     }
 

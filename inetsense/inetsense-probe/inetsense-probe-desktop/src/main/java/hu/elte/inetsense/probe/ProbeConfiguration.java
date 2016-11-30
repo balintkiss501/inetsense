@@ -19,6 +19,7 @@ import hu.elte.inetsense.common.util.JsonConverter;
 import hu.elte.inetsense.common.util.PropertyUtil;
 import hu.elte.inetsense.probe.service.DownloadSpeedMeterService;
 import hu.elte.inetsense.probe.service.MeasurementService;
+import hu.elte.inetsense.probe.service.IspService;
 import hu.elte.inetsense.probe.service.ProbeConfigurationProvider;
 import hu.elte.inetsense.probe.service.UploadSpeedMeterService;
 import hu.elte.inetsense.probe.view.ProbeView;
@@ -69,13 +70,18 @@ public class ProbeConfiguration implements SchedulingConfigurer {
     public JsonConverter jsonConverter(BaseConfigurationProvider configurationProvider) {
         return new JsonConverter();
     }
+    
+    @Bean
+    public IspService ispService(BaseConfigurationProvider configurationProvider) {
+        return new IspService();
+    }
 
     @Bean
     public MeasurementService measurementService(ConfigurationProvider configurationProvider,
             DownloadSpeedMeterService downloadSpeedMeterService, UploadSpeedMeterService uploadSpeedMeterService,
-            ClockService clockService, JsonConverter jsonConverter) {
+            ClockService clockService, IspService ispService, JsonConverter jsonConverter) {
         return new MeasurementService(configurationProvider, downloadSpeedMeterService, uploadSpeedMeterService,
-                clockService, jsonConverter);
+                clockService, ispService, jsonConverter);
     }
 
     @Bean

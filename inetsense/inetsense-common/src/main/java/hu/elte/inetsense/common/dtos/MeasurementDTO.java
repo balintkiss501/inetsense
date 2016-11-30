@@ -32,6 +32,8 @@ public class MeasurementDTO implements Serializable {
 
     @Min(value = 0, message = "Upload speed cannot be negative!")
     private Long uploadSpeed;
+    
+    private String isp=null;
 
     public Double getLat() {
         return lat;
@@ -71,6 +73,14 @@ public class MeasurementDTO implements Serializable {
 
     public void setUploadSpeed(Long uploadSpeed) {
         this.uploadSpeed = uploadSpeed;
+    }
+    
+    public String getIsp() {
+        return isp;
+    }
+
+    public void setIsp(String isp) {
+        this.isp = isp;
     }
 
 }

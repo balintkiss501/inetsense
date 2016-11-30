@@ -15,6 +15,9 @@ databaseChangeLog:
       file: patch/create_table_user.yaml
       relativeToChangelogFile: true
   - include:
+      file: patch/INS-42_ISP.yaml
+      relativeToChangelogFile: true
+  - include:
       file: patch/alter_probe_add_user.yaml
       relativeToChangelogFile: true
   - include:

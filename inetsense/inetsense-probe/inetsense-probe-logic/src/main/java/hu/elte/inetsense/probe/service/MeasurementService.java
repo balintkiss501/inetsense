@@ -47,17 +47,19 @@ public class MeasurementService {
     private ConfigurationProvider configurationProvider;
     private DownloadSpeedMeterService downloadSpeedMeterService;
     private UploadSpeedMeterService uploadSpeedMeterService;
+    private IspService ispService;
     private ClockService clockService;
     private JsonConverter jsonConverter;
     private String probeId;
 
     public MeasurementService(ConfigurationProvider configurationProvider,
             DownloadSpeedMeterService downloadSpeedMeterService, UploadSpeedMeterService uploadSpeedMeterService,
-            ClockService clockService, JsonConverter jsonConverter) {
+            ClockService clockService, IspService ispService, JsonConverter jsonConverter) {
         this.configurationProvider = configurationProvider;
         this.downloadSpeedMeterService = downloadSpeedMeterService;
         this.uploadSpeedMeterService = uploadSpeedMeterService;
         this.clockService = clockService;
+        this.ispService = ispService;
         this.jsonConverter = jsonConverter;
     }
 
@@ -123,6 +125,7 @@ public class MeasurementService {
         measurement.setDownloadSpeed(downloadSpeed);
         measurement.setUploadSpeed(uploadSpeed);
         measurement.setCompletedOn(clockService.getCurrentTime());
+        measurement.setIsp(ispService.getIspName());
         return measurement;
     }
 
@@ -137,4 +140,5 @@ public class MeasurementService {
         }
         return probeId;
     }
+    
 }

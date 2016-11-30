@@ -5,6 +5,7 @@ import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
 import hu.elte.inetsense.common.util.HTTPUtil;
 import hu.elte.inetsense.probe.service.MeasurementService;
+import hu.elte.inetsense.probe.service.IspService;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +33,9 @@ public class InetsenseProbeController {
     private MeasurementService measurementService;
     
     @Autowired
+    private IspService ispService;
+    
+    @Autowired
     private ClockService clockService;
 
     private boolean guiEnabled;
@@ -42,8 +46,10 @@ public class InetsenseProbeController {
             ScheduledExecutorService ses = (ScheduledExecutorService) taskExecutor;
             int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
             int timeDelay = 10 * 60 * 1000;
+            int ispDelay = 30 * 60 * 1000;
             ses.scheduleWithFixedDelay(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
             ses.scheduleWithFixedDelay(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
+            ses.scheduleWithFixedDelay(() -> ispService.updateIsp(), 100, ispDelay, TimeUnit.MILLISECONDS);
         }
     }
 

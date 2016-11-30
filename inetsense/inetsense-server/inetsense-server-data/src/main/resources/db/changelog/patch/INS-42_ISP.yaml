@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: INS-42_ISP
+      author: deadmanswitch
+      changes:
+        - addColumn:
+            tableName: measurement
+            columns:
+              - column:
+                  name: isp_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
