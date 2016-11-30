@@ -11,4 +11,8 @@ import hu.elte.inetsense.server.data.entities.UserRole;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
+    UserRole findById(Long id);
+    UserRole findByUserId(Long userId);
+    UserRole findByRoleId(Long roleId);
+
 }

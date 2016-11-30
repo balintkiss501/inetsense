@@ -7,14 +7,19 @@ databaseChangeLog:
             tableName: user_role
             columns:
               - column:
+                  name: user_role_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
                   name: user_id
                   type: bigint
                   constraints:
-                    primaryKey: true
                     nullable: false
               - column:
                   name: role_id
                   type: bigint
                   constraints:
-                    primaryKey: true
                     nullable: false

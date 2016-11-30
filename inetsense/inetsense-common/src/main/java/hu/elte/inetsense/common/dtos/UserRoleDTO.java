@@ -14,6 +14,9 @@ public class UserRoleDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
+    private Long              userRoleId;
+
+    @NotNull
     private Long              userId;
 
     @NotEmpty

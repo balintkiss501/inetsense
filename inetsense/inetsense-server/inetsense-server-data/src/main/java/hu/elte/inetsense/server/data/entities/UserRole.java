@@ -20,10 +20,21 @@ public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long              id;
     private Long              user_id;
     private Long              role_id;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_role_id")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
     @Column(name = "user_id")
     public Long getUserId() {
         return user_id;

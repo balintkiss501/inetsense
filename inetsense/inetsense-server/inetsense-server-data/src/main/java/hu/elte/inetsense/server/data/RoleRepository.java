@@ -11,6 +11,7 @@ import hu.elte.inetsense.server.data.entities.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
+    Role findById(Long id);
     Role findByName(String name);
 
 }

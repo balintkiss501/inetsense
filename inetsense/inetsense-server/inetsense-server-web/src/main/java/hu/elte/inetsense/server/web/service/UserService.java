@@ -52,7 +52,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         if (savedUser != null) {
-            Role role = roleRepository.findByName("User");
+            Role role = roleRepository.findByName("USER");
             if (role != null) {
                 UserRole userRole = new UserRole();
                 userRole.setUserId(savedUser.getId());
