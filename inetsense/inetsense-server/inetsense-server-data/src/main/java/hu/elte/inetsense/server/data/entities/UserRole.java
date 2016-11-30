@@ -21,8 +21,8 @@ public class UserRole implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long              id;
-    private Long              user_id;
-    private Long              role_id;
+    private Long              userId;
+    private Long              roleId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,27 +37,27 @@ public class UserRole implements Serializable {
 
     @Column(name = "user_id")
     public Long getUserId() {
-        return user_id;
+        return userId;
     }
 
-    public void setUserId(final Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(final Long userId) {
+        this.userId = userId;
     }
 
     @Column(name = "role_id")
     public Long getRoleId() {
-        return role_id;
+        return roleId;
     }
 
-    public void setRoleId(final Long role_id) {
-        this.role_id = role_id;
+    public void setRoleId(final Long roleId) {
+        this.roleId = roleId;
     }
 
     @Override
     public int hashCode() {
-        return (user_id == 0 || role_id == 0)
+        return (userId == 0 || roleId == 0)
           ? 0
-          : (user_id.hashCode() + role_id.hashCode());
+          : (userId.hashCode() + roleId.hashCode());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UserRole implements Serializable {
             return false;
         }
         final UserRole other = (UserRole) obj;
-        return Objects.equals(this.user_id, other.user_id)
-               && Objects.equals(this.role_id, other.role_id);
+        return Objects.equals(this.userId, other.userId)
+               && Objects.equals(this.roleId, other.roleId);
     }
 }
