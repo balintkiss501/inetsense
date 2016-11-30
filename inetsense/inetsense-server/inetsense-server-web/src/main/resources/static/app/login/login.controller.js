@@ -7,7 +7,7 @@
  * Controller of the login-register form
  */
 angular.module('inetsense')
-    .controller('LoginController', function($scope, $http, $location) {
+    .controller('LoginController', function($scope, $cacheFactory, $http, $location) {
         var self = this;
 
         self.credentials = {};
@@ -25,10 +25,25 @@ angular.module('inetsense')
 
             $http(req).then(
                 function(response) {
-                    console.log("Login succeeded");
-                    $location.path("/dashboard");
+                    var reqUser = {
+                        method: 'GET',
+                        url: 'user'
+                    };
+                    $http(reqUser).then(
+                        function(response) {
+                            var cF = $cacheFactory('myCache');
+                            console.log("User's role: " + response.data.authorities["0"].authority);
+                            cF.put('roleCache', response.data.authorities["0"].authority);
+                            console.log("Read from cache: " + cF.get('roleCache'));
+                            console.log("Login succeeded");
+                            $location.path("/dashboard");
+                        },
+                        function(response) {
+                            console.log("Login failed");
+                            self.loginError = true;
+                        })
                 },
-                function(response){
+                function(response) {
                     console.log("Login failed");
                     self.loginError = true;
                 }
