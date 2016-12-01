@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_into_configuration_probe_limit
+      author: zsoltistvanfi
+      changes:
+        - insert:
+            tableName: configuration
+            columns:
+              - column:
+                  name: key
+                  value: probe.limitPerUser
+              - column:
+                  name: value
+                  value: 10
+              - column:
+                  name: comment
+                  value: Max count of probes per user

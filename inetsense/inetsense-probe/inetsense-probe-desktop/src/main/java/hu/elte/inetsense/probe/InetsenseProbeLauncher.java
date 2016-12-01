@@ -1,37 +1,51 @@
 
 package hu.elte.inetsense.probe;
 
-import hu.elte.inetsense.probe.controller.InetsenseProbeController;
-import hu.elte.inetsense.probe.view.ProbeView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
+import hu.elte.inetsense.probe.controller.InetsenseProbeController;
+import hu.elte.inetsense.probe.view.ProbeView;
 
 public class InetsenseProbeLauncher {
 
-    private static final Logger log = LogManager.getLogger();
+	// !!!!! WARNING !!!!!
+	// logger cannot be used before spring context is created!!!
+	// !!!!!!!!!!!!!!!!!!!!
 
-    public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
+	public static void main(final String[] args) throws InvocationTargetException, InterruptedException {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ProbeConfiguration.class);
+		context.registerShutdownHook();
+		InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
+		initView(context, app);
+		app.start();
+		registerShutdownHook(context);
+	}
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-                ProbeConfiguration.class)) {
-            context.registerShutdownHook();
-            InetsenseProbeController app = context.getBean(InetsenseProbeController.class);
-            ProbeView view = context.getBean(ProbeView.class);
+	private static void initView(AnnotationConfigApplicationContext context, InetsenseProbeController app)
+			throws InterruptedException, InvocationTargetException {
+		ProbeView view = context.getBean(ProbeView.class);
 
-            if (view == null) {
-                app.setGuiEnabled(false);
-            } else {
-                app.setGuiEnabled(true);
-                SwingUtilities.invokeAndWait(() -> {
-                    view.setVisible(true);
-                });
-            }
+		if (view == null) {
+			app.setGuiEnabled(false);
+		} else {
+			app.setGuiEnabled(true);
+			SwingUtilities.invokeAndWait(() -> {
+				view.setVisible(true);
+			});
+		}
+	}
 
-            app.start();
-        }
-    }
+	private static void registerShutdownHook(AnnotationConfigApplicationContext context) {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    public void run() {
+		    	if(context != null) {
+		    		context.close();
+		    	}
+		    }
+		});
+	}
 }

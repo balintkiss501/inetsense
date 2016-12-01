@@ -8,5 +8,6 @@ import hu.elte.inetsense.common.dtos.ProbeDataDTO;
 public interface ProbeDataService {
 
     void saveProbeData(ProbeDataDTO probeData);
+    void processProbeData(ProbeDataDTO probeData);
 
 }

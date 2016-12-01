@@ -14,3 +14,18 @@ databaseChangeLog:
   - include:
       file: patch/create_table_user.yaml
       relativeToChangelogFile: true
+  - include:
+      file: patch/INS-42_ISP.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/alter_probe_add_user.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/insert_into_configuration_probe_limit.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/insert_into_configuration_probe_download_thread_count.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/create_index_on_measurement.yaml
+      relativeToChangelogFile: true

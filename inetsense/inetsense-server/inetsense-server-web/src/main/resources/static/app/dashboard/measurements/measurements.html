@@ -1,1 +1,21 @@
 <h1>Mérések</h1>
+
+<div class="panel-body" style="height: 20%">
+    <input type="button" class="btn btn-default" ng-click="ctrl.getProbes()" value="Szondák listájának frissitése" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Azonosító</th>
+            </tr>
+        </thead>
+        <tr ng-repeat="probe in ctrl.probes">
+            <td ng-bind="probe.authId"></td>
+            <td><input type="button" class="btn btn-default" ng-click="ctrl.getMeasurements(probe.authId)" value="Kiválasztás" /></td>
+        </tr>
+    </table>
+    <div id="masterChartContainer" style="height: 400px; min-width: 310px"></div>
+    <div>
+        <div id="uploadChartContainer" style="width: 50%; float: left"></div>
+        <div id="downloadChartContainer" style="width: 50%; float: left"></div>
+    </div>
+</div>

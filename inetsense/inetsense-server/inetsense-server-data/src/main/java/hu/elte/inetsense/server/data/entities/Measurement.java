@@ -30,6 +30,7 @@ public class Measurement implements Serializable {
     private Long              uploadSpeed;
     private Double             latitude;
     private Double             Longitude;
+    private String              isp;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,6 +105,15 @@ public class Measurement implements Serializable {
 
     public void setLongitude(Double Longitude) {
         this.Longitude = Longitude;
+    }
+    
+    @Column(name = "isp_name", nullable = true)
+    public String getIsp() {
+        return isp;
+    }
+
+    public void setIsp(String isp) {
+        this.isp = isp;
     }
 
 }

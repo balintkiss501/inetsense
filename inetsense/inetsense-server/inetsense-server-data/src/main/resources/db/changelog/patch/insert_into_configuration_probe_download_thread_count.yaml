@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_into_configuration_probe_download_thread_count
+      author: szulyak
+      changes:
+  - insert:
+      tableName: configuration
+      columns:
+        - column:
+            name: key
+            value: probe.download.downloadThreadCount
+        - column:
+            name: value
+            value: 2
+        - column:
+            name: comment
+            value: Probe will download with multithread.
