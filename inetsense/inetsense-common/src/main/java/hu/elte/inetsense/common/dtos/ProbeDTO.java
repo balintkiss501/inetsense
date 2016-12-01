@@ -5,7 +5,6 @@
  */
 package hu.elte.inetsense.common.dtos;
 
-
 import java.util.Date;
 
 /**
@@ -15,17 +14,21 @@ import java.util.Date;
 public class ProbeDTO {
 
     private String authId;
-
     private Date createdOn;
+    private String userEmail;
 
     public ProbeDTO() {
     }
     
-    
-    public ProbeDTO(String authId,Date createdOn) {
+    public ProbeDTO(String authId, Date createdOn) {
         this.authId = authId;
-        
         this.createdOn = createdOn;
+    }
+
+    public ProbeDTO(String authId, Date createdOn, String userEmail) {
+        this.authId = authId;
+        this.createdOn = createdOn;
+        this.userEmail = userEmail;
     }
 
     public String getAuthId() {
@@ -43,7 +46,13 @@ public class ProbeDTO {
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
     }
-    
-    
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 
 }
