@@ -15,7 +15,7 @@ import hu.elte.inetsense.server.data.entities.Probe;
 @Repository
 public interface MeasurementRepository extends JpaRepository<Measurement, Long> {
 
-    List<Measurement> findAllByProbe(Probe probe);
+    List<Measurement> findAllByProbeId(long probeId);
 
     List<Measurement> findAllByProbeOrderByIdAsc(Probe probe);
 

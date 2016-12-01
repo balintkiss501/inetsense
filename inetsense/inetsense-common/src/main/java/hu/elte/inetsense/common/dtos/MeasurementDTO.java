@@ -35,6 +35,14 @@ public class MeasurementDTO implements Serializable {
     
     private String isp=null;
 
+    public MeasurementDTO() { }
+
+    public MeasurementDTO(Date completedOn, Long downloadSpeed, long uploadSpeed){
+        this.completedOn = completedOn;
+        this.downloadSpeed = downloadSpeed;
+        this.uploadSpeed = uploadSpeed;
+    }
+
     public Double getLat() {
         return lat;
     }

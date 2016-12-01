@@ -21,6 +21,7 @@
         <js>webjar:angular-loading-bar/0.9.0/build/loading-bar.min.js</js>
         <js>webjar:ocLazyLoad/1.0.9/dist/ocLazyLoad.min.js</js>
         <js>webjar:angular-toggle-switch/1.3.0/angular-toggle-switch.min.js</js>
-        <js>webjar:angular-chart.js/0.8.8/angular-chart.min.js</js>
+        <js>webjar:angular-chart.js/1.0.0/dist/angular-chart.min.js</js>
+        <js>webjar:highstock/4.2.7/highstock-all.js</js>
     </group>
 </groups>
