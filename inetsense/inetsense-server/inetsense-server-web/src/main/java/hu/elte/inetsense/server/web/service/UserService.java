@@ -8,8 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hu.elte.inetsense.common.dtos.UserDTO;
+import hu.elte.inetsense.common.dtos.RoleDTO;
+import hu.elte.inetsense.common.dtos.UserRoleDTO;
 import hu.elte.inetsense.server.data.UserRepository;
+import hu.elte.inetsense.server.data.RoleRepository;
+import hu.elte.inetsense.server.data.UserRoleRepository;
 import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.data.entities.Role;
+import hu.elte.inetsense.server.data.entities.UserRole;
 
 /**
  * @author Zsolt Istvanfi
@@ -19,7 +25,11 @@ import hu.elte.inetsense.server.data.entities.User;
 public class UserService {
 
     @Autowired
-    private UserRepository  userRepository;
+    private UserRepository      userRepository;
+    @Autowired
+    private RoleRepository      roleRepository;
+    @Autowired
+    private UserRoleRepository  userRoleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -39,7 +49,19 @@ public class UserService {
 
         user.setPassword(hashedPassword);
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        if (savedUser != null) {
+            Role role = roleRepository.findByName("USER");
+            if (role != null) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(savedUser.getId());
+                userRole.setRoleId(role.getId());
+                userRoleRepository.save(userRole);
+            }
+        }
+
+        return savedUser;
     }
 
     public User findUserByEmail(final String email) {

@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_role
+      author: zoltantorok
+      changes:
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+                    unique: true

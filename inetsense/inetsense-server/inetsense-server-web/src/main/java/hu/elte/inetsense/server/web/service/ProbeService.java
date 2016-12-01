@@ -44,6 +44,10 @@ public class ProbeService {
         random.setSeed(System.currentTimeMillis());
     }
 
+    public List<Probe> getAllProbes() {
+        return repo.findAll();
+    }
+
     public List<Probe> getAllProbesOfCurrentUser() {
         User user = UserUtils.getLoggedInUser();
         return repo.findAllByUserId(user.getId());

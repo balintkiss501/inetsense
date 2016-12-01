@@ -80,4 +80,6 @@ angular.module('inetsense', [
                 }
             }
         });
-});
+}).factory('myCache', ['$cacheFactory', function($cacheFactory) {
+    return $cacheFactory('roleCache');
+}]);
