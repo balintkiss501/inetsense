@@ -18,6 +18,7 @@ public class UploadServerConfigurationProvider extends CollectorLocationAwareCon
     
     @Override
     protected void doLoadConfiguration() throws ConfigurationException {
+    	fixURLConfigurationFromProperty();
         loadDefaultConfiguration();
     }
 
