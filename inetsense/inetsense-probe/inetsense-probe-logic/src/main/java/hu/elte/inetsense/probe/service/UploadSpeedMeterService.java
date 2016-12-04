@@ -1,9 +1,9 @@
 package hu.elte.inetsense.probe.service;
 
+import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -28,31 +28,36 @@ public class UploadSpeedMeterService implements SpeedMeterService {
     }
 
     private long upload() throws Exception {
-        log.info("Measuring upload speed...");
-        URL u = getUploadUrl();
-        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setConnectTimeout(configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_MAX_TIME) / 2);
-
-        OutputStream os = conn.getOutputStream();
-        os.write(createBinaryData());
-        os.flush();
-        try(Scanner sc = new Scanner(conn.getInputStream())) {
-            if(sc.hasNextLong()) {
-                long nextLong = sc.nextLong();
-                log.info("Upload done. Measured speed: {} Bps.", nextLong);
-                return nextLong;
-            }
-        }
-        return 0;
+    	 log.info("Measuring upload speed...");
+         try (Socket socket = createUploadSocket()) {
+        	 sendUploadData(socket);
+        	 return readUploadSpeed(socket);
+         }
     }
 
-    private URL getUploadUrl() throws MalformedURLException {
-        String host = configurationProvider.getString(ConfigurationNames.UPLOAD_SERVER_HOST);
-        int port = configurationProvider.getInt(ConfigurationNames.UPLOAD_SERVER_PORT);
-        return new URL(String.format("http://%s:%d/upload", host, port));
-    }
+	private long readUploadSpeed(Socket socket) throws IOException {
+		try(Scanner sc = new Scanner(socket.getInputStream())) {
+             if(sc.hasNextLong()) {
+                 long nextLong = sc.nextLong();
+                 log.info("Upload done. Measured speed: {} Bps.", nextLong);
+                 return nextLong;
+             }
+         }
+		return 0;
+	}
+
+	private void sendUploadData(Socket socket) throws IOException {
+		OutputStream os = socket.getOutputStream();
+         os.write(createBinaryData());
+         os.flush();
+	}
+
+	private Socket createUploadSocket() throws UnknownHostException, IOException {
+		String host = configurationProvider.getString(ConfigurationNames.UPLOAD_SERVER_HOST);
+		 int port = configurationProvider.getInt(ConfigurationNames.UPLOAD_SERVER_PORT);
+		 Socket socket = new Socket(host , port);
+		return socket;
+	}
 
     private byte[] createBinaryData() {
         int fileSize = configurationProvider.getInt(ConfigurationNames.PROBE_UPLOAD_SIZE);

@@ -24,12 +24,10 @@ public class IspService {
     }
     
     public void updateIsp() {
-        
-        log.info("Updating ISP...");
-        
+        log.info("Updating ISP information...");
         try {
             isp = checkIsp();
-            log.info("Updating done. ISP: "+isp);
+            log.info("Updating done. ISP: {}", isp);
         } catch (Exception e) {
             log.error(e);
         }
@@ -40,11 +38,11 @@ public class IspService {
      * @throws java.io.IOException
      */
     private String checkIsp() throws IOException {
-        
-        String info = new Scanner(new URL("http://ipinfo.io/org").openStream(), "UTF-8").useDelimiter("\\A").next();
-        
-        // remove ID from the result, to get the ISP name
-        return info.substring(info.indexOf(" "));
+        try(Scanner scanner = new Scanner(new URL("http://ipinfo.io/org").openStream(), "UTF-8")) {
+        	scanner.useDelimiter("\\A");
+        	String info = scanner.next();
+        	return info.substring(info.indexOf(" "));
+        }
         
     }
     
