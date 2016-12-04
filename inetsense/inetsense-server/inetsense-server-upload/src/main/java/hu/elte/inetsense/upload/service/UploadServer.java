@@ -47,11 +47,6 @@ public class UploadServer {
 
             PrintWriter out = new PrintWriter(socket.getOutputStream());
 
-            out.println("HTTP/1.0 200 OK");
-            out.println("Content-Type: text/html");
-            out.println("Server: Bot");
-            out.println("");
-
             out.println(downloadSpeed);
             out.flush();
             socket.close();

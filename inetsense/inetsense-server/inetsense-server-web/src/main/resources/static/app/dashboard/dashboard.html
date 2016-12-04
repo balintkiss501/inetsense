@@ -6,7 +6,7 @@
             <li class="sidebar-brand"><span>iNETSense</span></li>
             <li><a ui-sref="dashboard">Kezdőoldal</a></li>
             <li><a ui-sref="dashboard.probes">Szondák</a></li>
-            <li><a ui-sref="dashboard.measurements">Mérések</a></li>
+            <li ng-if="userRole !== 'ADMIN'"><a ui-sref="dashboard.measurements">Mérések</a></li>
             <li><a ng-click="ctrl.logout()">Kijelentkezés</a></li>
         </ul>
     </div>

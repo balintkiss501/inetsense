@@ -7,7 +7,7 @@
  * Controller of the login-register form
  */
 angular.module('inetsense')
-    .controller('LoginController', function($scope, $http, $location) {
+    .controller('LoginController', function($scope, $rootScope, $http, $location) {
         var self = this;
 
         self.credentials = {};
@@ -25,10 +25,22 @@ angular.module('inetsense')
 
             $http(req).then(
                 function(response) {
-                    console.log("Login succeeded");
-                    $location.path("/dashboard");
+                    var reqUser = {
+                        method: 'GET',
+                        url: 'user'
+                    };
+                    $http(reqUser).then(
+                        function(response) {
+                            $rootScope.userRole = response.data.authorities["0"].authority;
+                            console.log("Login succeeded");
+                            $location.path("/dashboard");
+                        },
+                        function(response) {
+                            console.log("Login failed");
+                            self.loginError = true;
+                        })
                 },
-                function(response){
+                function(response) {
                     console.log("Login failed");
                     self.loginError = true;
                 }

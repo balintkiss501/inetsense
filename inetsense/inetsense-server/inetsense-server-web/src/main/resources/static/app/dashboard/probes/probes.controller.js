@@ -7,7 +7,7 @@
  * Controller of the probes screen
  */
 angular.module('inetsense')
-    .controller('ProbesController', function ($scope, $http) {
+    .controller('ProbesController', function ($scope, $rootScope, $http) {
         var self = this;
 
         self.freeProbesCount = 0;
@@ -16,13 +16,17 @@ angular.module('inetsense')
         var $probeRegBtn = $("#probeRegBtn");
 
         var reloadProbes = function() {
-            $http.get("probes").then(function(value) {
+            var getUrl = "probes";
+            if ($rootScope.userRole == "ADMIN") {
+                getUrl = "probes/listForAdmin";
+            }
+            $http.get(getUrl).then(function(value) {
                 self.probes = value.data;
                 return $http.get("probes/probeCountLimit");
             }).then( function(value) {
                 self.freeProbesCount = value.data - self.probes.length;
 
-                if (self.freeProbesCount <= 0) {
+                if (self.freeProbesCount <= 0 || $rootScope.userRole == "ADMIN") {
                     self.freeProbesCount = 0;
                     $probeRegBtn.prop("disabled", true);
                 } else {

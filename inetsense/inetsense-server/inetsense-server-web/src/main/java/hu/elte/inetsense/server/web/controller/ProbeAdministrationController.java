@@ -38,6 +38,15 @@ public class ProbeAdministrationController {
     @Autowired
     ProbeService         service;
 
+    @RequestMapping(value = "/listForAdmin", method = RequestMethod.GET)
+    public List<ProbeDTO> listForAdmin() {
+        List<Probe> probes = service.getAllProbes();
+
+        return probes.stream().map(p -> {
+            return new ProbeDTO(p.getAuthId(), p.getCreatedOn(), p.getUser().getEmail());
+        }).collect(Collectors.toList());
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public List<ProbeDTO> list() {
         List<Probe> probes = service.getAllProbesOfCurrentUser();

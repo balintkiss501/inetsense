@@ -47,8 +47,11 @@ public class InetsenseProbeController {
             int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
             int timeDelay = 10 * 60 * 1000;
             int ispDelay = 30 * 60 * 1000;
+            log.info("Scheduling measurement services...");
             ses.scheduleWithFixedDelay(() -> measurementService.measure(), 500, delay, TimeUnit.MILLISECONDS);
+            log.info("Scheduling clock service...");
             ses.scheduleWithFixedDelay(() -> clockService.refreshClock(), 100, timeDelay, TimeUnit.MILLISECONDS);
+            log.info("Scheduling isp service...");
             ses.scheduleWithFixedDelay(() -> ispService.updateIsp(), 100, ispDelay, TimeUnit.MILLISECONDS);
         }
     }
@@ -56,7 +59,7 @@ public class InetsenseProbeController {
     private boolean initProbeId() {
         String probeId = configurationProvider.getString(ConfigurationNames.PROBE_ID);
         while (isDefaultProbeId(probeId) || !isExistingProbe(probeId)) {
-            log.info("Pobe ID is not valid: {}", probeId);
+            log.warn("Pobe ID is not valid: {}", probeId);
 
             if (!guiEnabled) {
                 return false;
@@ -64,11 +67,12 @@ public class InetsenseProbeController {
 
             probeId = JOptionPane.showInputDialog("Enter probe id");
             if (probeId == null) {
-                int confirmResult = JOptionPane.showConfirmDialog(null, "Would you like to close this window?", null, JOptionPane.YES_NO_OPTION);
+                int confirmResult = JOptionPane.showConfirmDialog(null, "Would you like to close the application?", null, JOptionPane.YES_NO_OPTION);
                 if (confirmResult == JOptionPane.YES_OPTION) {
                 	System.exit(0);
                 }
             } else {
+            	log.info("Setting new Probe Id: {}", probeId);
                 configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID, probeId);
             }
         }

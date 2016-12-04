@@ -32,14 +32,15 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
 
     public DownloadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         this.configurationProvider = configurationProvider;
-        this.threadCount = configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_THREAD_COUNT);
+        threadCount = configurationProvider.getInt(ConfigurationNames.PROBE_DOWNLOAD_THREAD_COUNT);
     }
 
     @Override
     public long measure() throws Exception {
+    	log.info("Measuring download speed:");
         long downloadSpeed = 0;
-        ExecutorService executor = Executors.newFixedThreadPool(this.threadCount);
-        List<Future<Long>> downloadFutures = getDownloadFutures(executor);
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        List<Future<Long>> downloadFutures = scheduleDownloadTasks(executor);
         executor.shutdown();
         try{
           executor.awaitTermination(1L, TimeUnit.MINUTES);
@@ -51,20 +52,19 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
         }
 
         return downloadSpeed;
-       // return download(getDownloadTarget());
     }
     
     private Long getDownloadSpeed(List<Future<Long>> downloadFutures) throws Exception{
-        long downloadSpeed = 0;
-        for(int i =0 ; i < this.threadCount; ++i){
-            Future<Long> downloadFuture = downloadFutures.get(i);
-            downloadSpeed += downloadFuture.get();
-        }
-        log.info("Download complete. All download speed: {}....", downloadSpeed);
+        long downloadSpeed = (long) downloadFutures.stream().mapToLong(f -> {
+			try { return f.get(); } 
+			catch (Exception e) {}
+			return 0;
+		}).average().orElse(0);
+        log.info("Download complete. Download speed: {}....", downloadSpeed);
         return downloadSpeed;
     }
     
-    private List<Future<Long>> getDownloadFutures(ExecutorService executor){
+    private List<Future<Long>> scheduleDownloadTasks(ExecutorService executor){
         List<Future<Long>> downloadFutures = new ArrayList<Future<Long>>();
         for(int i = 0; i < threadCount; ++i){
               downloadFutures.add(executor.submit(new DownloadMeter(getDownloadTarget(),configurationProvider)));

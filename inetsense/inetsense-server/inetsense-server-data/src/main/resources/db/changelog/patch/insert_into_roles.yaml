@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_into_roles
+      author: zoltantorok
+      changes:
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: ADMIN
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: USER
