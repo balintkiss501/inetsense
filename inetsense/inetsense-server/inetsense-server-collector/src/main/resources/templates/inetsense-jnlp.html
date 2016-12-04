@@ -13,6 +13,7 @@
            "http://java.sun.com/products/autodl/j2se"/>
         <jar href="/jnlp/inetsense-probe-desktop-${project.version}.jar"
             main="true" />
+        <property name="headless" value="false" /><!-- Needed in order for JNLP to be signed -->
 
     </resources>
     <application-desc
