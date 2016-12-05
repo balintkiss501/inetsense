@@ -13,8 +13,11 @@ import java.util.Date;
  */
 public class ProbeDTO {
 
+	private Long id;
     private String authId;
     private Date createdOn;
+    private UserDTO user;
+    // FIXME: remove user email from probe!!!!!!!!!!!!!!!
     private String userEmail;
 
     public ProbeDTO() {
@@ -30,6 +33,22 @@ public class ProbeDTO {
         this.createdOn = createdOn;
         this.userEmail = userEmail;
     }
+    
+    public UserDTO getUser() {
+		return user;
+	}
+    
+    public void setUser(UserDTO user) {
+		this.user = user;
+	}
+    
+    public Long getId() {
+		return id;
+	}
+    
+    public void setId(Long id) {
+		this.id = id;
+	}
 
     public String getAuthId() {
         return authId;

@@ -16,6 +16,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class MeasurementDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    private Long id;
+    
+	private Date createdOn;
 
     @JsonFormat(timezone = "UTC")
     @Past(message = "Completed on time must be in the past!")
@@ -43,6 +47,22 @@ public class MeasurementDTO implements Serializable {
         this.uploadSpeed = uploadSpeed;
     }
 
+    public Long getId() {
+		return id;
+	}
+    
+    public void setId(Long id) {
+		this.id = id;
+	}
+    
+    public Date getCreatedOn() {
+		return createdOn;
+	}
+    
+    public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+    
     public Double getLat() {
         return lat;
     }

@@ -1,6 +1,5 @@
 package hu.elte.inetsense.server.collector.service.impl;
 
-import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -13,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
 import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.server.collector.service.ClockService;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
 import hu.elte.inetsense.server.collector.service.message.ProbeDataReceiver;
 import hu.elte.inetsense.server.data.MeasurementRepository;
 import hu.elte.inetsense.server.data.ProbeRepository;
+import hu.elte.inetsense.server.data.converter.MeasurementConverter;
 import hu.elte.inetsense.server.data.entities.Measurement;
 import hu.elte.inetsense.server.data.entities.Probe;
 
@@ -34,6 +35,11 @@ public class ProbeDataServiceImpl implements ProbeDataService {
     
     @Autowired
     private MeasurementRepository measurementRepository;
+    
+    @Autowired
+    private MeasurementConverter measurementConverter;
+    
+    @Autowired ClockService clockService;
     
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -55,8 +61,15 @@ public class ProbeDataServiceImpl implements ProbeDataService {
 	}
 
 	private void processMeasurement(Probe probe, MeasurementDTO measurementDTO) {
-		Measurement measurement = measurementDto2Entity(probe, measurementDTO);
+		Measurement measurement = createMeasurement(probe, measurementDTO);
         measurementRepository.save(measurement);
+	}
+
+	private Measurement createMeasurement(Probe probe, MeasurementDTO measurementDTO) {
+		Measurement measurement = measurementConverter.convertToEntity(measurementDTO);
+		measurement.setCreatedOn(clockService.getCurrentTime());
+		measurement.setProbe(probe);
+		return measurement;
 	}
 
 	private void validateProbeData(final ProbeDataDTO probeData) {
@@ -70,20 +83,6 @@ public class ProbeDataServiceImpl implements ProbeDataService {
             return new NoSuchElementException("Unable to find probe based on auth id. Measurements can be saved only for an existing probe!");
         });
         return probe;
-    }
-
-    private Measurement measurementDto2Entity(Probe probe, MeasurementDTO measurementDTO) {
-        Measurement measurement = new Measurement();
-
-        measurement.setCreatedOn(new Date());
-        measurement.setProbe(probe);
-        measurement.setCompletedOn(measurementDTO.getCompletedOn());
-        measurement.setDownloadSpeed(measurementDTO.getDownloadSpeed());
-        measurement.setUploadSpeed(measurementDTO.getUploadSpeed());
-        measurement.setLatitude(measurementDTO.getLat());
-        measurement.setLongitude(measurementDTO.getLng());
-        measurement.setIsp(measurementDTO.getIsp());
-        return measurement;
     }
 
 }

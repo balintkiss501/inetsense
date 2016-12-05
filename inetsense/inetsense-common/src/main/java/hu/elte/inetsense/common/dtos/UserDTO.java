@@ -1,6 +1,8 @@
 package hu.elte.inetsense.common.dtos;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,38 +14,54 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class UserDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @Email
-    private String            email;
+	private Long id;
+	private Date createdOn;
+	@NotNull
+	@Email
+	private String email;
+	@NotEmpty
+	private String password;
+	private List<RoleDTO> roles;
 
-    @NotEmpty
-    private String            password;
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
 
-    private String            roles;
+	public void setEmail(final String email) {
+		this.email = email;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setEmail(final String email) {
-        this.email = email;
-    }
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public List<RoleDTO> getRoles() {
+		return roles;
+	}
 
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+	public void setRoles(List<RoleDTO> roles) {
+		this.roles = roles;
+	}
 
-    public String getRoles() {
-      return roles;
-    }
+	public Date getCreatedOn() {
+		return createdOn;
+	}
 
-    public void setRoles(final String roles) {
-      this.roles = roles;
-    }
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
 }
