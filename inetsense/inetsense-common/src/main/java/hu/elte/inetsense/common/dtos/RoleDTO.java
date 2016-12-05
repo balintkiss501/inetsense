@@ -14,7 +14,7 @@ public class RoleDTO implements Serializable {
     private Long id;
     
     @NotNull
-    private String            name;
+	private String name;
 
     public String getName() {
         return name;

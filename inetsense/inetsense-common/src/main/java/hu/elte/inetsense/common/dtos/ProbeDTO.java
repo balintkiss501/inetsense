@@ -20,20 +20,6 @@ public class ProbeDTO {
     // FIXME: remove user email from probe!!!!!!!!!!!!!!!
     private String userEmail;
 
-    public ProbeDTO() {
-    }
-    
-    public ProbeDTO(String authId, Date createdOn) {
-        this.authId = authId;
-        this.createdOn = createdOn;
-    }
-
-    public ProbeDTO(String authId, Date createdOn, String userEmail) {
-        this.authId = authId;
-        this.createdOn = createdOn;
-        this.userEmail = userEmail;
-    }
-    
     public UserDTO getUser() {
 		return user;
 	}

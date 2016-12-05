@@ -14,10 +14,10 @@ import hu.elte.inetsense.server.data.entities.User;
  */
 public class InetsenseUserDetails implements UserDetails {
 
-    private static final long        serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final User               user;
-    private final Collection<String> roles;
+	private final User user;
+	private final Collection<String> roles;
 
     public InetsenseUserDetails(final User user, final Collection<String> roles) {
         this.user = user;

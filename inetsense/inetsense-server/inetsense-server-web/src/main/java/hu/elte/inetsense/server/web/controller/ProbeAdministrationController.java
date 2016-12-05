@@ -6,7 +6,6 @@
 package hu.elte.inetsense.server.web.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hu.elte.inetsense.common.dtos.ProbeDTO;
 import hu.elte.inetsense.server.common.exception.InetsenseServiceException;
+import hu.elte.inetsense.server.data.converter.ProbeConverter;
 import hu.elte.inetsense.server.data.entities.Probe;
 import hu.elte.inetsense.server.web.service.ProbeService;
 
@@ -36,43 +36,41 @@ public class ProbeAdministrationController {
     private final Logger log = LogManager.getLogger();
 
     @Autowired
-    ProbeService         service;
+    private ProbeService service;
+    
+    private ProbeConverter probeConverter;
 
     @RequestMapping(value = "/listForAdmin", method = RequestMethod.GET)
     public List<ProbeDTO> listForAdmin() {
         List<Probe> probes = service.getAllProbes();
 
-        return probes.stream().map(p -> {
-            return new ProbeDTO(p.getAuthId(), p.getCreatedOn(), p.getUser().getEmail());
-        }).collect(Collectors.toList());
+        return probeConverter.convertToDtoList(probes);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<ProbeDTO> list() {
         List<Probe> probes = service.getAllProbesOfCurrentUser();
 
-        return probes.stream().map(p -> {
-            return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
-        }).collect(Collectors.toList());
+        return probeConverter.convertToDtoList(probes);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = { "authId" })
     public ProbeDTO addProbe(@RequestParam(value = "authId") final String authId) throws InetsenseServiceException {
-        Probe p = service.addProbe(authId);
-        return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
+        Probe probe = service.addProbe(authId);
+        return probeConverter.convertToDto(probe);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ProbeDTO addProbe() throws InetsenseServiceException {
-        Probe p = service.addProbe();
-        return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
+        Probe probe = service.addProbe();
+        return probeConverter.convertToDto(probe);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = { "authId", "newId" })
     public ProbeDTO changeProbe(@RequestParam(value = "authId") final String authId,
             @RequestParam(value = "newId") final String newId) {
-        Probe p = service.changeProbe(authId, newId);
-        return new ProbeDTO(p.getAuthId(), p.getCreatedOn());
+        Probe probe = service.changeProbe(authId, newId);
+        return probeConverter.convertToDto(probe);
     }
 
     @RequestMapping(value = "/probeCountLimit", method = RequestMethod.GET)

@@ -5,7 +5,7 @@ import hu.elte.inetsense.common.dtos.ProbeDTO;
 import hu.elte.inetsense.server.data.entities.AlertLog;
 import hu.elte.inetsense.server.data.entities.Probe;
 
-public class AlertLogConverter {
+public class AlertLogConverter extends AbstractConverter<AlertLogDTO, AlertLog> {
 
 	private ProbeConverter probeConverter;
 	
@@ -13,6 +13,7 @@ public class AlertLogConverter {
 		this.probeConverter = probeConverter;
 	}
 
+	@Override
 	public AlertLog convertToEntity(AlertLogDTO alertLogDto){
 		Probe probe = probeConverter.convertToEntity(alertLogDto.getProbeDto());
 		AlertLog alertLog = new AlertLog();
@@ -28,7 +29,8 @@ public class AlertLogConverter {
 		alertLog.setRelation(alertLogDto.getRelation());
 		return alertLog;
 	}
-	
+
+	@Override
 	public AlertLogDTO convertToDto(AlertLog alertLog){
 		AlertLogDTO alertLogDto = new AlertLogDTO();
 		ProbeDTO probeDto = probeConverter.convertToDto(alertLog.getProbe());

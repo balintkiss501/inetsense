@@ -31,13 +31,13 @@ import hu.elte.inetsense.server.web.util.UserUtils;
 @Service
 public class ProbeService {
 
-    @Autowired
-    ProbeRepository                     repo;
+	@Autowired
+	ProbeRepository repo;
 
-    @Autowired
-    private ServerConfigurationProvider configProvider;
+	@Autowired
+	private ServerConfigurationProvider configProvider;
 
-    private final SecureRandom          random = new SecureRandom();
+	private final SecureRandom random = new SecureRandom();
 
     @PostConstruct
     private void init() {
@@ -82,15 +82,6 @@ public class ProbeService {
     }
 
     public Probe changeProbe(final String authId, final String newId) {
-        /*
-         * Probe probe = repo.getProbe(authId);
-         *
-         * probe.setAuthId(newId);
-         * probe = repo.save(probe);
-         *
-         * return probe;
-         */
-
         Probe probe = new Probe();
         probe.setCreatedOn(Date.from(Instant.now()));
         probe.setAuthId(newId);
@@ -108,7 +99,6 @@ public class ProbeService {
         String id = "";
         boolean unique = true;
 
-        // skip short numbers, and collisions (there is approx. 1 out of 1000000)
         while (next.bitLength() < 36 || !unique) {
             next = new BigInteger(40, random);
             id = next.toString(32);

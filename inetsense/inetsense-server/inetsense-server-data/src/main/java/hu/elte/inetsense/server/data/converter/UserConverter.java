@@ -9,7 +9,7 @@ import hu.elte.inetsense.server.data.entities.Role;
 import hu.elte.inetsense.server.data.entities.User;
 
 
-public class UserConverter {
+public class UserConverter extends AbstractConverter<UserDTO, User>{
 	
 	private RoleConverter roleConverter;
 	
@@ -17,6 +17,7 @@ public class UserConverter {
 		this.roleConverter = roleConverter;
 	}
 
+	@Override
 	public UserDTO convertToDto(User user){
 		UserDTO userDto = new UserDTO();
 		userDto.setId(user.getId());
@@ -29,7 +30,8 @@ public class UserConverter {
 		userDto.setRoles(roles);
 		return userDto;
 	}
-	
+
+	@Override
 	public User convertToEntity(UserDTO userDto){
 		User user = new User();
 		user.setCreatedOn(userDto.getCreatedOn());

@@ -22,9 +22,9 @@ import hu.elte.inetsense.server.data.entities.UserRole;
 @Service
 public class InetsenseUserDetailsService implements UserDetailsService {
 
-    private final UserRepository     userRepository;
-    private final RoleRepository     roleRepository;
-    private final UserRoleRepository userRoleRepository;
+	private final UserRepository userRepository;
+	private final RoleRepository roleRepository;
+	private final UserRoleRepository userRoleRepository;
 
     @Autowired
     public InetsenseUserDetailsService(final UserRepository userRepository, final RoleRepository roleRepository,

@@ -3,7 +3,7 @@ package hu.elte.inetsense.server.data.converter;
 import hu.elte.inetsense.common.dtos.ProbeDTO;
 import hu.elte.inetsense.server.data.entities.Probe;
 
-public class ProbeConverter {
+public class ProbeConverter extends AbstractConverter<ProbeDTO, Probe> {
 	
 	private UserConverter userConverter;
 	
@@ -11,6 +11,7 @@ public class ProbeConverter {
 		this.userConverter = userConverter;
 	}
 
+	@Override
 	public ProbeDTO convertToDto(Probe probe){
 		ProbeDTO probeDto = new ProbeDTO();
 		probeDto.setId(probe.getId());
@@ -21,7 +22,8 @@ public class ProbeConverter {
 		probeDto.setUserEmail(probe.getUser().getEmail());
 		return probeDto;
 	}
-	
+
+	@Override
 	public Probe convertToEntity(ProbeDTO probeDto){
 		Probe probe = new Probe();
 		probe.setAuthId(probeDto.getAuthId());
@@ -30,4 +32,5 @@ public class ProbeConverter {
 		probe.setUser(userConverter.convertToEntity(probeDto.getUser()));
 		return probe;
 	}
+	
 }
