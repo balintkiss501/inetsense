@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import hu.elte.inetsense.server.data.entities.probe.Probe;
+
 /**
  * @author Zsolt Istvanfi
  */
@@ -31,6 +33,7 @@ public class Measurement implements Serializable {
 	private Double latitude;
 	private Double Longitude;
 	private String isp;
+	private String downloadTarget;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -114,6 +117,15 @@ public class Measurement implements Serializable {
 
 	public void setIsp(String isp) {
 		this.isp = isp;
+	}
+
+	@Column(name = "download_target_url", nullable = false)
+	public String getDownloadTarget() {
+		return downloadTarget;
+	}
+	
+	public void setDownloadTarget(String downloadTarget) {
+		this.downloadTarget = downloadTarget;
 	}
 
 }

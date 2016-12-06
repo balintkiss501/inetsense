@@ -1,7 +1,7 @@
 package hu.elte.inetsense.server.data.converter;
 
-import hu.elte.inetsense.common.dtos.RoleDTO;
-import hu.elte.inetsense.server.data.entities.Role;
+import hu.elte.inetsense.common.dtos.user.RoleDTO;
+import hu.elte.inetsense.server.data.entities.user.Role;
 
 
 public class RoleConverter extends AbstractConverter<RoleDTO, Role> {

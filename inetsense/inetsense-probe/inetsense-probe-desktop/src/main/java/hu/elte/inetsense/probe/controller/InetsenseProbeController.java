@@ -1,22 +1,30 @@
 package hu.elte.inetsense.probe.controller;
 
-import hu.elte.inetsense.common.service.configuration.ClockService;
-import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
-import hu.elte.inetsense.common.util.HTTPUtil;
-import hu.elte.inetsense.probe.service.MeasurementService;
-import hu.elte.inetsense.probe.service.IspService;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JOptionPane;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import java.util.Objects;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hu.elte.inetsense.common.dtos.probe.ProbeConfigurationDTO;
+import hu.elte.inetsense.common.service.configuration.ClockService;
+import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
+import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
+import hu.elte.inetsense.common.util.HTTPUtil;
+import hu.elte.inetsense.probe.service.IspService;
+import hu.elte.inetsense.probe.service.MeasurementService;
 
 @Component
 public class InetsenseProbeController {
@@ -37,12 +45,12 @@ public class InetsenseProbeController {
     
     @Autowired
     private ClockService clockService;
-
+    
     private boolean guiEnabled;
 
     public void start() {
         printProbeInformation();
-        if (initProbeId()) {
+        if (initProbeConfiguration()) {
             ScheduledExecutorService ses = (ScheduledExecutorService) taskExecutor;
             int delay = configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
             int timeDelay = 10 * 60 * 1000;
@@ -56,7 +64,7 @@ public class InetsenseProbeController {
         }
     }
 
-    private boolean initProbeId() {
+    private boolean initProbeConfiguration() {
         String probeId = configurationProvider.getString(ConfigurationNames.PROBE_ID);
         while (isDefaultProbeId(probeId) || !isExistingProbe(probeId)) {
             log.warn("Pobe ID is not valid: {}", probeId);
@@ -76,10 +84,30 @@ public class InetsenseProbeController {
                 configurationProvider.changeLocalProperty(ConfigurationNames.PROBE_ID, probeId);
             }
         }
+        loadProbeConfiguration(probeId);configurationProvider.getInt(ConfigurationNames.TEST_INTERVAL);
         return true;
     }
 
-    private boolean isExistingProbe(String probeId) {
+    private void loadProbeConfiguration(String probeId) {
+    	String baseUrl = configurationProvider.getCollectorBaseURL();
+        CloseableHttpResponse response = HTTPUtil.get(baseUrl + "/probe/" + probeId);
+        try {
+			String responseAsString = EntityUtils.toString(response.getEntity());
+			ObjectMapper mapper = new ObjectMapper();
+			List<ProbeConfigurationDTO> probeConfigurationList = mapper.readValue(responseAsString, new TypeReference<List<ProbeConfigurationDTO>>(){});
+			storeProbeConfig(probeConfigurationList);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void storeProbeConfig(List<ProbeConfigurationDTO> probeConfigurationList) {
+		probeConfigurationList.forEach(
+			config -> configurationProvider.changeLocalProperty(config.getKey(), config.getValue())
+		);
+	}
+
+	private boolean isExistingProbe(String probeId) {
         String baseUrl = configurationProvider.getCollectorBaseURL();
         CloseableHttpResponse response = HTTPUtil.get(baseUrl + "/probe/" + probeId);
         return 200 == response.getStatusLine().getStatusCode();

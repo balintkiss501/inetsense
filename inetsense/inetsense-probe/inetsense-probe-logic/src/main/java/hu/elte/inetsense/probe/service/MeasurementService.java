@@ -1,6 +1,7 @@
 package hu.elte.inetsense.probe.service;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -12,8 +13,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import hu.elte.inetsense.common.dtos.MeasurementDTO;
-import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.probe.MeasurementDTO;
+import hu.elte.inetsense.common.dtos.probe.ProbeDataDTO;
 import hu.elte.inetsense.common.service.configuration.ClockService;
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.common.service.configuration.ConfigurationProvider;
@@ -43,6 +44,7 @@ public class MeasurementService {
         }
     }
 
+    private Random rnd = new Random();
     private ProbeDataDTO probeDataDTO;
     private ConfigurationProvider configurationProvider;
     private DownloadSpeedMeterService downloadSpeedMeterService;
@@ -106,6 +108,8 @@ public class MeasurementService {
 
     private MeasurementDTO doMeasure() {
         ExecutorService executor = Executors.newFixedThreadPool(2);
+        String downloadTarget = getNextDownloadTarget();
+		downloadSpeedMeterService.setDownloadTarget(downloadTarget);
         Future<Long> downloadFuture = executor.submit(new SpeedMeter(downloadSpeedMeterService));
         Future<Long> uploadFuture = executor.submit(new SpeedMeter(uploadSpeedMeterService));
         executor.shutdown();
@@ -113,17 +117,24 @@ public class MeasurementService {
             executor.awaitTermination(1L, TimeUnit.MINUTES);
             long downloadSpeed = downloadFuture.get();
             long uploadSpeed = uploadFuture.get();
-            return createMeasurement(downloadSpeed, uploadSpeed);
+            return createMeasurement(downloadSpeed, uploadSpeed, downloadTarget);
         } catch (Exception e) {
             log.error(e);
             throw new RuntimeException(e);
         }
     }
+    
+    private String getNextDownloadTarget() {
+        String[] targets = configurationProvider.getStringArray(ConfigurationNames.PROBE_TARGET_FILES);
+        int index = rnd.nextInt(targets.length);
+        return targets[index];
+    }
 
-    private MeasurementDTO createMeasurement(long downloadSpeed, long uploadSpeed) {
+    private MeasurementDTO createMeasurement(long downloadSpeed, long uploadSpeed, String downloadTarget) {
         MeasurementDTO measurement = new MeasurementDTO();
         measurement.setDownloadSpeed(downloadSpeed);
         measurement.setUploadSpeed(uploadSpeed);
+        measurement.setDownloadTarget(downloadTarget);
         measurement.setCompletedOn(clockService.getCurrentTime());
         measurement.setIsp(ispService.getIspName());
         return measurement;

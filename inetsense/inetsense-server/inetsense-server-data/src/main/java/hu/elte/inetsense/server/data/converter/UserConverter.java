@@ -3,10 +3,10 @@ package hu.elte.inetsense.server.data.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import hu.elte.inetsense.common.dtos.RoleDTO;
-import hu.elte.inetsense.common.dtos.UserDTO;
-import hu.elte.inetsense.server.data.entities.Role;
-import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.common.dtos.user.RoleDTO;
+import hu.elte.inetsense.common.dtos.user.UserDTO;
+import hu.elte.inetsense.server.data.entities.user.Role;
+import hu.elte.inetsense.server.data.entities.user.User;
 
 
 public class UserConverter extends AbstractConverter<UserDTO, User>{

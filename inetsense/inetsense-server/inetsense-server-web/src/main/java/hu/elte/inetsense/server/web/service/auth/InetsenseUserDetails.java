@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
-import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.data.entities.user.User;
 
 /**
  * @author Zsolt Istvanfi

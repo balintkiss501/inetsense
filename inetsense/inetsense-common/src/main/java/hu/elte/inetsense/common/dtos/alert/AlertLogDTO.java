@@ -1,10 +1,10 @@
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.alert;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import hu.elte.inetsense.common.dtos.ProbeDTO;
-import hu.elte.inetsense.common.dtos.AlertType;
+import hu.elte.inetsense.common.dtos.alert.AlertType;
+import hu.elte.inetsense.common.dtos.probe.ProbeDTO;
 
 public class AlertLogDTO implements Serializable {
 

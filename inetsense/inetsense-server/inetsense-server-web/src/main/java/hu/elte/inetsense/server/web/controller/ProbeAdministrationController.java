@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.common.dtos.ProbeDTO;
+import hu.elte.inetsense.common.dtos.probe.ProbeDTO;
 import hu.elte.inetsense.server.common.exception.InetsenseServiceException;
 import hu.elte.inetsense.server.data.converter.ProbeConverter;
-import hu.elte.inetsense.server.data.entities.Probe;
+import hu.elte.inetsense.server.data.entities.probe.Probe;
 import hu.elte.inetsense.server.web.service.ProbeService;
 
 /**

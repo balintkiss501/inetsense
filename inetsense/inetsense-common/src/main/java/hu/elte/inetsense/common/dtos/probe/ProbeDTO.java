@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.probe;
 
 import java.util.Date;
+
+import hu.elte.inetsense.common.dtos.user.UserDTO;
 
 /**
  *

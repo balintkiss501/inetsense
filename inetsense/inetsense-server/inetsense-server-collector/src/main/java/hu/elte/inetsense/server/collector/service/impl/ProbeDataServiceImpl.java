@@ -10,14 +10,14 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.elte.inetsense.common.dtos.MeasurementDTO;
-import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.probe.MeasurementDTO;
+import hu.elte.inetsense.common.dtos.probe.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.ClockService;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
 import hu.elte.inetsense.server.collector.service.message.ProbeDataReceiver;
 import hu.elte.inetsense.server.data.converter.MeasurementConverter;
 import hu.elte.inetsense.server.data.entities.Measurement;
-import hu.elte.inetsense.server.data.entities.Probe;
+import hu.elte.inetsense.server.data.entities.probe.Probe;
 import hu.elte.inetsense.server.data.repository.MeasurementRepository;
 import hu.elte.inetsense.server.data.repository.ProbeRepository;
 

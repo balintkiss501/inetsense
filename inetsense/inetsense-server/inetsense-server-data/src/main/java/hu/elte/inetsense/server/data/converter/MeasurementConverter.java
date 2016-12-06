@@ -1,6 +1,6 @@
 package hu.elte.inetsense.server.data.converter;
 
-import hu.elte.inetsense.common.dtos.MeasurementDTO;
+import hu.elte.inetsense.common.dtos.probe.MeasurementDTO;
 import hu.elte.inetsense.server.data.entities.Measurement;
 
 
@@ -17,6 +17,7 @@ public class MeasurementConverter extends AbstractConverter<MeasurementDTO, Meas
 		measurementDTO.setLat(measurement.getLatitude());
 		measurementDTO.setLng(measurement.getLongitude());
 		measurementDTO.setIsp(measurementDTO.getIsp());
+		measurementDTO.setDownloadTarget(measurement.getDownloadTarget());
 		return measurementDTO;
 	}
 	
@@ -31,6 +32,7 @@ public class MeasurementConverter extends AbstractConverter<MeasurementDTO, Meas
         measurement.setLatitude(measurementDTO.getLat());
         measurement.setLongitude(measurementDTO.getLng());
         measurement.setIsp(measurementDTO.getIsp());
+        measurement.setDownloadTarget(measurementDTO.getDownloadTarget());
 		return measurement;
 	}
 

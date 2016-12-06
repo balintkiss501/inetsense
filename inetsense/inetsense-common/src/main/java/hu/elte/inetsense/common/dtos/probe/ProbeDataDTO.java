@@ -1,4 +1,4 @@
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.probe;
 
 import java.util.ArrayList;
 import java.util.List;

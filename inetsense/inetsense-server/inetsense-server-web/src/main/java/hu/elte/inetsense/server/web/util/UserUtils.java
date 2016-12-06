@@ -3,7 +3,7 @@ package hu.elte.inetsense.server.web.util;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.data.entities.user.User;
 import hu.elte.inetsense.server.web.service.auth.InetsenseUserDetails;
 
 /**

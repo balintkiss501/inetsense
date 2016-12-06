@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.common.dtos.MeasurementDTO;
+import hu.elte.inetsense.common.dtos.probe.MeasurementDTO;
 import hu.elte.inetsense.server.web.service.MeasurementService;
 
 /**

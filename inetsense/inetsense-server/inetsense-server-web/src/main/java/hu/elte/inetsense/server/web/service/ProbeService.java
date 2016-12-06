@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
 import hu.elte.inetsense.server.common.exception.InetsenseServiceException;
-import hu.elte.inetsense.server.data.entities.Probe;
-import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.data.entities.probe.Probe;
+import hu.elte.inetsense.server.data.entities.user.User;
 import hu.elte.inetsense.server.data.repository.ProbeRepository;
 import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
 import hu.elte.inetsense.server.web.util.UserUtils;

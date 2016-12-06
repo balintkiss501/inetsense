@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import hu.elte.inetsense.server.data.entities.UserRole;
+import hu.elte.inetsense.server.data.entities.user.UserRole;
 
 /**
  * @author Zoltan Torok

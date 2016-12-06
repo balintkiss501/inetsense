@@ -1,4 +1,4 @@
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.user;
 
 import java.io.Serializable;
 

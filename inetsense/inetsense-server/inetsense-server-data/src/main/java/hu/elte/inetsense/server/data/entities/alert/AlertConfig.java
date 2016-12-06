@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.data.entities;
+package hu.elte.inetsense.server.data.entities.alert;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
-import hu.elte.inetsense.common.dtos.AlertType;
+import hu.elte.inetsense.common.dtos.alert.AlertType;
 
 @Entity
 public class AlertConfig implements Serializable {

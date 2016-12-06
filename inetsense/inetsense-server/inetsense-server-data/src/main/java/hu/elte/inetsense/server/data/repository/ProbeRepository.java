@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import hu.elte.inetsense.server.data.entities.Probe;
+import hu.elte.inetsense.server.data.entities.probe.Probe;
 
 /**
  * @author Zsolt Istvanfi

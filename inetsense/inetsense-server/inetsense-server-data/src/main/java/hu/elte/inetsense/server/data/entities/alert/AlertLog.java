@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.data.entities;
+package hu.elte.inetsense.server.data.entities.alert;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,8 @@ import java.util.Date;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import hu.elte.inetsense.common.dtos.AlertType;
+import hu.elte.inetsense.common.dtos.alert.AlertType;
+import hu.elte.inetsense.server.data.entities.probe.Probe;
 
 import javax.persistence.FetchType;
 import javax.persistence.Column;

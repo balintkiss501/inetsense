@@ -1,7 +1,7 @@
 package hu.elte.inetsense.server.data.converter;
 
-import hu.elte.inetsense.common.dtos.ProbeDTO;
-import hu.elte.inetsense.server.data.entities.Probe;
+import hu.elte.inetsense.common.dtos.probe.ProbeDTO;
+import hu.elte.inetsense.server.data.entities.probe.Probe;
 
 public class ProbeConverter extends AbstractConverter<ProbeDTO, Probe> {
 	

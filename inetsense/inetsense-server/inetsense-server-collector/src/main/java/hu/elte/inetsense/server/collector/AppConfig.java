@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import hu.elte.inetsense.server.data.converter.MeasurementConverter;
+import hu.elte.inetsense.server.data.converter.ProbeConfigurationConverter;
 import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
 import hu.elte.inetsense.server.service.configuration.VersionInfo;
 
@@ -67,5 +68,10 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Bean
     public MeasurementConverter measurementConverter() {
     	return new MeasurementConverter();
+    }
+
+    @Bean
+    public ProbeConfigurationConverter probeConfigurationConverter() {
+    	return new ProbeConfigurationConverter();
     }
 }

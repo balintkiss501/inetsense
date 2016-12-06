@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.common.dtos.UserDTO;
-import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.common.dtos.user.UserDTO;
+import hu.elte.inetsense.server.data.entities.user.User;
 import hu.elte.inetsense.server.web.service.UserService;
 
 /**

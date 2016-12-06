@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.data.entities;
+package hu.elte.inetsense.server.data.entities.user;
 
 import java.io.Serializable;
 import java.util.Date;
