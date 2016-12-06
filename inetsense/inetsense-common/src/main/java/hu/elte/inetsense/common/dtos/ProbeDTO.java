@@ -17,8 +17,6 @@ public class ProbeDTO {
     private String authId;
     private Date createdOn;
     private UserDTO user;
-    // FIXME: remove user email from probe!!!!!!!!!!!!!!!
-    private String userEmail;
 
     public UserDTO getUser() {
 		return user;
@@ -50,14 +48,6 @@ public class ProbeDTO {
 
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
 }

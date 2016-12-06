@@ -18,8 +18,6 @@ public class ProbeConverter extends AbstractConverter<ProbeDTO, Probe> {
 		probeDto.setAuthId(probe.getAuthId());
 		probeDto.setCreatedOn(probe.getCreatedOn());
 		probeDto.setUser(userConverter.convertToDto(probe.getUser()));
-		// FIXME: THIS MUST BE REMOVED
-		probeDto.setUserEmail(probe.getUser().getEmail());
 		return probeDto;
 	}
 
