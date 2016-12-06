@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.data;
+package hu.elte.inetsense.server.data.repository;
 
 import java.util.List;
 import java.util.Optional;

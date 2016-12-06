@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import hu.elte.inetsense.common.service.configuration.BaseConfigurationProvider;
 import hu.elte.inetsense.common.service.configuration.ConfigurationNames;
-import hu.elte.inetsense.server.data.ConfigurationRepository;
 import hu.elte.inetsense.server.data.entities.Configuration;
+import hu.elte.inetsense.server.data.repository.ConfigurationRepository;
 
 @Component
 public class ServerConfigurationProvider extends BaseConfigurationProvider {

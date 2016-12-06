@@ -8,11 +8,11 @@ import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 
 import hu.elte.inetsense.common.dtos.MeasurementDTO;
-import hu.elte.inetsense.server.data.MeasurementRepository;
-import hu.elte.inetsense.server.data.ProbeRepository;
 import hu.elte.inetsense.server.data.converter.MeasurementConverter;
 import hu.elte.inetsense.server.data.entities.Measurement;
 import hu.elte.inetsense.server.data.entities.Probe;
+import hu.elte.inetsense.server.data.repository.MeasurementRepository;
+import hu.elte.inetsense.server.data.repository.ProbeRepository;
 import hu.elte.inetsense.server.web.util.UserUtils;
 
 /**

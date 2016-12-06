@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.server.data.ProbeRepository;
+import hu.elte.inetsense.server.data.repository.ProbeRepository;
 
 @RestController
 @RequestMapping("/probe")

@@ -9,12 +9,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import hu.elte.inetsense.server.data.RoleRepository;
-import hu.elte.inetsense.server.data.UserRepository;
-import hu.elte.inetsense.server.data.UserRoleRepository;
 import hu.elte.inetsense.server.data.entities.Role;
 import hu.elte.inetsense.server.data.entities.User;
 import hu.elte.inetsense.server.data.entities.UserRole;
+import hu.elte.inetsense.server.data.repository.RoleRepository;
+import hu.elte.inetsense.server.data.repository.UserRepository;
+import hu.elte.inetsense.server.data.repository.UserRoleRepository;
 
 /**
  * @author Zsolt Istvanfi
