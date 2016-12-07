@@ -23,7 +23,7 @@ public class UserConverter extends AbstractConverter<UserDTO, User>{
 		userDto.setId(user.getId());
 		userDto.setCreatedOn(user.getCreatedOn());
 		userDto.setEmail(user.getEmail());
-		userDto.setPassword(user.getPassword());
+//		userDto.setPassword(user.getPassword());
 		List<RoleDTO> roles = user.getRoles().stream()
 				.map(role -> roleConverter.convertToDto(role))
 				.collect(Collectors.toList());
@@ -37,7 +37,7 @@ public class UserConverter extends AbstractConverter<UserDTO, User>{
 		user.setCreatedOn(userDto.getCreatedOn());
 		user.setEmail(userDto.getEmail());
 		user.setId(userDto.getId());
-		user.setPassword(userDto.getPassword());
+//		user.setPassword(userDto.getPassword());
 		List<Role> roles = userDto.getRoles().stream()
 				.map(roleDto -> roleConverter.convertToEntity(roleDto))
 				.collect(Collectors.toList());

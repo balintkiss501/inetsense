@@ -20,7 +20,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="probe in ctrl.probes">
-                <td ng-if="userRole === 'ADMIN'" ng-bind="probe.userEmail"></td>
+                <td ng-if="userRole === 'ADMIN'" ng-bind="probe.user.email"></td>
                 <td ng-bind="probe.authId"></td>
                 <td ng-bind="probe.createdOn | date:'yyyy.MM.dd. HH:mm:ss'"></td>
             </tr>

@@ -1,12 +1,13 @@
 package hu.elte.inetsense.server.web.service.auth;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 
+import hu.elte.inetsense.server.data.entities.user.Role;
 import hu.elte.inetsense.server.data.entities.user.User;
 
 /**
@@ -24,8 +25,10 @@ public class InetsenseUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String rolesAsString = StringUtils.collectionToCommaDelimitedString(user.getRoles());
-
+        String rolesAsString = user.getRoles()
+        						  	 .stream()
+        							 .map(Role::getName)
+        							 .collect(Collectors.joining(","));
         return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesAsString);
     }
 
