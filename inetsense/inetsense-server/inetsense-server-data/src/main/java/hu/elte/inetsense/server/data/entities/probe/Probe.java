@@ -1,4 +1,4 @@
-package hu.elte.inetsense.server.data.entities;
+package hu.elte.inetsense.server.data.entities.probe;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import hu.elte.inetsense.server.data.entities.user.User;
+
 /**
  * @author Zsolt Istvanfi
  */
@@ -23,10 +25,11 @@ public class Probe implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long              id;
-    private Date              createdOn;
-    private String            authId;
-    private User              user;
+	private Long id;
+	private Date createdOn;
+	private String authId;
+	private User user;
+	private ProbeConfigurationProfile configurationProfile;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +60,16 @@ public class Probe implements Serializable {
     public void setAuthId(final String authId) {
         this.authId = authId;
     }
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "configuration_profile_id")
+    public ProbeConfigurationProfile getConfigurationProfile() {
+		return configurationProfile;
+	}
+	
+	public void setConfigurationProfile(ProbeConfigurationProfile configurationProfile) {
+		this.configurationProfile = configurationProfile;
+	}
 
     @Override
     public int hashCode() {

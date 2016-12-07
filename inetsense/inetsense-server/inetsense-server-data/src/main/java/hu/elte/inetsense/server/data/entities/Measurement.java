@@ -14,106 +14,118 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import hu.elte.inetsense.server.data.entities.probe.Probe;
+
 /**
  * @author Zsolt Istvanfi
  */
 @Entity
 public class Measurement implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Long              id;
-    private Date              createdOn;
-    private Date              completedOn;
-    private Probe             probe;
-    private Long              downloadSpeed;
-    private Long              uploadSpeed;
-    private Double             latitude;
-    private Double             Longitude;
-    private String              isp;
+	private Long id;
+	private Date createdOn;
+	private Date completedOn;
+	private Probe probe;
+	private Long downloadSpeed;
+	private Long uploadSpeed;
+	private Double latitude;
+	private Double Longitude;
+	private String isp;
+	private String downloadTarget;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "measurement_id")
-    public Long getId() {
-        return id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "measurement_id")
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_on", nullable = false)
-    public Date getCreatedOn() {
-        return createdOn;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_on", nullable = false)
+	public Date getCreatedOn() {
+		return createdOn;
+	}
 
-    public void setCreatedOn(final Date createdOn) {
-        this.createdOn = createdOn;
-    }
+	public void setCreatedOn(final Date createdOn) {
+		this.createdOn = createdOn;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "completed_on", nullable = false)
-    public Date getCompletedOn() {
-        return completedOn;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "completed_on", nullable = false)
+	public Date getCompletedOn() {
+		return completedOn;
+	}
 
-    public void setCompletedOn(final Date completedOn) {
-        this.completedOn = completedOn;
-    }
+	public void setCompletedOn(final Date completedOn) {
+		this.completedOn = completedOn;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "probe_id", nullable = false)
-    public Probe getProbe() {
-        return probe;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "probe_id", nullable = false)
+	public Probe getProbe() {
+		return probe;
+	}
 
-    public void setProbe(final Probe probe) {
-        this.probe = probe;
-    }
+	public void setProbe(final Probe probe) {
+		this.probe = probe;
+	}
 
-    @Column(name = "download_speed", nullable = false)
-    public Long getDownloadSpeed() {
-        return downloadSpeed;
-    }
+	@Column(name = "download_speed", nullable = false)
+	public Long getDownloadSpeed() {
+		return downloadSpeed;
+	}
 
-    public void setDownloadSpeed(Long downloadSpeed) {
-        this.downloadSpeed = downloadSpeed;
-    }
+	public void setDownloadSpeed(Long downloadSpeed) {
+		this.downloadSpeed = downloadSpeed;
+	}
 
-    @Column(name = "upload_speed", nullable = false)
-    public Long getUploadSpeed() {
-        return uploadSpeed;
-    }
+	@Column(name = "upload_speed", nullable = false)
+	public Long getUploadSpeed() {
+		return uploadSpeed;
+	}
 
-    public void setUploadSpeed(Long uploadSpeed) {
-        this.uploadSpeed = uploadSpeed;
-    }
+	public void setUploadSpeed(Long uploadSpeed) {
+		this.uploadSpeed = uploadSpeed;
+	}
 
-    public Double getLatitude() {
-        return latitude;
-    }
+	public Double getLatitude() {
+		return latitude;
+	}
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
 
-    public Double getLongitude() {
-        return Longitude;
-    }
+	public Double getLongitude() {
+		return Longitude;
+	}
 
-    public void setLongitude(Double Longitude) {
-        this.Longitude = Longitude;
-    }
-    
-    @Column(name = "isp_name", nullable = true)
-    public String getIsp() {
-        return isp;
-    }
+	public void setLongitude(Double Longitude) {
+		this.Longitude = Longitude;
+	}
 
-    public void setIsp(String isp) {
-        this.isp = isp;
-    }
+	@Column(name = "isp_name", nullable = true)
+	public String getIsp() {
+		return isp;
+	}
+
+	public void setIsp(String isp) {
+		this.isp = isp;
+	}
+
+	@Column(name = "download_target_url", nullable = false)
+	public String getDownloadTarget() {
+		return downloadTarget;
+	}
+	
+	public void setDownloadTarget(String downloadTarget) {
+		this.downloadTarget = downloadTarget;
+	}
 
 }

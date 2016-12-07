@@ -2,15 +2,13 @@ package hu.elte.inetsense.probe.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.Future;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.client.ClientProtocolException;
@@ -28,7 +26,7 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
     private static final Logger log = LogManager.getLogger();
     private int threadCount;
     private BaseConfigurationProvider configurationProvider;
-    private Random rnd = new Random();
+    private String downloadTarget;
 
     public DownloadSpeedMeterService(BaseConfigurationProvider configurationProvider) {
         this.configurationProvider = configurationProvider;
@@ -72,11 +70,13 @@ public class DownloadSpeedMeterService implements SpeedMeterService {
         return downloadFutures;
     }
 
-    private String getDownloadTarget() {
-        String[] targets = configurationProvider.getStringArray(ConfigurationNames.PROBE_TARGET_FILES);
-        int index = rnd.nextInt(targets.length);
-        return targets[index];
-    }
+    public String getDownloadTarget() {
+		return downloadTarget;
+	}
+    
+    public void setDownloadTarget(String downloadTarget) {
+		this.downloadTarget = downloadTarget;
+	}
     
     private class DownloadMeter implements Callable<Long>{
 

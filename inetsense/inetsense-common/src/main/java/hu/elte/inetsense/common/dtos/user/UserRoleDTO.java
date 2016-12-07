@@ -1,4 +1,4 @@
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.user;
 
 import java.io.Serializable;
 
@@ -13,14 +13,14 @@ public class UserRoleDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
-    private Long              userRoleId;
+	@NotNull
+	private Long userRoleId;
 
-    @NotNull
-    private Long              userId;
+	@NotNull
+	private Long userId;
 
-    @NotEmpty
-    private Long              roleId;
+	@NotEmpty
+	private Long roleId;
 
     public Long getUserId() {
         return userId;

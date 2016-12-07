@@ -7,15 +7,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.elte.inetsense.common.dtos.UserDTO;
-import hu.elte.inetsense.common.dtos.RoleDTO;
-import hu.elte.inetsense.common.dtos.UserRoleDTO;
-import hu.elte.inetsense.server.data.UserRepository;
-import hu.elte.inetsense.server.data.RoleRepository;
-import hu.elte.inetsense.server.data.UserRoleRepository;
-import hu.elte.inetsense.server.data.entities.User;
-import hu.elte.inetsense.server.data.entities.Role;
-import hu.elte.inetsense.server.data.entities.UserRole;
+import hu.elte.inetsense.common.dtos.user.UserDTO;
+import hu.elte.inetsense.server.data.entities.user.Role;
+import hu.elte.inetsense.server.data.entities.user.User;
+import hu.elte.inetsense.server.data.entities.user.UserRole;
+import hu.elte.inetsense.server.data.repository.RoleRepository;
+import hu.elte.inetsense.server.data.repository.UserRepository;
+import hu.elte.inetsense.server.data.repository.UserRoleRepository;
 
 /**
  * @author Zsolt Istvanfi

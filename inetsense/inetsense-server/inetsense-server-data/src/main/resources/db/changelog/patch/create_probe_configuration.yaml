@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_probe_configuration
+      author: abodo
+      changes:
+        - createTable:
+            tableName: probe_configuration_profile
+            columns:
+              - column:
+                  name: profile_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: single_measurement
+                  type: boolean
+                  defaultValueBoolean: false
+        - createTable:
+            tableName: probe_configuration
+            columns:
+              - column:
+                  name: configuration_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: key
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: configuration_profile_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_probe_confprofile
+                    references: probe_configuration_profile(profile_id)
+        - addColumn:
+            tableName: probe
+            columns:
+              - column:
+                  name: configuration_profile_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_probe_profile
+                    references: probe_configuration_profile(profile_id)
+        - addColumn:
+            tableName: measurement
+            columns:
+              - column:
+                  name: download_target_url
+                  type: char(255)

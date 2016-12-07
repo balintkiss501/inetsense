@@ -1,33 +1,34 @@
 package hu.elte.inetsense.server.web.service.auth;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 
-import hu.elte.inetsense.server.data.entities.User;
+import hu.elte.inetsense.server.data.entities.user.Role;
+import hu.elte.inetsense.server.data.entities.user.User;
 
 /**
  * @author Zsolt Istvanfi
  */
 public class InetsenseUserDetails implements UserDetails {
 
-    private static final long        serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final User               user;
-    private final Collection<String> roles;
+	private final User user;
 
-    public InetsenseUserDetails(final User user, final Collection<String> roles) {
+    public InetsenseUserDetails(User user) {
         this.user = user;
-        this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String rolesAsString = StringUtils.collectionToCommaDelimitedString(roles);
-
+        String rolesAsString = user.getRoles()
+        						  	 .stream()
+        							 .map(Role::getName)
+        							 .collect(Collectors.joining(","));
         return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesAsString);
     }
 

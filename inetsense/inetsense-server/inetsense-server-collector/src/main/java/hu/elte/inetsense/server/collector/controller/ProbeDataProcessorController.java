@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.probe.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
 
 /**

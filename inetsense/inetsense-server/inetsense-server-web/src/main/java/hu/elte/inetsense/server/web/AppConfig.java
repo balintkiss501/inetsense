@@ -9,6 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
+import hu.elte.inetsense.server.data.converter.MeasurementConverter;
+import hu.elte.inetsense.server.data.converter.ProbeConverter;
+import hu.elte.inetsense.server.data.converter.RoleConverter;
+import hu.elte.inetsense.server.data.converter.UserConverter;
 import hu.elte.inetsense.server.service.configuration.ServerConfigurationProvider;
 import hu.elte.inetsense.server.service.configuration.VersionInfo;
 
@@ -37,6 +41,26 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Bean
     public VersionInfo versionInfo() {
         return new VersionInfo();
+    }
+    
+    @Bean
+    public MeasurementConverter measurementConverter() {
+    	return new MeasurementConverter();
+    }
+    
+    @Bean
+    public RoleConverter roleConverter() {
+    	return new RoleConverter();
+    }
+    
+    @Bean
+    public UserConverter userConverter(RoleConverter roleConverter) {
+    	return new UserConverter(roleConverter);
+    }
+
+    @Bean
+    public ProbeConverter probeConverter(UserConverter userConverter) {
+    	return new ProbeConverter(userConverter);
     }
 
 }

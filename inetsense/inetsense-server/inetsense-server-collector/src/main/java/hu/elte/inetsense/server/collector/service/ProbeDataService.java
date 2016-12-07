@@ -1,6 +1,6 @@
 package hu.elte.inetsense.server.collector.service;
 
-import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.probe.ProbeDataDTO;
 
 /**
  * @author Zsolt Istvanfi

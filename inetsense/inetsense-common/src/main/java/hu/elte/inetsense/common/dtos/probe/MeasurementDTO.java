@@ -1,4 +1,4 @@
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.probe;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,33 +16,44 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class MeasurementDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
+    private Long id;
+	private Date createdOn;
     @JsonFormat(timezone = "UTC")
     @Past(message = "Completed on time must be in the past!")
     private Date completedOn;
-
+    
     @Range(min = -90, max = 90, message = "Latitude value must be between -90 and 90!")
     private Double lat;
-
+    
     @Range(min = -180, max = 180, message = "Longitude value must be between -180 and 180!")
     private Double lng;
-
+    
     @Min(value = 0, message = "Download speed cannot be negative!")
     private Long downloadSpeed;
-
+    
     @Min(value = 0, message = "Upload speed cannot be negative!")
     private Long uploadSpeed;
     
-    private String isp=null;
+    private String isp;
+    private String downloadTarget;
 
-    public MeasurementDTO() { }
-
-    public MeasurementDTO(Date completedOn, Long downloadSpeed, long uploadSpeed){
-        this.completedOn = completedOn;
-        this.downloadSpeed = downloadSpeed;
-        this.uploadSpeed = uploadSpeed;
-    }
-
+    public Long getId() {
+		return id;
+	}
+    
+    public void setId(Long id) {
+		this.id = id;
+	}
+    
+    public Date getCreatedOn() {
+		return createdOn;
+	}
+    
+    public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+    
     public Double getLat() {
         return lat;
     }
@@ -90,5 +101,13 @@ public class MeasurementDTO implements Serializable {
     public void setIsp(String isp) {
         this.isp = isp;
     }
+    
+    public String getDownloadTarget() {
+		return downloadTarget;
+	}
+    
+    public void setDownloadTarget(String downloadTarget) {
+		this.downloadTarget = downloadTarget;
+	}
 
 }

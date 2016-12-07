@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hu.elte.inetsense.common.dtos;
+package hu.elte.inetsense.common.dtos.probe;
 
 import java.util.Date;
+
+import hu.elte.inetsense.common.dtos.user.UserDTO;
 
 /**
  *
@@ -13,23 +15,26 @@ import java.util.Date;
  */
 public class ProbeDTO {
 
+	private Long id;
     private String authId;
     private Date createdOn;
-    private String userEmail;
+    private UserDTO user;
 
-    public ProbeDTO() {
-    }
+    public UserDTO getUser() {
+		return user;
+	}
     
-    public ProbeDTO(String authId, Date createdOn) {
-        this.authId = authId;
-        this.createdOn = createdOn;
-    }
-
-    public ProbeDTO(String authId, Date createdOn, String userEmail) {
-        this.authId = authId;
-        this.createdOn = createdOn;
-        this.userEmail = userEmail;
-    }
+    public void setUser(UserDTO user) {
+		this.user = user;
+	}
+    
+    public Long getId() {
+		return id;
+	}
+    
+    public void setId(Long id) {
+		this.id = id;
+	}
 
     public String getAuthId() {
         return authId;
@@ -45,14 +50,6 @@ public class ProbeDTO {
 
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
 }

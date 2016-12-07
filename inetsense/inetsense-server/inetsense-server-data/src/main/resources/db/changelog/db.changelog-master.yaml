@@ -38,3 +38,9 @@ databaseChangeLog:
   - include:
       file: patch/create_index_on_measurement.yaml
       relativeToChangelogFile: true
+  - include:
+      file: patch/create_table_alert_tables.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: patch/create_probe_configuration.yaml
+      relativeToChangelogFile: true

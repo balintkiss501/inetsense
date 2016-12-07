@@ -1,0 +1,94 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_alert_log
+      author: szulyak
+      changes:
+        - createTable:
+            tableName: alert_config
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: alert_type_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: limit
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: severity
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_message
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  value: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: relation
+                  type: varchar(3)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: alert_log
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: probe_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: date
+              - column:
+                  name: count
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: limit
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: severity
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_message
+                  type: char(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: relation
+                  type: varchar(3)
+                  constraints:
+                    nullable: false

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import hu.elte.inetsense.common.dtos.ProbeDataDTO;
+import hu.elte.inetsense.common.dtos.probe.ProbeDataDTO;
 import hu.elte.inetsense.server.collector.service.ProbeDataService;
 
 @Component

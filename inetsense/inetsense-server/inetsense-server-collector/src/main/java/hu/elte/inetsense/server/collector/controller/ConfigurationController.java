@@ -25,6 +25,6 @@ public class ConfigurationController {
 
     private String getConfigString(String key) {
         String value = configurationProvider.getString(key);
-        return String.format("%s = %s", key, value);
+        return String.format("%s = %s", key, value); 
     }
 }

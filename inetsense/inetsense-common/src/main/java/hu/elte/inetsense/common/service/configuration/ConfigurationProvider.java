@@ -50,11 +50,15 @@ public class ConfigurationProvider extends BaseConfigurationProvider {
     }
 
     public <T> void changeLocalProperty(ConfigurationNames property, T value) {
+    	changeLocalProperty(property.getKey(), value);
+    }
+    
+    public <T> void changeLocalProperty(String key, T value) {
         try {
-            localConfigurationBuilder.getConfiguration().setProperty(property.getKey(), value);
+            localConfigurationBuilder.getConfiguration().setProperty(key, value);
             localConfigurationBuilder.save();
         } catch (ConfigurationException e) {
-            log.error("Failed to change property: {} to value: {}", property.getKey(), value, e);
+            log.error("Failed to change property: {} to value: {}", key, value, e);
             throw new RuntimeException(e);
         }
     }

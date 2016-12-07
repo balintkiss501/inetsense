@@ -1,9 +1,9 @@
-package hu.elte.inetsense.server.data;
+package hu.elte.inetsense.server.data.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import hu.elte.inetsense.server.data.entities.Role;
+import hu.elte.inetsense.server.data.entities.user.Role;
 
 /**
  * @author Zoltan Torok

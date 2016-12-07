@@ -1,7 +1,6 @@
-package hu.elte.inetsense.server.data.entities;
+package hu.elte.inetsense.server.data.entities.user;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -9,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * @author Zoltan Daniel Torok
