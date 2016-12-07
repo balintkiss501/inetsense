@@ -37,7 +37,8 @@ public class ProbeAdministrationController {
 
     @Autowired
     private ProbeService service;
-    
+
+    @Autowired
     private ProbeConverter probeConverter;
 
     @RequestMapping(value = "/listForAdmin", method = RequestMethod.GET)

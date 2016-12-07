@@ -17,16 +17,14 @@ public class InetsenseUserDetails implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private final User user;
-	private final Collection<String> roles;
 
-    public InetsenseUserDetails(final User user, final Collection<String> roles) {
+    public InetsenseUserDetails(User user) {
         this.user = user;
-        this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String rolesAsString = StringUtils.collectionToCommaDelimitedString(roles);
+        String rolesAsString = StringUtils.collectionToCommaDelimitedString(user.getRoles());
 
         return AuthorityUtils.commaSeparatedStringToAuthorityList(rolesAsString);
     }

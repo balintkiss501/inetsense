@@ -9,14 +9,14 @@ public abstract class AbstractConverter<DTO, ENTITY> {
 	
 	protected abstract ENTITY convertToEntity(DTO s);
 
-	public List<DTO> convertToDtoList(List<ENTITY> probes) {
-        return probes.stream()
+	public List<DTO> convertToDtoList(List<ENTITY> entities) {
+        return entities.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 	
-	public List<ENTITY> convertToEntityList(List<DTO> probes) {
-        return probes.stream()
+	public List<ENTITY> convertToEntityList(List<DTO> dtos) {
+        return dtos.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList());
     }
